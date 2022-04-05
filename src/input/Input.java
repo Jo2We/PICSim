@@ -9,6 +9,17 @@ import java.util.ArrayList;
 import java.util.Scanner; // Import the Scanner class to read text files
 
 public class Input {
+
+    /**
+     * constructor
+     */
+    public Input() {}
+
+    /**
+     * reads the Assambler program file and filters the relevant lines out of the file
+     * @param lines
+     * @return
+     */
     public ArrayList<String> read(ArrayList<String> lines) {
         String encoding = "windows-1252";
         try {
