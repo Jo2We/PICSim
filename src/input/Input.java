@@ -18,7 +18,7 @@ public class Input {
                 String data = myReader.nextLine();
                 char character = data.charAt(0);
                 if (character != ' ') {
-                    lines.add(data);
+                    lines.add(data.substring(5,9));
                 }
             }
             myReader.close();
