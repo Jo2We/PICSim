@@ -16,4 +16,8 @@ public class Controller {
         this.lines.forEach((key) -> System.out.println(key));
     }
 
+    void callCommands(){
+        
+    }
+
 }
