@@ -54,7 +54,7 @@ public class Input {
             String line;
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
-                System.out.println(line);
+                //System.out.println(line);
                 if (!line.isBlank()) {
                     lines.add(line);
                 }

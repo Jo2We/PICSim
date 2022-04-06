@@ -14,7 +14,9 @@ public class Commands {
     }
 
 
-    public void addwf() /*00 0111 -0000 0000 -|-1111 1111-*/ {
+    public void addwf(int dec) /*00 0111 -0000 0000 -|-1111 1111-*/ {
+        System.out.println("called addwf with " + dec);
+
     }
 
     public void andwf() /*00 0101 -0000 0000 -|-1111 1111-*/ {
