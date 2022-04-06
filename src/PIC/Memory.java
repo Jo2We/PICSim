@@ -4,8 +4,8 @@ public class Memory {
 
     char w;
     char pcl;
-    private boolean[] ra;
-    private boolean[] rb;
+    char ra;
+    char rb;
 
     char getW(){
         return w;
