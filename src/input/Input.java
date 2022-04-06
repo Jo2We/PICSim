@@ -3,6 +3,7 @@ package input;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Input {
         String encoding = "windows-1252";
         try {
             File source =  new File("res/TPicSim1.LST");
+            // System.out.println(source.isFile());
             Scanner myReader = new Scanner(source, Charset.forName(encoding));
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -35,6 +37,30 @@ public class Input {
             myReader.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return lines;
+    }
+
+    /**
+     * reads the Assambler program file and filters the relevant lines out of the file
+     * @param lines
+     * @return
+     */
+    public ArrayList<String> readTxt(ArrayList<String> lines) {
+        // res/AllCommandsText.txt
+        try {
+            Scanner scanner = new Scanner(new File("res/AllCommandsText.txt"));
+            String line;
+            while (scanner.hasNextLine()) {
+                line = scanner.nextLine();
+                System.out.println(line);
+                if (!line.isBlank()) {
+                    lines.add(line);
+                }
+            }
+            scanner.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return lines;
