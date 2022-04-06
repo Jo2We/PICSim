@@ -63,7 +63,13 @@ public class Input {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return lines;
+        // lines.forEach((key) -> System.out.println(key));
+        ArrayList<String> linesCut = new ArrayList<String>();
+        for (String key : lines) {
+            linesCut.add(key.substring(5,9));
+        }
+        // linesCut.forEach((key) -> System.out.println(key));
+        return linesCut;
     }
 }
 
