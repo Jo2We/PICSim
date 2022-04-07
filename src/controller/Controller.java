@@ -1,5 +1,6 @@
 package controller;
 
+import GUI.MainFrame;
 import PIC.Commands;
 import input.Input;
 import PIC.Memory;
@@ -30,6 +31,7 @@ public class Controller {
      * method to run the PICSumulator and manages all steps
      */
     public void runPICSimulator() {
+        MainFrame mainFrame = new MainFrame();
         Input I = new Input();
         this.linesStr = I.read(this.linesStr);
         //this.lines.forEach((key) -> System.out.println(key + ": " + getBinary(key)));
