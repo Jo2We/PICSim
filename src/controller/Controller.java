@@ -16,11 +16,14 @@ public class Controller {
     private ArrayList<Integer> linesInt = new ArrayList<Integer>();
 
     Memory m;
+    Commands command;
+
     /**
      * constructor
      */
     public Controller() {
         m = new Memory();
+        command = new Commands(m);
     }
 
     /**
@@ -58,7 +61,6 @@ public class Controller {
      */
     private void callCommands(int dec) {
         //System.out.println(dec);
-        Commands command = new Commands();
 
         if (dec < 16384) {
             if (dec < 8192) { // 0

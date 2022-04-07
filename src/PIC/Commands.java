@@ -9,8 +9,8 @@ public class Commands {
     /**
      * constructor
      */
-    public Commands() {
-        m = new Memory();
+    public Commands(Memory m) {
+        this.m = m;
     }
 
 
