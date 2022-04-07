@@ -10,9 +10,15 @@ public class Memory {
     char getW(){
         return w;
     }
-
     void setW(char w){
         this.w = w;
     }
 
+    public char getPcl() {
+        return pcl;
+    }
+
+    public void setPcl(char pcl) {
+        this.pcl = pcl;
+    }
 }

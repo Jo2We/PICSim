@@ -2,7 +2,9 @@ package controller;
 
 import PIC.Commands;
 import input.Input;
+import PIC.Memory;
 
+import java.lang.management.MemoryManagerMXBean;
 import java.util.ArrayList;
 
 public class Controller {
@@ -10,12 +12,15 @@ public class Controller {
     /**
      * attributes
      */
-    private ArrayList<String> lines = new ArrayList<String>();
+    private ArrayList<String> linesStr = new ArrayList<String>();
+    private ArrayList<Integer> linesInt = new ArrayList<Integer>();
 
+    Memory m;
     /**
      * constructor
      */
     public Controller() {
+        m = new Memory();
     }
 
     /**
@@ -23,10 +28,13 @@ public class Controller {
      */
     public void runPICSimulator() {
         Input I = new Input();
-        //this.lines = I.read(this.lines);
-        this.lines = I.read(this.lines);
-        this.lines.forEach((key) -> System.out.println(key + ": " + getBinary(key)));
-        this.lines.forEach((key) -> callCommands(getBinaryAsInt(key)));
+        this.linesStr = I.read(this.linesStr);
+        //this.lines.forEach((key) -> System.out.println(key + ": " + getBinary(key)));
+        this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
+
+        for (m.setPcl((char) 0); m.getPcl() < linesInt.size(); m.setPcl((char) (m.getPcl()+1))) {
+            callCommands(linesInt.get(m.getPcl()));
+        }
     }
 
     /**

@@ -148,6 +148,9 @@ public class Commands {
 
     public void _goto(int opcode) /*10 0*/ {
         System.out.println("called _goto with " + opcode);
+        int k = opcode - 10240; //-10 1000 0000 0000
+
+        m.setPcl((char) (k-1));
 
     }
 
