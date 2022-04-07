@@ -2,6 +2,7 @@ package controller;
 
 import GUI.MainFrame;
 import PIC.Commands;
+import PIC.Memory;
 import input.Input;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ public class Controller {
      * attributes
      */
     private ArrayList<String> lines = new ArrayList<String>();
+    private MainFrame mainFrame;
+    private Memory memory;
 
     /**
      * constructor
@@ -23,7 +26,8 @@ public class Controller {
      * method to run the PICSumulator and manages all steps
      */
     public void runPICSimulator() {
-        MainFrame mainFrame = new MainFrame();
+        memory = new Memory();
+        mainFrame = new MainFrame(this);
         Input I = new Input();
         //this.lines = I.read(this.lines);
         this.lines = I.read(this.lines);
@@ -256,4 +260,11 @@ public class Controller {
         System.out.println("error");
     }
 
+    public String[][] getMainMemory() {
+        return memory.getMainMemory();
+    }
+
+    public void setMainMemoryByIndex(int row, int column, String value) {
+        memory.setMainMemoryByIndex(row, column, value);
+    }
 }
