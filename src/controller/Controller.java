@@ -1,5 +1,6 @@
 package controller;
 
+import GUI.MainFrame;
 import PIC.Commands;
 import input.Input;
 
@@ -22,6 +23,7 @@ public class Controller {
      * method to run the PICSumulator and manages all steps
      */
     public void runPICSimulator() {
+        MainFrame mainFrame = new MainFrame();
         Input I = new Input();
         //this.lines = I.read(this.lines);
         this.lines = I.read(this.lines);
