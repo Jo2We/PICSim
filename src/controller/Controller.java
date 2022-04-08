@@ -267,4 +267,20 @@ public class Controller {
     public void setMainMemoryByIndex(int row, int column, String value) {
         memory.setMainMemoryByIndex(row, column, value);
     }
+
+    public void setRAPinMemory (int value, int column) {
+        memory.setRAPin(value, column);
+    }
+
+    public void setRBPinMemory (int value, int column) {
+        memory.setRBPin(value, column);
+    }
+
+    public void setRATrisMemory(String value, int column) {
+        memory.setRATris(value, column);
+    }
+
+    public void setRBTrisMemory(String value, int column) {
+        memory.setRBTris(value, column);
+    }
 }
