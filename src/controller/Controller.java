@@ -1,6 +1,8 @@
 package controller;
 
+import GUI.MainFrame;
 import PIC.Commands;
+import PIC.Memory;
 import input.Input;
 import PIC.Memory;
 
@@ -17,6 +19,7 @@ public class Controller {
 
     Memory m;
     Commands command;
+    private MainFrame mainFrame;
 
     /**
      * constructor
@@ -30,6 +33,7 @@ public class Controller {
      * method to run the PICSumulator and manages all steps
      */
     public void runPICSimulator() {
+        mainFrame = new MainFrame(this);
         Input I = new Input();
         this.linesStr = I.read(this.linesStr);
         //this.lines.forEach((key) -> System.out.println(key + ": " + getBinary(key)));
@@ -264,4 +268,27 @@ public class Controller {
         System.out.println("error");
     }
 
+    public String[][] getMainMemory() {
+        return m.getMainMemory();
+    }
+
+    public void setMainMemoryByIndex(int row, int column, String value) {
+        m.setMainMemoryByIndex(row, column, value);
+    }
+
+    public void setRAPinMemory (int value, int column) {
+        m.setRAPin(value, column);
+    }
+
+    public void setRBPinMemory (int value, int column) {
+        m.setRBPin(value, column);
+    }
+
+    public void setRATrisMemory(String value, int column) {
+        m.setRATris(value, column);
+    }
+
+    public void setRBTrisMemory(String value, int column) {
+        m.setRBTris(value, column);
+    }
 }
