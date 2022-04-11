@@ -4,9 +4,7 @@ import GUI.MainFrame;
 import PIC.Commands;
 import PIC.Memory;
 import input.Input;
-import PIC.Memory;
 
-import java.lang.management.MemoryManagerMXBean;
 import java.util.ArrayList;
 
 public class Controller {
@@ -17,7 +15,7 @@ public class Controller {
     private ArrayList<String> linesStr = new ArrayList<String>();
     private ArrayList<Integer> linesInt = new ArrayList<Integer>();
 
-    Memory m;
+    Memory memory;
     Commands command;
     private MainFrame mainFrame;
 
@@ -25,22 +23,23 @@ public class Controller {
      * constructor
      */
     public Controller() {
-        m = new Memory();
-        command = new Commands(m);
+        memory = new Memory();
+        command = new Commands(memory);
     }
 
     /**
-     * method to run the PICSumulator and manages all steps
+     * method to run the PICSimulator and manages all steps
      */
     public void runPICSimulator() {
         mainFrame = new MainFrame(this);
         Input I = new Input();
         this.linesStr = I.read(this.linesStr);
-        //this.lines.forEach((key) -> System.out.println(key + ": " + getBinary(key)));
         this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
 
-        for (m.setPcl((char) 0); m.getPcl() < linesInt.size(); m.setPcl((char) (m.getPcl()+1))) {
-            callCommands(linesInt.get(m.getPcl()));
+        for (memory.setPcl((char) 0); memory.getPcl() < linesInt.size(); memory.setPcl((char) (memory.getPcl()+1))) {
+            callCommands(linesInt.get(memory.getPcl()));
+            mainFrame.reloadMainMemory();
+            System.out.println((int)memory.getW());
         }
     }
 
@@ -268,27 +267,23 @@ public class Controller {
         System.out.println("error");
     }
 
-    public String[][] getMainMemory() {
-        return m.getMainMemory();
+    public char[] getMainMemory() {
+        return memory.getMainMemory();
     }
 
     public void setMainMemoryByIndex(int row, int column, String value) {
-        m.setMainMemoryByIndex(row, column, value);
+        memory.setMainMemoryByIndex(row, column, value);
     }
 
-    public void setRAPinMemory (int value, int column) {
-        m.setRAPin(value, column);
-    }
-
-    public void setRBPinMemory (int value, int column) {
-        m.setRBPin(value, column);
+    public void setBitinMemory (int index, int value, int position) {
+        memory.setBit(index, value, position);
     }
 
     public void setRATrisMemory(String value, int column) {
-        m.setRATris(value, column);
+        memory.setRATris(value, column);
     }
 
     public void setRBTrisMemory(String value, int column) {
-        m.setRBTris(value, column);
+        memory.setRBTris(value, column);
     }
 }

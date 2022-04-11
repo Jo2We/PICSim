@@ -1,16 +1,17 @@
 package PIC;
 
-import PIC.Memory;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 public class Commands {
 
-    Memory m;
+    Memory memory;
 
     /**
      * constructor
      */
     public Commands(Memory m) {
-        this.m = m;
+        this.memory = m;
     }
 
 
@@ -128,16 +129,26 @@ public class Commands {
         System.out.println("called addlw with " + opcode);
 
         int k = opcode - 15872; //-11 1110 0000 0000
-        m.setW((char) (k + m.getW()));
+        memory.setW((char) (k + memory.getW()));
     }
 
     public void andlw(int opcode) /*11 1001*/ {
         System.out.println("called andlw with " + opcode);
+        int k = opcode - 0x3900;
+
+        memory.setW((char) (k & memory.getW()));
+
 
     }
 
     public void call(int opcode) /*10 0*/ {
         System.out.println("called call with " + opcode);
+
+        int k = opcode & 0x7ff;
+
+        memory.setPcl((char) (k - 1));
+
+        memory.pushStack(k);
 
     }
 
@@ -150,19 +161,23 @@ public class Commands {
         System.out.println("called _goto with " + opcode);
         int k = opcode - 10240; //-10 1000 0000 0000
 
-        m.setPcl((char) (k-1));
+        memory.setPcl((char) (k - 1));
 
     }
 
     public void iorlw(int opcode) /*11 1000*/ {
         System.out.println("called iorlw with " + opcode);
+        int k = opcode - 0x3800;
+
+        memory.setW((char) (k | memory.getW()));
+
 
     }
 
     public void movlw(int opcode) /*11 00xx*/ {
         System.out.println("called movlw with " + opcode);
         int k = opcode - 12288; //-11 0000 0000 0000
-        m.setW((char) k);
+        memory.setW((char) k);
     }
 
     public void retfie() /*00 0000 0000 1001*/ {
@@ -188,11 +203,19 @@ public class Commands {
     public void sublw(int opcode) /*11 110x*/ {
         System.out.println("called sublw with " + opcode);
         int k = opcode - 15360; //-11 1100 0000 0000
-        m.setW((char) (k - m.getW()));
+        memory.setW((char) (k - memory.getW()));
     }
 
     public void xorlw(int opcode) /*11 1010*/ {
         System.out.println("called xorlw with " + opcode);
+
+        int k = opcode - 0x3a00;
+        String text = "text";
+
+        //byte[] bytes = ByteBuffer.allocate(8).putInt(k).array();
+        memory.setW((char) ((char) ((char)k ^ (char)memory.getW()) & (char)255));
+        //BigInteger bigint = bigint.xor
+
 
     }
 }

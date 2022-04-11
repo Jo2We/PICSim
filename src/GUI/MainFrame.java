@@ -14,7 +14,7 @@ public class MainFrame {
     private int columnsMemory = 8;
     private JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory + 1];
     private String[][] labelsMemonryCommands = new String[rowsMemory][columnsMemory + 1];
-    private String[][] mainMemory = new String[rowsMemory][columnsMemory];
+    protected char[] mainMemory;
 
     private int rowsRARB = 6;
     private int columnsRARB = 8;
@@ -54,10 +54,10 @@ public class MainFrame {
         for (int row = 0; row < rowsMemory; row++) {
             panel.add(labelsMemory[row][0]);
             for (int column = 1; column < columnsMemory + 1; column++) {
-                labelsMemory[row][column] = new JLabel(this.mainMemory[row][column - 1], SwingConstants.CENTER);
-                labelsMemonryCommands[row][column] = "clicked: " + row + " " + column;
+                labelsMemory[row][column] = new JLabel( String.valueOf((int)this.mainMemory[row * 8 + (column - 1)]), SwingConstants.CENTER);
                 labelsMemory[row][column].setFont(new Font("Arial", Font.PLAIN, 10));
                 labelsMemory[row][column].setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+                labelsMemonryCommands[row][column] = "clicked: " + row + " " + column;
                 int rowCommand = row;
                 int columnCommand = column;
                 labelsMemory[row][column].addMouseListener(new MouseListener() {
@@ -89,14 +89,14 @@ public class MainFrame {
         return panel;
     }
 
-    private ScrollPane buildScrollView () {
+    private ScrollPane buildScrollView() {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setBounds(10, 25, 240, 300);
         scrollPane.add(buildMemory());
         return scrollPane;
     }
 
-    private JPanel buildTopLineMemory () {
+    private JPanel buildTopLineMemory() {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(1, columnsMemory);
         panel.setLayout(layout);
@@ -116,7 +116,7 @@ public class MainFrame {
         return panel;
     }
 
-    private JPanel buildRARB () {
+    private JPanel buildRARB() {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(rowsRARB, columnsRARB + 1);
         for (int row = 0; row < rowsRARB; row++) {
@@ -204,27 +204,27 @@ public class MainFrame {
 
     private void mouseEventMemoryClick(ActionEvent ae) {
         System.out.println(ae.getActionCommand());
-        String [] str = ae.getActionCommand().substring(9).split(" ");
+        String[] str = ae.getActionCommand().substring(9).split(" ");
         int row = Integer.parseInt(str[0]);
         int column = Integer.parseInt(str[1]);
         MemoryManipulationFrame memoryManipulationFrame = new MemoryManipulationFrame(Integer.toHexString(row * 8), row, column, this);
     }
 
-    public void storeMemoryManipulation (int row, int column, String value) {
+    public void storeMemoryManipulation(int row, int column, String value) {
         controller.setMainMemoryByIndex(row, column, value);
         this.labelsMemory[row][column].setText(value);
     }
 
-    private void reloadMainMemory() {
+    public void reloadMainMemory() {
         mainMemory = controller.getMainMemory();
         for (int row = 0; row < rowsMemory; row++) {
             for (int column = 0; column < columnsMemory; column++) {
-                labelsMemory[row][column + 1].setText(mainMemory[row][column]);
+                labelsMemory[row][column + 1].setText(String.valueOf((int)mainMemory[row * 8 + column]));
             }
         }
     }
 
-    private void toggleRARBTris (ActionEvent ae, JLabel label, int row, int column) {
+    private void toggleRARBTris(ActionEvent ae, JLabel label, int row, int column) {
         //System.out.println(ae.getActionCommand());
         if (ae.getActionCommand().equals("i")) {
             label.setText("o");
@@ -245,23 +245,23 @@ public class MainFrame {
         }
     }
 
-    private void toggleRARBPin (ActionEvent ae, JLabel label, int row, int column) {
+    private void toggleRARBPin(ActionEvent ae, JLabel label, int row, int position) {
         //System.out.println(ae.getActionCommand() + " " + column);
         if (ae.getActionCommand().equals("1")) {
             label.setText("0");
             if (row == 2) { // RA
-                controller.setRAPinMemory(0, column);
+                controller.setBitinMemory(5, 0, position);
             }
             if (row == 5) { // RB
-                controller.setRBPinMemory(0, column);
+                controller.setBitinMemory(6, 0, position);
             }
         } else {
             label.setText("1");
             if (row == 2) { // RA
-                controller.setRAPinMemory(1, column);
+                controller.setBitinMemory(5, 1, position);
             }
             if (row == 5) { // RB
-                controller.setRBPinMemory(1, column);
+                controller.setBitinMemory(6, 1, position);
             }
         }
     }
