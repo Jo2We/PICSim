@@ -2,10 +2,9 @@ package controller;
 
 import GUI.MainFrame;
 import PIC.Commands;
-import input.Input;
 import PIC.Memory;
+import input.Input;
 
-import java.lang.management.MemoryManagerMXBean;
 import java.util.ArrayList;
 
 public class Controller {
@@ -13,33 +12,27 @@ public class Controller {
     /**
      * attributes
      */
-    private ArrayList<String> linesStr = new ArrayList<String>();
-    private ArrayList<Integer> linesInt = new ArrayList<Integer>();
-
-    Memory m;
-    Commands command;
+    private ArrayList<String> lines = new ArrayList<String>();
+    private MainFrame mainFrame;
+    private Memory memory;
 
     /**
      * constructor
      */
     public Controller() {
-        m = new Memory();
-        command = new Commands(m);
     }
 
     /**
      * method to run the PICSumulator and manages all steps
      */
     public void runPICSimulator() {
-        MainFrame mainFrame = new MainFrame();
+        memory = new Memory();
+        mainFrame = new MainFrame(this);
         Input I = new Input();
-        this.linesStr = I.read(this.linesStr);
-        //this.lines.forEach((key) -> System.out.println(key + ": " + getBinary(key)));
-        this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
-
-        for (m.setPcl((char) 0); m.getPcl() < linesInt.size(); m.setPcl((char) (m.getPcl()+1))) {
-            callCommands(linesInt.get(m.getPcl()));
-        }
+        //this.lines = I.read(this.lines);
+        this.lines = I.read(this.lines);
+        this.lines.forEach((key) -> System.out.println(key + ": " + getBinary(key)));
+        this.lines.forEach((key) -> callCommands(getBinaryAsInt(key)));
     }
 
     /**
@@ -63,6 +56,7 @@ public class Controller {
      */
     private void callCommands(int dec) {
         //System.out.println(dec);
+        Commands command = new Commands();
 
         if (dec < 16384) {
             if (dec < 8192) { // 0
@@ -266,4 +260,27 @@ public class Controller {
         System.out.println("error");
     }
 
+    public String[][] getMainMemory() {
+        return memory.getMainMemory();
+    }
+
+    public void setMainMemoryByIndex(int row, int column, String value) {
+        memory.setMainMemoryByIndex(row, column, value);
+    }
+
+    public void setRAPinMemory (int value, int column) {
+        memory.setRAPin(value, column);
+    }
+
+    public void setRBPinMemory (int value, int column) {
+        memory.setRBPin(value, column);
+    }
+
+    public void setRATrisMemory(String value, int column) {
+        memory.setRATris(value, column);
+    }
+
+    public void setRBTrisMemory(String value, int column) {
+        memory.setRBTris(value, column);
+    }
 }
