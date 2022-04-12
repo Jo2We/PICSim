@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class MainFrame {
 
@@ -22,6 +23,8 @@ public class MainFrame {
 
     private String memoryManipulation = "0";
 
+    private ArrayList<String> fullLines;
+
     private Controller controller;
 
     public MainFrame(Controller controller) {
@@ -32,9 +35,11 @@ public class MainFrame {
         //mainFrame.add(buildMemory());
 
         mainFrame.add(buildTopLineMemory());
-        mainFrame.add(buildMemory());
+        //mainFrame.add(buildMemory());
         mainFrame.add(buildScrollView());
         mainFrame.add(buildRARB());
+        mainFrame.add(buildCodeScrollPane());
+        //mainFrame.add(buildCodeViewColumns());
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,7 +87,6 @@ public class MainFrame {
                     public void mouseExited(MouseEvent e) {
                     }
                 });
-
                 panel.add(labelsMemory[row][column]);
             }
         }
@@ -264,5 +268,75 @@ public class MainFrame {
                 controller.setBitinMemory(6, 1, position);
             }
         }
+    }
+
+    private JScrollPane buildCodeScrollPane() {
+        this.fullLines = this.controller.getFullLines();
+        JSplitPane panel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        JPanel panelRows = new JPanel();
+        panelRows.setBackground(Color.gray);
+        panelRows.add(new JLabel("Rows"));
+        JPanel panelCode = new JPanel();
+        panelCode.setBackground(Color.gray);
+        panelCode.add(new JLabel("Code"));
+
+        panel.setDividerLocation(0.1);
+        panel.setLeftComponent(buildCodeRowPanel());
+        panel.setRightComponent(buildCodePanel());
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setBounds(260, 200, 650, 450);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        return scrollPane;
+    }
+
+    private JList buildCodeRowPanel () {
+        String [] lines = fullLines.toArray(new String[0]);
+        for (int index = 0; index < lines.length; index++) {
+            lines[index] = lines[index].substring(21,25);
+            System.out.println(lines[index]);
+        }
+        JList list = new JList(lines);
+        list.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                mouseEventCodeRowClick(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, "clicked on row: " + (list.getSelectedIndex() + 1)), list.getSelectedIndex());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+        return list;
+    }
+
+    private JList buildCodePanel () {
+        String [] lines = fullLines.toArray(new String[0]);
+        for (int index = 0; index < lines.length; index++) {
+            lines[index] = lines[index].substring(26);
+            System.out.println(lines[index]);
+        }
+        JList list = new JList(lines);
+        return list;
+    }
+
+    private void mouseEventCodeRowClick (ActionEvent ae, int row) {
+        System.out.println(ae.getActionCommand());
+    }
+
+    public void reloadCode () {
+        ArrayList<String> fullLines = controller.getFullLines();
+        fullLines.forEach(key -> System.out.println(key.substring(21)));
     }
 }

@@ -14,6 +14,7 @@ public class Controller {
      */
     private ArrayList<String> linesStr = new ArrayList<String>();
     private ArrayList<Integer> linesInt = new ArrayList<Integer>();
+    private ArrayList<String> fullLines = new ArrayList<String>();
 
     Memory memory;
     Commands command;
@@ -31,14 +32,16 @@ public class Controller {
      * method to run the PICSimulator and manages all steps
      */
     public void runPICSimulator() {
-        mainFrame = new MainFrame(this);
         Input I = new Input();
-        this.linesStr = I.read(this.linesStr);
+        this.linesStr = I.read(this.linesStr, this.fullLines);
+        mainFrame = new MainFrame(this);
         this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
 
         for (memory.setPcl((char) 0); memory.getPcl() < linesInt.size(); memory.setPcl((char) (memory.getPcl()+1))) {
             callCommands(linesInt.get(memory.getPcl()));
             mainFrame.reloadMainMemory();
+            //fullLines.forEach(key -> System.out.println(key));
+            //mainFrame.reloadCode();
             System.out.println((int)memory.getW());
         }
     }
@@ -285,5 +288,9 @@ public class Controller {
 
     public void setRBTrisMemory(String value, int column) {
         memory.setRBTris(value, column);
+    }
+
+    public ArrayList<String> getFullLines () {
+        return this.fullLines;
     }
 }
