@@ -21,7 +21,7 @@ public class Input {
      * @param lines
      * @return
      */
-    public ArrayList<String> read(ArrayList<String> lines) {
+    public ArrayList<String> read(ArrayList<String> lines, ArrayList<String> fullLines) {
         String encoding = "windows-1252";
         try {
             File source =  new File("res/TPicSim2.LST");
@@ -29,6 +29,7 @@ public class Input {
             Scanner myReader = new Scanner(source, Charset.forName(encoding));
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
+                fullLines.add(data);
                 char character = data.charAt(0);
 
                 if (character != ' ') {
