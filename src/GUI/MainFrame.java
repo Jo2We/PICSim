@@ -211,7 +211,8 @@ public class MainFrame {
     }
 
     public void storeMemoryManipulation(int row, int column, String value) {
-        controller.setMainMemoryByIndex(row, column, value);
+        int num = Integer.parseInt(value, 16);
+        controller.setMainMemoryByIndex(row*8+column , num);
         this.labelsMemory[row][column].setText(value);
     }
 

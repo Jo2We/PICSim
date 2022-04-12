@@ -36,10 +36,10 @@ public class Controller {
         this.linesStr = I.read(this.linesStr);
         this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
 
-        for (memory.setPcl((char) 0); memory.getPcl() < linesInt.size(); memory.setPcl((char) (memory.getPcl()+1))) {
+        for (memory.setPcl((char) 0); memory.getPcl() < linesInt.size(); memory.setPcl((char) (memory.getPcl() + 1))) {
             callCommands(linesInt.get(memory.getPcl()));
             mainFrame.reloadMainMemory();
-            System.out.println((int)memory.getW());
+            System.out.println((int) memory.getW());
         }
     }
 
@@ -271,11 +271,11 @@ public class Controller {
         return memory.getMainMemory();
     }
 
-    public void setMainMemoryByIndex(int row, int column, String value) {
-        memory.setMainMemoryByIndex(row, column, value);
+    public void setMainMemoryByIndex(int index, int value) {
+        memory.setMainMemoryByIndex(index, value);
     }
 
-    public void setBitinMemory (int index, int value, int position) {
+    public void setBitinMemory(int index, int value, int position) {
         memory.setBit(index, value, position);
     }
 

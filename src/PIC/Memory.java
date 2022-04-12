@@ -26,9 +26,9 @@ public class Memory {
         return this.mainMemory;
     }
 
-    public void setMainMemoryByIndex(int row, int column, String value) {
-        int hex = Integer.parseInt(value, 16);
-        this.mainMemory[row * 8 + column] = (char) hex;
+    public void setMainMemoryByIndex(int index, int value) {
+        //int hex = Integer.parseInt(value, 16);
+        this.mainMemory[index] = (char) value;
     }
 
     public char getW() {

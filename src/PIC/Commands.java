@@ -34,11 +34,14 @@ public class Commands {
         System.out.println("called clrf with " + opcode);
         int f = opcode & 0x7f;
 
+        memory.setMainMemoryByIndex(f, 0);
+
     }
 
     public void clrw(int opcode) /*00 0001 0 -xxx xxxx-*/ {
         System.out.println("called clrw with " + opcode);
 
+        memory.setW((char) 0);
     }
 
     public void comf(int opcode) /*00 1001 0 -000 0000 -|-111 1111-*/ {
@@ -63,7 +66,15 @@ public class Commands {
         System.out.println("called encf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
-    }
+
+        char value = memory.getMainMemory()[f];
+        value++;
+
+        if (d == 0){
+            memory.setW(value);
+        }else {
+            memory.setMainMemoryByIndex(f, value);
+        }    }
 
     public void incfsz(int opcode) /*00 1111 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called incfsz with " + opcode);
@@ -81,11 +92,21 @@ public class Commands {
         System.out.println("called movf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
+
+        char value = memory.getMainMemory()[f];
+
+        if (d == 0){
+            memory.setW(value);
+        }else {
+            memory.setMainMemoryByIndex(f, value);
+        }
     }
 
     public void movwf(int opcode) /*00 0000 1 -000 0000 -|-111 1111-*/ {
         System.out.println("called movwf with " + opcode);
         int f = opcode & 0x7f;
+
+        memory.setMainMemoryByIndex(f, memory.getW());
     }
 
     public void nop() /*00 0000 0xx0 0000*/ {
@@ -116,6 +137,15 @@ public class Commands {
         System.out.println("called swapf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
+
+        char value = memory.getMainMemory()[f];
+        value = (char) (value - memory.getW());
+
+        if (d == 0) {
+            memory.setW(value);
+        } else {
+            memory.setMainMemoryByIndex(f, value);
+        }
     }
 
     public void xorwf(int opcode) /*00 0110 -0000 0000 -|-1111 1111-*/ {
