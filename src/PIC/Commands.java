@@ -20,6 +20,19 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
+        char value = (char) (memory.getW() + memory.getMainMemory()[f]);
+
+        if(d == 0){
+            memory.setW(value);
+        }else {
+            memory.setMainMemoryByIndex(f, value);
+        }
+
+        if (value == 0){
+            memory.setStatus(2);
+        }
+
+
 
     }
 
@@ -35,6 +48,7 @@ public class Commands {
         int f = opcode & 0x7f;
 
         memory.setMainMemoryByIndex(f, 0);
+        memory.setMainMemoryBit(3, 1, 2);
 
     }
 

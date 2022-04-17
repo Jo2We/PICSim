@@ -60,7 +60,15 @@ public class Memory {
         return 0;
     }
 
-    public void setBit(int index, int value, int position) {
+    public void setStatus(int position){
+        setMainMemoryBit(3, 1, position);
+    }
+
+    public void resetStatus(){
+        setMainMemoryByIndex(3, 0);
+    }
+
+    public void setMainMemoryBit(int index, int value, int position) {
         if (value == 0) {
             switch (position) {
                 case 0:

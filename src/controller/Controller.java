@@ -279,7 +279,7 @@ public class Controller {
     }
 
     public void setBitinMemory(int index, int value, int position) {
-        memory.setBit(index, value, position);
+        memory.setMainMemoryBit(index, value, position);
     }
 
     public void setRATrisMemory(String value, int column) {

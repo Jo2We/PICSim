@@ -59,7 +59,9 @@ public class MainFrame {
         for (int row = 0; row < rowsMemory; row++) {
             panel.add(labelsMemory[row][0]);
             for (int column = 1; column < columnsMemory + 1; column++) {
-                labelsMemory[row][column] = new JLabel( String.valueOf((int)this.mainMemory[row * 8 + (column - 1)]), SwingConstants.CENTER);
+                String content = String.format("%02d", (int)this.mainMemory[row * 8 + (column - 1)]);
+                //String.valueOf((int)this.mainMemory[row * 8 + (column - 1)])
+                labelsMemory[row][column] = new JLabel(content, SwingConstants.CENTER);
                 labelsMemory[row][column].setFont(new Font("Arial", Font.PLAIN, 10));
                 labelsMemory[row][column].setBorder(BorderFactory.createLineBorder(Color.gray, 1));
                 labelsMemonryCommands[row][column] = "clicked: " + row + " " + column;
@@ -216,7 +218,7 @@ public class MainFrame {
 
     public void storeMemoryManipulation(int row, int column, String value) {
         int num = Integer.parseInt(value, 16);
-        controller.setMainMemoryByIndex(row*8+column , num);
+        controller.setMainMemoryByIndex(row * 8 + column, num);
         this.labelsMemory[row][column].setText(value);
     }
 
@@ -224,7 +226,9 @@ public class MainFrame {
         mainMemory = controller.getMainMemory();
         for (int row = 0; row < rowsMemory; row++) {
             for (int column = 0; column < columnsMemory; column++) {
-                labelsMemory[row][column + 1].setText(String.valueOf((int)mainMemory[row * 8 + column]));
+                String content = String.format("%02d", (int)this.mainMemory[row * 8 + column]);
+
+                labelsMemory[row][column + 1].setText(content);
             }
         }
     }
@@ -290,10 +294,10 @@ public class MainFrame {
         return scrollPane;
     }
 
-    private JList buildCodeRowPanel () {
-        String [] lines = fullLines.toArray(new String[0]);
+    private JList buildCodeRowPanel() {
+        String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
-            lines[index] = lines[index].substring(21,25);
+            lines[index] = lines[index].substring(21, 25);
             System.out.println(lines[index]);
         }
         JList list = new JList(lines);
@@ -322,8 +326,8 @@ public class MainFrame {
         return list;
     }
 
-    private JList buildCodePanel () {
-        String [] lines = fullLines.toArray(new String[0]);
+    private JList buildCodePanel() {
+        String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
             lines[index] = lines[index].substring(26);
             System.out.println(lines[index]);
@@ -332,11 +336,11 @@ public class MainFrame {
         return list;
     }
 
-    private void mouseEventCodeRowClick (ActionEvent ae, int row) {
+    private void mouseEventCodeRowClick(ActionEvent ae, int row) {
         System.out.println(ae.getActionCommand());
     }
 
-    public void reloadCode () {
+    public void reloadCode() {
         ArrayList<String> fullLines = controller.getFullLines();
         fullLines.forEach(key -> System.out.println(key.substring(21)));
     }

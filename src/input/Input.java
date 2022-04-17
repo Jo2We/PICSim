@@ -52,7 +52,7 @@ public class Input {
     public ArrayList<String> readTxt(ArrayList<String> lines) {
         // res/AllCommandsText.txt
         try {
-            Scanner scanner = new Scanner(new File("res/AllCommandsText.txt"));
+            Scanner scanner = new Scanner(new File("res/test.txt"));
             String line;
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
