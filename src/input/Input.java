@@ -24,7 +24,7 @@ public class Input {
     public ArrayList<String> read(ArrayList<String> lines, ArrayList<String> fullLines) {
         String encoding = "windows-1252";
         try {
-            File source =  new File("res/TPicSim2.LST");
+            File source =  new File("res/test.LST");
             // System.out.println(source.isFile());
             Scanner myReader = new Scanner(source, Charset.forName(encoding));
             while (myReader.hasNextLine()) {

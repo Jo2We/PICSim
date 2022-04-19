@@ -38,11 +38,12 @@ public class Controller {
         this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
 
         for (memory.setPcl((char) 0); memory.getPcl() < linesInt.size(); memory.setPcl((char) (memory.getPcl() + 1))) {
+            memory.resetStatus();
             callCommands(linesInt.get(memory.getPcl()));
             mainFrame.reloadMainMemory();
-            //System.out.println((int) memory.getW());
             //mainFrame.reloadCode();
-            //System.out.println((int)memory.getW());
+            System.out.println((int)memory.getStatus());
+            System.out.println((int)memory.getW());
         }
     }
 

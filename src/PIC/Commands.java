@@ -22,16 +22,11 @@ public class Commands {
 
         char value = (char) (memory.getW() + memory.getMainMemory()[f]);
 
-        if(d == 0){
+        if (d == 0) {
             memory.setW(value);
-        }else {
+        } else {
             memory.setMainMemoryByIndex(f, value);
         }
-
-        if (value == 0){
-            memory.setStatus(2);
-        }
-
 
 
     }
@@ -84,11 +79,12 @@ public class Commands {
         char value = memory.getMainMemory()[f];
         value++;
 
-        if (d == 0){
+        if (d == 0) {
             memory.setW(value);
-        }else {
+        } else {
             memory.setMainMemoryByIndex(f, value);
-        }    }
+        }
+    }
 
     public void incfsz(int opcode) /*00 1111 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called incfsz with " + opcode);
@@ -109,9 +105,9 @@ public class Commands {
 
         char value = memory.getMainMemory()[f];
 
-        if (d == 0){
+        if (d == 0) {
             memory.setW(value);
-        }else {
+        } else {
             memory.setMainMemoryByIndex(f, value);
         }
     }
@@ -196,7 +192,9 @@ public class Commands {
         System.out.println("called addlw with " + opcode);
 
         int k = opcode & 0xff;
-        memory.setW((char) (k + memory.getW()));
+        int value = k + memory.getW();
+        saveValue(0, 0, value, memory.getW());
+        //memory.setW((char) (k + memory.getW()));
     }
 
     public void andlw(int opcode) /*11 1001*/ {
@@ -270,7 +268,9 @@ public class Commands {
     public void sublw(int opcode) /*11 110x*/ {
         System.out.println("called sublw with " + opcode);
         int k = opcode & 0xff;
-        memory.setW((char) (k - memory.getW()));
+        int value = k - memory.getW();
+        saveValue(0, 0, value, memory.getW());
+        //memory.setW((char) (k - memory.getW()));
     }
 
     public void xorlw(int opcode) /*11 1010*/ {
@@ -279,6 +279,32 @@ public class Commands {
         int k = opcode & 0xff;
 
         memory.setW((char) (k ^ memory.getW() & 0xff));
+
+
+    }
+
+    private void saveValue(int destination, int index, int value, int prevValue) {
+        if (value == 0) {
+            memory.setStatus(2);
+        }
+
+
+        if (value > 127 && prevValue <= 127 || value <= 127 && prevValue > 127) {
+            //overflow
+            memory.setStatus(1);
+        }
+
+        if (value > 255 || value < 0) {
+            //carry
+            value += 255;
+            value = value % 255;
+            memory.setStatus(0);
+        }
+        if (destination == 0) {
+            memory.setW((char) value);
+        } else {
+            memory.setMainMemoryByIndex(index, value);
+        }
 
 
     }
