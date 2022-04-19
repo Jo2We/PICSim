@@ -40,9 +40,9 @@ public class Controller {
         for (memory.setPcl((char) 0); memory.getPcl() < linesInt.size(); memory.setPcl((char) (memory.getPcl() + 1))) {
             callCommands(linesInt.get(memory.getPcl()));
             mainFrame.reloadMainMemory();
-            System.out.println((int) memory.getW());
+            //System.out.println((int) memory.getW());
             //mainFrame.reloadCode();
-            System.out.println((int)memory.getW());
+            //System.out.println((int)memory.getW());
         }
     }
 
@@ -292,5 +292,28 @@ public class Controller {
 
     public ArrayList<String> getFullLines () {
         return this.fullLines;
+    }
+
+    public char getW () {
+        return this.memory.getW();
+    }
+
+    public char getPcl () {
+        return this.memory.getPcl();
+    }
+
+    public char getStatus () {
+        return this.memory.getStatus();
+    }
+
+    public String getText (char charValue) {
+        String str;
+        int value = (int) charValue;
+        if (value < 16) {
+            str = "0" + Integer.toHexString(value);
+        } else {
+            str = Integer.toHexString(value);
+        }
+        return str;
     }
 }

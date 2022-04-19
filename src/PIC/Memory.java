@@ -39,7 +39,7 @@ public class Memory {
         this.w = w;
     }
 
-    public int getPcl() {
+    public char getPcl() {
         return mainMemory[2];
     }
 
@@ -66,6 +66,10 @@ public class Memory {
 
     public void resetStatus(){
         setMainMemoryByIndex(3, 0);
+    }
+
+    public char getStatus () {
+        return this.mainMemory[3];
     }
 
     public void setMainMemoryBit(int index, int value, int position) {

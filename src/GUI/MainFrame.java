@@ -40,6 +40,7 @@ public class MainFrame {
         mainFrame.add(buildRARB());
         mainFrame.add(buildCodeScrollPane());
         //mainFrame.add(buildCodeViewColumns());
+        mainFrame.add(buildSpecialFunctionRegisterVisible());
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -298,7 +299,7 @@ public class MainFrame {
         String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
             lines[index] = lines[index].substring(21, 25);
-            System.out.println(lines[index]);
+            //System.out.println(lines[index]);
         }
         JList list = new JList(lines);
         list.addMouseListener(new MouseListener() {
@@ -330,7 +331,7 @@ public class MainFrame {
         String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
             lines[index] = lines[index].substring(26);
-            System.out.println(lines[index]);
+            //System.out.println(lines[index]);
         }
         JList list = new JList(lines);
         return list;
@@ -342,6 +343,39 @@ public class MainFrame {
 
     public void reloadCode() {
         ArrayList<String> fullLines = controller.getFullLines();
-        fullLines.forEach(key -> System.out.println(key.substring(21)));
+        //fullLines.forEach(key -> System.out.println(key.substring(21)));
+    }
+
+    private JPanel buildSpecialFunctionRegisterVisible () {
+        JPanel panel = new JPanel();
+        panel.setBounds(500, 10, 150, 150);
+        //panel.setBackground(Color.cyan);
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        GridLayout layout = new GridLayout(6, 2);
+        panel.setLayout(layout);
+        panel.add(new JLabel("sichtbar"));
+        panel.add(new JLabel(""));
+        panel.add(new JLabel("W-Register"));
+        // W-Register
+        JLabel labelWRegister = new JLabel("", SwingConstants.CENTER);
+        labelWRegister.setText(this.controller.getText(this.controller.getW()));
+        panel.add(labelWRegister);
+        panel.add(new JLabel("FSR"));
+        JLabel labelFsr = new JLabel("", SwingConstants.CENTER);
+        labelFsr.setText("insert here");
+        panel.add(labelFsr);
+        panel.add(new JLabel("PCL"));
+        JLabel labelPcl = new JLabel("", SwingConstants.CENTER);
+        labelPcl.setText(this.controller.getText(this.controller.getPcl()));
+        panel.add(labelPcl);
+        panel.add(new JLabel("PCLATH"));
+        JLabel labelPclath = new JLabel("", SwingConstants.CENTER);
+        labelPclath.setText("insert here");
+        panel.add(labelPclath);
+        panel.add(new JLabel("Status"));
+        JLabel labelStatus = new JLabel("", SwingConstants.CENTER);
+        labelStatus.setText(this.controller.getText(this.controller.getStatus()));
+        panel.add(labelStatus);
+        return panel;
     }
 }
