@@ -25,6 +25,8 @@ public class MainFrame {
 
     private ArrayList<String> fullLines;
 
+    private JLabel[] labelsSpecialFunctionsRegisterVisible = new JLabel[5];
+
     private Controller controller;
 
     public MainFrame(Controller controller) {
@@ -60,7 +62,7 @@ public class MainFrame {
         for (int row = 0; row < rowsMemory; row++) {
             panel.add(labelsMemory[row][0]);
             for (int column = 1; column < columnsMemory + 1; column++) {
-                String content = String.format("%02d", (int)this.mainMemory[row * 8 + (column - 1)]);
+                String content = String.format("%02d", (int) this.mainMemory[row * 8 + (column - 1)]);
                 //String.valueOf((int)this.mainMemory[row * 8 + (column - 1)])
                 labelsMemory[row][column] = new JLabel(content, SwingConstants.CENTER);
                 labelsMemory[row][column].setFont(new Font("Arial", Font.PLAIN, 10));
@@ -220,16 +222,14 @@ public class MainFrame {
     public void storeMemoryManipulation(int row, int column, String value) {
         int num = Integer.parseInt(value, 16);
         controller.setMainMemoryByIndex(row * 8 + column, num);
-        this.labelsMemory[row][column].setText(value);
+        this.labelsMemory[row][column].setText(this.controller.getText((char) num));
     }
 
     public void reloadMainMemory() {
         mainMemory = controller.getMainMemory();
         for (int row = 0; row < rowsMemory; row++) {
             for (int column = 0; column < columnsMemory; column++) {
-                String content = String.format("%02d", (int)this.mainMemory[row * 8 + column]);
-
-                labelsMemory[row][column + 1].setText(content);
+                labelsMemory[row][column + 1].setText(this.controller.getText(this.mainMemory[row * 8 + column]));
             }
         }
     }
@@ -346,7 +346,7 @@ public class MainFrame {
         //fullLines.forEach(key -> System.out.println(key.substring(21)));
     }
 
-    private JPanel buildSpecialFunctionRegisterVisible () {
+    private JPanel buildSpecialFunctionRegisterVisible() {
         JPanel panel = new JPanel();
         panel.setBounds(500, 10, 150, 150);
         //panel.setBackground(Color.cyan);
@@ -356,26 +356,38 @@ public class MainFrame {
         panel.add(new JLabel("sichtbar"));
         panel.add(new JLabel(""));
         panel.add(new JLabel("W-Register"));
-        // W-Register
         JLabel labelWRegister = new JLabel("", SwingConstants.CENTER);
         labelWRegister.setText(this.controller.getText(this.controller.getW()));
+        labelsSpecialFunctionsRegisterVisible[0] = labelWRegister;
         panel.add(labelWRegister);
         panel.add(new JLabel("FSR"));
         JLabel labelFsr = new JLabel("", SwingConstants.CENTER);
         labelFsr.setText("insert here");
+        labelsSpecialFunctionsRegisterVisible[1] = labelFsr;
         panel.add(labelFsr);
         panel.add(new JLabel("PCL"));
         JLabel labelPcl = new JLabel("", SwingConstants.CENTER);
         labelPcl.setText(this.controller.getText(this.controller.getPcl()));
+        labelsSpecialFunctionsRegisterVisible[2] = labelPcl;
         panel.add(labelPcl);
         panel.add(new JLabel("PCLATH"));
         JLabel labelPclath = new JLabel("", SwingConstants.CENTER);
         labelPclath.setText("insert here");
+        labelsSpecialFunctionsRegisterVisible[3] = labelPclath;
         panel.add(labelPclath);
         panel.add(new JLabel("Status"));
         JLabel labelStatus = new JLabel("", SwingConstants.CENTER);
         labelStatus.setText(this.controller.getText(this.controller.getStatus()));
+        labelsSpecialFunctionsRegisterVisible[4] = labelStatus;
         panel.add(labelStatus);
         return panel;
+    }
+
+    public void reloadSpecialFunctionFegisterVisible() {
+        labelsSpecialFunctionsRegisterVisible[0].setText(this.controller.getText(this.controller.getW()));
+        labelsSpecialFunctionsRegisterVisible[1].setText("insert here");
+        labelsSpecialFunctionsRegisterVisible[2].setText(this.controller.getText(this.controller.getPcl()));
+        labelsSpecialFunctionsRegisterVisible[3].setText("insert here");
+        labelsSpecialFunctionsRegisterVisible[4].setText(this.controller.getText(this.controller.getStatus()));
     }
 }

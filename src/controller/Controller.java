@@ -42,7 +42,8 @@ public class Controller {
             mainFrame.reloadMainMemory();
             //System.out.println((int) memory.getW());
             //mainFrame.reloadCode();
-            //System.out.println((int)memory.getW());
+            System.out.println(Integer.toHexString((int)memory.getW()));
+            mainFrame.reloadSpecialFunctionFegisterVisible();
         }
     }
 
