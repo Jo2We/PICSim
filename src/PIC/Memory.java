@@ -1,5 +1,6 @@
 package PIC;
 
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 public class Memory {
@@ -20,6 +21,8 @@ public class Memory {
                 mainMemory[row * 8 + column] = 0;
             }
         }
+        this.setStatus(6);
+        this.setStatus(5);
     }
 
     public char[] getMainMemory() {
@@ -65,7 +68,13 @@ public class Memory {
     }
 
     public void setStatus(int position){
-        setMainMemoryBit(3, 1, position);
+        char value = this.getStatusByIndex(position);
+        if (value == '0') {
+            setMainMemoryBit(3, 1, position);
+        }
+        if (value == '1') {
+            setMainMemoryBit(3, 0, position);
+        }
     }
 
     public void resetStatus(){
@@ -155,5 +164,10 @@ public class Memory {
             System.out.print(key + " ");
         }
         System.out.println();
+    }
+
+    public char getStatusByIndex(int index) {
+        String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[3] & 0xFF)).replace(' ', '0');
+        return str.charAt(index);
     }
 }

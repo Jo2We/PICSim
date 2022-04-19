@@ -27,13 +27,9 @@ public class Commands {
         }else {
             memory.setMainMemoryByIndex(f, value);
         }
-
         if (value == 0){
             memory.setStatus(2);
         }
-
-
-
     }
 
     public void andwf(int opcode) /*00 0101 -0000 0000 -|-1111 1111-*/ {

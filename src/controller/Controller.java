@@ -322,4 +322,8 @@ public class Controller {
     public char getStack () {
         return this.memory.getStack();
     }
+
+    public char getStatusByIndex (int index) {
+        return this.memory.getStatusByIndex(index);
+    }
 }

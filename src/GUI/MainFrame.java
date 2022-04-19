@@ -30,6 +30,10 @@ public class MainFrame {
     private JLabel[] labelsSpecialFunctionsRegisterVisible = new JLabel[5];
     private JLabel[] labelsSpecialFunctionsRegisterHidden = new JLabel[2];
 
+    private int statusRows = 2;
+    private int statusColumns = 8;
+    private String[] statusStrings = {"IRP", "RP1", "RP2", "TO", "PD", "Z", "DC", "C"};
+
     private Controller controller;
 
     public MainFrame(Controller controller) {
@@ -47,6 +51,7 @@ public class MainFrame {
         //mainFrame.add(buildCodeViewColumns());
         mainFrame.add(buildSpecialFunctionsRegisterVisible());
         mainFrame.add(buildSpecialFunctionRegisterHidden());
+        mainFrame.add(buildStatusRegister());
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -419,5 +424,29 @@ public class MainFrame {
     public void reloadLabelsSpecialFunctionsRegisterHidden() {
         labelsSpecialFunctionsRegisterHidden[0].setText("insert here");
         labelsSpecialFunctionsRegisterHidden[1].setText(this.controller.getText(this.controller.getStack()));
+    }
+
+    private JPanel buildStatusRegister () {
+        JPanel panel = new JPanel();
+        //panel.setBackground(Color.cyan);
+        panel.setBounds(10, 350, 240, 40);
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        GridLayout layout = new GridLayout(this.statusRows, this.statusColumns);
+        panel.setLayout(layout);
+        for (int row = 0; row < this.statusRows; row++) {
+            for (int column = 0; column < this.statusColumns; column++) {
+                JLabel label = new JLabel("", SwingConstants.CENTER);
+                label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+                if (row == 0) {
+                    label.setText(statusStrings[column]);
+                    panel.add(label);
+                }
+                if (row == 1) {
+                    label.setText("" + this.controller.getStatusByIndex(column));
+                    panel.add(label);
+                }
+            }
+        }
+        return panel;
     }
 }
