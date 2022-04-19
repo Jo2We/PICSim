@@ -44,6 +44,10 @@ public class Controller {
             //mainFrame.reloadCode();
             System.out.println((int)memory.getStatus());
             System.out.println((int)memory.getW());
+
+            System.out.println(Integer.toHexString((int)memory.getW()));
+            mainFrame.reloadSpecialFunctionsRegisterVisible();
+            mainFrame.reloadLabelsSpecialFunctionsRegisterHidden();
         }
     }
 
@@ -316,5 +320,13 @@ public class Controller {
             str = Integer.toHexString(value);
         }
         return str;
+    }
+
+    public char getStack () {
+        return this.memory.getStack();
+    }
+
+    public char getStatusByIndex (int index) {
+        return this.memory.getStatusByIndex(index);
     }
 }

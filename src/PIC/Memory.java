@@ -1,5 +1,6 @@
 package PIC;
 
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 public class Memory {
@@ -11,7 +12,7 @@ public class Memory {
     private int rowsMemory = 32;
     private int columnsMemory = 8;
     private char[] mainMemory = new char[rowsMemory * 8 + columnsMemory];
-    private short[] stack = new short[8];
+    private char[] stack = new char[8];
     private int stackpointer = 0;
 
     public Memory() {
@@ -20,6 +21,8 @@ public class Memory {
                 mainMemory[row * 8 + column] = 0;
             }
         }
+        this.setStatus(6);
+        this.setStatus(5);
     }
 
     public char[] getMainMemory() {
@@ -48,7 +51,7 @@ public class Memory {
     }
 
     public void pushStack(int value) {
-        stack[stackpointer % 8] = (short) value;
+        stack[stackpointer % 8] = (char) value;
         stackpointer++;
     }
 
@@ -60,8 +63,18 @@ public class Memory {
         return 0;
     }
 
+    public char getStack() {
+        return this.stack[stackpointer];
+    }
+
     public void setStatus(int position){
-        setMainMemoryBit(3, 1, position);
+        char value = this.getStatusByIndex(position);
+        if (value == '0') {
+            setMainMemoryBit(3, 1, position);
+        }
+        if (value == '1') {
+            setMainMemoryBit(3, 0, position);
+        }
     }
 
     public void resetStatus(){
@@ -151,5 +164,10 @@ public class Memory {
             System.out.print(key + " ");
         }
         System.out.println();
+    }
+
+    public char getStatusByIndex(int index) {
+        String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[3] & 0xFF)).replace(' ', '0');
+        return str.charAt(index);
     }
 }

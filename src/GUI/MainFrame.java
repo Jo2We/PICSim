@@ -25,6 +25,15 @@ public class MainFrame {
 
     private ArrayList<String> fullLines;
 
+    private JList rowList;
+    private JList codeList;
+    private JLabel[] labelsSpecialFunctionsRegisterVisible = new JLabel[5];
+    private JLabel[] labelsSpecialFunctionsRegisterHidden = new JLabel[2];
+
+    private int statusRows = 2;
+    private int statusColumns = 8;
+    private String[] statusStrings = {"IRP", "RP1", "RP2", "TO", "PD", "Z", "DC", "C"};
+
     private Controller controller;
 
     public MainFrame(Controller controller) {
@@ -40,7 +49,9 @@ public class MainFrame {
         mainFrame.add(buildRARB());
         mainFrame.add(buildCodeScrollPane());
         //mainFrame.add(buildCodeViewColumns());
-        mainFrame.add(buildSpecialFunctionRegisterVisible());
+        mainFrame.add(buildSpecialFunctionsRegisterVisible());
+        mainFrame.add(buildSpecialFunctionRegisterHidden());
+        mainFrame.add(buildStatusRegister());
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +71,7 @@ public class MainFrame {
         for (int row = 0; row < rowsMemory; row++) {
             panel.add(labelsMemory[row][0]);
             for (int column = 1; column < columnsMemory + 1; column++) {
-                String content = String.format("%02d", (int)this.mainMemory[row * 8 + (column - 1)]);
+                String content = String.format("%02d", (int) this.mainMemory[row * 8 + (column - 1)]);
                 //String.valueOf((int)this.mainMemory[row * 8 + (column - 1)])
                 labelsMemory[row][column] = new JLabel(content, SwingConstants.CENTER);
                 labelsMemory[row][column].setFont(new Font("Arial", Font.PLAIN, 10));
@@ -220,16 +231,14 @@ public class MainFrame {
     public void storeMemoryManipulation(int row, int column, String value) {
         int num = Integer.parseInt(value, 16);
         controller.setMainMemoryByIndex(row * 8 + column, num);
-        this.labelsMemory[row][column].setText(value);
+        this.labelsMemory[row][column].setText(this.controller.getText((char) num));
     }
 
     public void reloadMainMemory() {
         mainMemory = controller.getMainMemory();
         for (int row = 0; row < rowsMemory; row++) {
             for (int column = 0; column < columnsMemory; column++) {
-                String content = String.format("%02d", (int)this.mainMemory[row * 8 + column]);
-
-                labelsMemory[row][column + 1].setText(content);
+                labelsMemory[row][column + 1].setText(this.controller.getText(this.mainMemory[row * 8 + column]));
             }
         }
     }
@@ -301,11 +310,11 @@ public class MainFrame {
             lines[index] = lines[index].substring(21, 25);
             //System.out.println(lines[index]);
         }
-        JList list = new JList(lines);
-        list.addMouseListener(new MouseListener() {
+        this.rowList = new JList(lines);
+        this.rowList.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                mouseEventCodeRowClick(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, "clicked on row: " + (list.getSelectedIndex() + 1)), list.getSelectedIndex());
+                mouseEventCodeRowClick(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, "clicked on row: " + (rowList.getSelectedIndex() + 1)), rowList.getSelectedIndex());
             }
 
             @Override
@@ -324,7 +333,7 @@ public class MainFrame {
             public void mouseExited(MouseEvent e) {
             }
         });
-        return list;
+        return this.rowList;
     }
 
     private JList buildCodePanel() {
@@ -333,12 +342,13 @@ public class MainFrame {
             lines[index] = lines[index].substring(26);
             //System.out.println(lines[index]);
         }
-        JList list = new JList(lines);
-        return list;
+        this.codeList = new JList(lines);
+        return this.codeList;
     }
 
     private void mouseEventCodeRowClick(ActionEvent ae, int row) {
         System.out.println(ae.getActionCommand());
+        this.codeList.setSelectedIndex(row);
     }
 
     public void reloadCode() {
@@ -346,36 +356,97 @@ public class MainFrame {
         //fullLines.forEach(key -> System.out.println(key.substring(21)));
     }
 
-    private JPanel buildSpecialFunctionRegisterVisible () {
+    private JPanel buildSpecialFunctionsRegisterVisible() {
         JPanel panel = new JPanel();
         panel.setBounds(500, 10, 150, 150);
-        //panel.setBackground(Color.cyan);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(6, 2);
         panel.setLayout(layout);
         panel.add(new JLabel("sichtbar"));
         panel.add(new JLabel(""));
         panel.add(new JLabel("W-Register"));
-        // W-Register
         JLabel labelWRegister = new JLabel("", SwingConstants.CENTER);
         labelWRegister.setText(this.controller.getText(this.controller.getW()));
+        labelsSpecialFunctionsRegisterVisible[0] = labelWRegister;
         panel.add(labelWRegister);
         panel.add(new JLabel("FSR"));
         JLabel labelFsr = new JLabel("", SwingConstants.CENTER);
         labelFsr.setText("insert here");
+        labelsSpecialFunctionsRegisterVisible[1] = labelFsr;
         panel.add(labelFsr);
         panel.add(new JLabel("PCL"));
         JLabel labelPcl = new JLabel("", SwingConstants.CENTER);
         labelPcl.setText(this.controller.getText(this.controller.getPcl()));
+        labelsSpecialFunctionsRegisterVisible[2] = labelPcl;
         panel.add(labelPcl);
         panel.add(new JLabel("PCLATH"));
         JLabel labelPclath = new JLabel("", SwingConstants.CENTER);
-        labelPclath.setText("insert here");
+        labelPclath.setText(this.controller.getText(this.mainMemory[10]));
+        labelsSpecialFunctionsRegisterVisible[3] = labelPclath;
         panel.add(labelPclath);
         panel.add(new JLabel("Status"));
         JLabel labelStatus = new JLabel("", SwingConstants.CENTER);
         labelStatus.setText(this.controller.getText(this.controller.getStatus()));
+        labelsSpecialFunctionsRegisterVisible[4] = labelStatus;
         panel.add(labelStatus);
+        return panel;
+    }
+
+    public void reloadSpecialFunctionsRegisterVisible() {
+        labelsSpecialFunctionsRegisterVisible[0].setText(this.controller.getText(this.controller.getW()));
+        labelsSpecialFunctionsRegisterVisible[1].setText(this.controller.getText(this.mainMemory[10]));
+        labelsSpecialFunctionsRegisterVisible[2].setText(this.controller.getText(this.controller.getPcl()));
+        labelsSpecialFunctionsRegisterVisible[3].setText("insert here");
+        labelsSpecialFunctionsRegisterVisible[4].setText(this.controller.getText(this.controller.getStatus()));
+    }
+
+    private JPanel buildSpecialFunctionRegisterHidden() {
+        JPanel panel = new JPanel();
+        panel.setBounds(675, 10, 150, 150);
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        GridLayout layout = new GridLayout(5, 2);
+        panel.setLayout(layout);
+        panel.add(new JLabel("versteckt"));
+        panel.add(new JLabel(""));
+        panel.add(new JLabel("PC"));
+        JLabel labelPc = new JLabel("", SwingConstants.CENTER);
+        labelPc.setText("insert here");
+        labelsSpecialFunctionsRegisterHidden[0] = labelPc;
+        panel.add(labelPc);
+        panel.add(new JLabel("Stackpointer"));
+        JLabel labelStackpointer = new JLabel("", SwingConstants.CENTER);
+        labelStackpointer.setText(this.controller.getText(this.controller.getStack()));
+        labelsSpecialFunctionsRegisterHidden[1] = labelStackpointer;
+        panel.add(labelStackpointer);
+        return panel;
+    }
+
+    public void reloadLabelsSpecialFunctionsRegisterHidden() {
+        labelsSpecialFunctionsRegisterHidden[0].setText("insert here");
+        labelsSpecialFunctionsRegisterHidden[1].setText(this.controller.getText(this.controller.getStack()));
+    }
+
+    private JPanel buildStatusRegister () {
+        JPanel panel = new JPanel();
+        //panel.setBackground(Color.cyan);
+        panel.setBounds(10, 350, 240, 40);
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        GridLayout layout = new GridLayout(this.statusRows, this.statusColumns);
+        panel.setLayout(layout);
+        for (int row = 0; row < this.statusRows; row++) {
+            for (int column = 0; column < this.statusColumns; column++) {
+                JLabel label = new JLabel("", SwingConstants.CENTER);
+                label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+                if (row == 0) {
+                    label.setText(statusStrings[column]);
+                    panel.add(label);
+                }
+                if (row == 1) {
+                    label.setText("" + this.controller.getStatusByIndex(column));
+                    panel.add(label);
+                }
+            }
+        }
         return panel;
     }
 }
