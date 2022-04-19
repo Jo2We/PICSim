@@ -25,7 +25,10 @@ public class MainFrame {
 
     private ArrayList<String> fullLines;
 
+    private JList rowList;
+    private JList codeList;
     private JLabel[] labelsSpecialFunctionsRegisterVisible = new JLabel[5];
+    private JLabel[] labelsSpecialFunctionsRegisterHidden = new JLabel[2];
 
     private Controller controller;
 
@@ -42,7 +45,8 @@ public class MainFrame {
         mainFrame.add(buildRARB());
         mainFrame.add(buildCodeScrollPane());
         //mainFrame.add(buildCodeViewColumns());
-        mainFrame.add(buildSpecialFunctionRegisterVisible());
+        mainFrame.add(buildSpecialFunctionsRegisterVisible());
+        mainFrame.add(buildSpecialFunctionRegisterHidden());
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -301,11 +305,11 @@ public class MainFrame {
             lines[index] = lines[index].substring(21, 25);
             //System.out.println(lines[index]);
         }
-        JList list = new JList(lines);
-        list.addMouseListener(new MouseListener() {
+        this.rowList = new JList(lines);
+        this.rowList.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                mouseEventCodeRowClick(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, "clicked on row: " + (list.getSelectedIndex() + 1)), list.getSelectedIndex());
+                mouseEventCodeRowClick(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, "clicked on row: " + (rowList.getSelectedIndex() + 1)), rowList.getSelectedIndex());
             }
 
             @Override
@@ -324,7 +328,7 @@ public class MainFrame {
             public void mouseExited(MouseEvent e) {
             }
         });
-        return list;
+        return this.rowList;
     }
 
     private JList buildCodePanel() {
@@ -333,12 +337,13 @@ public class MainFrame {
             lines[index] = lines[index].substring(26);
             //System.out.println(lines[index]);
         }
-        JList list = new JList(lines);
-        return list;
+        this.codeList = new JList(lines);
+        return this.codeList;
     }
 
     private void mouseEventCodeRowClick(ActionEvent ae, int row) {
         System.out.println(ae.getActionCommand());
+        this.codeList.setSelectedIndex(row);
     }
 
     public void reloadCode() {
@@ -346,10 +351,9 @@ public class MainFrame {
         //fullLines.forEach(key -> System.out.println(key.substring(21)));
     }
 
-    private JPanel buildSpecialFunctionRegisterVisible() {
+    private JPanel buildSpecialFunctionsRegisterVisible() {
         JPanel panel = new JPanel();
         panel.setBounds(500, 10, 150, 150);
-        //panel.setBackground(Color.cyan);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(6, 2);
         panel.setLayout(layout);
@@ -372,7 +376,7 @@ public class MainFrame {
         panel.add(labelPcl);
         panel.add(new JLabel("PCLATH"));
         JLabel labelPclath = new JLabel("", SwingConstants.CENTER);
-        labelPclath.setText("insert here");
+        labelPclath.setText(this.controller.getText(this.mainMemory[10]));
         labelsSpecialFunctionsRegisterVisible[3] = labelPclath;
         panel.add(labelPclath);
         panel.add(new JLabel("Status"));
@@ -383,11 +387,37 @@ public class MainFrame {
         return panel;
     }
 
-    public void reloadSpecialFunctionFegisterVisible() {
+    public void reloadSpecialFunctionsRegisterVisible() {
         labelsSpecialFunctionsRegisterVisible[0].setText(this.controller.getText(this.controller.getW()));
-        labelsSpecialFunctionsRegisterVisible[1].setText("insert here");
+        labelsSpecialFunctionsRegisterVisible[1].setText(this.controller.getText(this.mainMemory[10]));
         labelsSpecialFunctionsRegisterVisible[2].setText(this.controller.getText(this.controller.getPcl()));
         labelsSpecialFunctionsRegisterVisible[3].setText("insert here");
         labelsSpecialFunctionsRegisterVisible[4].setText(this.controller.getText(this.controller.getStatus()));
+    }
+
+    private JPanel buildSpecialFunctionRegisterHidden() {
+        JPanel panel = new JPanel();
+        panel.setBounds(675, 10, 150, 150);
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        GridLayout layout = new GridLayout(5, 2);
+        panel.setLayout(layout);
+        panel.add(new JLabel("versteckt"));
+        panel.add(new JLabel(""));
+        panel.add(new JLabel("PC"));
+        JLabel labelPc = new JLabel("", SwingConstants.CENTER);
+        labelPc.setText("insert here");
+        labelsSpecialFunctionsRegisterHidden[0] = labelPc;
+        panel.add(labelPc);
+        panel.add(new JLabel("Stackpointer"));
+        JLabel labelStackpointer = new JLabel("", SwingConstants.CENTER);
+        labelStackpointer.setText(this.controller.getText(this.controller.getStack()));
+        labelsSpecialFunctionsRegisterHidden[1] = labelStackpointer;
+        panel.add(labelStackpointer);
+        return panel;
+    }
+
+    public void reloadLabelsSpecialFunctionsRegisterHidden() {
+        labelsSpecialFunctionsRegisterHidden[0].setText("insert here");
+        labelsSpecialFunctionsRegisterHidden[1].setText(this.controller.getText(this.controller.getStack()));
     }
 }

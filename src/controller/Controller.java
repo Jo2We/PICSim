@@ -43,7 +43,8 @@ public class Controller {
             //System.out.println((int) memory.getW());
             //mainFrame.reloadCode();
             System.out.println(Integer.toHexString((int)memory.getW()));
-            mainFrame.reloadSpecialFunctionFegisterVisible();
+            mainFrame.reloadSpecialFunctionsRegisterVisible();
+            mainFrame.reloadLabelsSpecialFunctionsRegisterHidden();
         }
     }
 
@@ -316,5 +317,9 @@ public class Controller {
             str = Integer.toHexString(value);
         }
         return str;
+    }
+
+    public char getStack () {
+        return this.memory.getStack();
     }
 }

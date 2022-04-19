@@ -11,7 +11,7 @@ public class Memory {
     private int rowsMemory = 32;
     private int columnsMemory = 8;
     private char[] mainMemory = new char[rowsMemory * 8 + columnsMemory];
-    private short[] stack = new short[8];
+    private char[] stack = new char[8];
     private int stackpointer = 0;
 
     public Memory() {
@@ -48,7 +48,7 @@ public class Memory {
     }
 
     public void pushStack(int value) {
-        stack[stackpointer % 8] = (short) value;
+        stack[stackpointer % 8] = (char) value;
         stackpointer++;
     }
 
@@ -58,6 +58,10 @@ public class Memory {
             return stack[stackpointer];
         }
         return 0;
+    }
+
+    public char getStack() {
+        return this.stack[stackpointer];
     }
 
     public void setStatus(int position){
