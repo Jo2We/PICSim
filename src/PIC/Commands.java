@@ -224,7 +224,7 @@ public class Commands {
         System.out.println("called _goto with " + opcode);
         int k = opcode & 0x7ff;
 
-        memory.setPcl((char) (k - 1));
+        memory.setPcl(k - 1);
 
     }
 

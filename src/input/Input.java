@@ -21,19 +21,19 @@ public class Input {
      * @param lines
      * @return
      */
-    public ArrayList<String> read(ArrayList<String> lines, ArrayList<String> fullLines) {
+    public ArrayList<Integer> read(ArrayList<Integer> lines, ArrayList<String> fullLines, ArrayList<String> crossList) {
         String encoding = "windows-1252";
         try {
-            File source =  new File("res/test.LST");
+            File source =  new File("res/TPicSim1.LST");
             // System.out.println(source.isFile());
             Scanner myReader = new Scanner(source, Charset.forName(encoding));
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 fullLines.add(data);
                 char character = data.charAt(0);
-
                 if (character != ' ') {
-                    lines.add(data.substring(5,9));
+                    lines.add(getBinaryAsInt(data.substring(5,9)));
+                    crossList.add(data.substring(20, 25));
                 }
             }
             myReader.close();
@@ -72,6 +72,10 @@ public class Input {
         }
         // linesCut.forEach((key) -> System.out.println(key));
         return linesCut;
+    }
+
+    private int getBinaryAsInt(String str) {
+        return Integer.parseInt(str, 16);
     }
 }
 
