@@ -1,6 +1,7 @@
 package controller;
 
 import GUI.MainFrame;
+import GUI.ReloadingMethods;
 import PIC.Commands;
 import PIC.Memory;
 import input.Input;
@@ -12,13 +13,15 @@ public class Controller {
     /**
      * attributes
      */
-    private ArrayList<String> linesStr = new ArrayList<String>();
-    private ArrayList<Integer> linesInt = new ArrayList<Integer>();
+    private ArrayList<Integer> lines = new ArrayList<Integer>();
     private ArrayList<String> fullLines = new ArrayList<String>();
+
+    private ArrayList<String> crossList = new ArrayList<String>();
 
     Memory memory;
     Commands command;
     private MainFrame mainFrame;
+    private ReloadingMethods reloadingMethods;
 
     /**
      * constructor
@@ -33,21 +36,27 @@ public class Controller {
      */
     public void runPICSimulator() {
         Input I = new Input();
-        this.linesStr = I.read(this.linesStr, this.fullLines);
-        mainFrame = new MainFrame(this);
-        this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
+        this.lines = I.read(this.lines, this.fullLines, this.crossList);
+        //this.crossList.forEach(key -> System.out.println(key));
+        this.reloadingMethods = new ReloadingMethods(this);
+        //this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
 
-        for (memory.setPcl((char) 0); memory.getPcl() < linesInt.size(); memory.setPcl((char) (memory.getPcl() + 1))) {
+        for (this.memory.setPcl(0); this.memory.getPcl() < this.lines.size(); this.memory.setPcl(this.memory.getPcl() + 1)) {
             memory.resetStatus();
-            callCommands(linesInt.get(memory.getPcl()));
-            mainFrame.reloadMainMemory();
-            //mainFrame.reloadCode();
-            System.out.println((int)memory.getStatus());
-            System.out.println((int)memory.getW());
-
-            System.out.println(Integer.toHexString((int)memory.getW()));
-            mainFrame.reloadSpecialFunctionsRegisterVisible();
-            mainFrame.reloadLabelsSpecialFunctionsRegisterHidden();
+            int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
+            reloadingMethods.reloadCode(index - 1);
+            reloadingMethods.reloadMainMemory();
+            reloadingMethods.reloadSpecialFunctionsRegisterVisible();
+            reloadingMethods.reloadLabelsSpecialFunctionsRegisterHidden();
+            callCommands(lines.get(memory.getPcl()));
+            //System.out.println((int)memory.getStatus());
+            //System.out.println((int)memory.getW());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //System.out.println(Integer.toHexString((int)memory.getW()));
         }
     }
 
@@ -61,10 +70,6 @@ public class Controller {
     private String getBinary(String str) {
         int num = (Integer.parseInt(str, 16));
         return Integer.toBinaryString(num);
-    }
-
-    private int getBinaryAsInt(String str) {
-        return Integer.parseInt(str, 16);
     }
 
     /**

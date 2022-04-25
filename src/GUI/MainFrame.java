@@ -5,15 +5,17 @@ import controller.Controller;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class MainFrame {
 
-    private int rowsMemory = 32;
-    private int columnsMemory = 8;
-    private JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory + 1];
+    protected Controller controller;
+    protected int rowsMemory = 32;
+    protected int columnsMemory = 8;
+    protected JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory + 1];
     private String[][] labelsMemonryCommands = new String[rowsMemory][columnsMemory + 1];
     protected int[] mainMemory;
 
@@ -25,16 +27,17 @@ public class MainFrame {
 
     private ArrayList<String> fullLines;
 
-    private JList rowList;
-    private JList codeList;
-    private JLabel[] labelsSpecialFunctionsRegisterVisible = new JLabel[5];
-    private JLabel[] labelsSpecialFunctionsRegisterHidden = new JLabel[2];
+    protected JList rowList;
+    protected JList codeList;
+    protected JLabel[] labelsSpecialFunctionsRegisterVisible = new JLabel[5];
+    protected JLabel[] labelsSpecialFunctionsRegisterHidden = new JLabel[2];
 
     private int statusRows = 2;
     private int statusColumns = 8;
     private String[] statusStrings = {"IRP", "RP1", "RP0", "TO", "PD", "Z", "DC", "C"};
 
-    private Controller controller;
+    protected JLabel timerLabel = new JLabel("", SwingConstants.RIGHT);
+    protected double timer = 0.0;
 
     public MainFrame(Controller controller) {
         this.controller = controller;
@@ -52,6 +55,8 @@ public class MainFrame {
         mainFrame.add(buildSpecialFunctionsRegisterVisible());
         mainFrame.add(buildSpecialFunctionRegisterHidden());
         mainFrame.add(buildStatusRegister());
+        mainFrame.add(buildButtonControls());
+        mainFrame.add(buildTimerView());
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -234,15 +239,6 @@ public class MainFrame {
         this.labelsMemory[row][column].setText(this.controller.getText((char) num));
     }
 
-    public void reloadMainMemory() {
-        mainMemory = controller.getMainMemory();
-        for (int row = 0; row < rowsMemory; row++) {
-            for (int column = 0; column < columnsMemory; column++) {
-                labelsMemory[row][column + 1].setText(this.controller.getText(this.mainMemory[row * 8 + column]));
-            }
-        }
-    }
-
     private void toggleRARBTris(ActionEvent ae, JLabel label, int row, int column) {
         //System.out.println(ae.getActionCommand());
         if (ae.getActionCommand().equals("i")) {
@@ -307,7 +303,7 @@ public class MainFrame {
     private JList buildCodeRowPanel() {
         String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
-            lines[index] = lines[index].substring(21, 25);
+            lines[index] = lines[index].substring(20, 25);
             //System.out.println(lines[index]);
         }
         this.rowList = new JList(lines);
@@ -343,17 +339,13 @@ public class MainFrame {
             //System.out.println(lines[index]);
         }
         this.codeList = new JList(lines);
+        this.codeList.setEnabled(false);
         return this.codeList;
     }
 
     private void mouseEventCodeRowClick(ActionEvent ae, int row) {
         System.out.println(ae.getActionCommand());
         this.codeList.setSelectedIndex(row);
-    }
-
-    public void reloadCode() {
-        ArrayList<String> fullLines = controller.getFullLines();
-        //fullLines.forEach(key -> System.out.println(key.substring(21)));
     }
 
     private JPanel buildSpecialFunctionsRegisterVisible() {
@@ -392,14 +384,6 @@ public class MainFrame {
         return panel;
     }
 
-    public void reloadSpecialFunctionsRegisterVisible() {
-        labelsSpecialFunctionsRegisterVisible[0].setText(this.controller.getText(this.controller.getW()));
-        labelsSpecialFunctionsRegisterVisible[1].setText(this.controller.getText(this.mainMemory[10]));
-        labelsSpecialFunctionsRegisterVisible[2].setText(this.controller.getText(this.controller.getPcl()));
-        labelsSpecialFunctionsRegisterVisible[3].setText("insert here");
-        labelsSpecialFunctionsRegisterVisible[4].setText(this.controller.getText(this.controller.getStatus()));
-    }
-
     private JPanel buildSpecialFunctionRegisterHidden() {
         JPanel panel = new JPanel();
         panel.setBounds(675, 10, 150, 150);
@@ -421,12 +405,7 @@ public class MainFrame {
         return panel;
     }
 
-    public void reloadLabelsSpecialFunctionsRegisterHidden() {
-        labelsSpecialFunctionsRegisterHidden[0].setText("insert here");
-        labelsSpecialFunctionsRegisterHidden[1].setText(this.controller.getText(this.controller.getStack()));
-    }
-
-    private JPanel buildStatusRegister () {
+    private JPanel buildStatusRegister() {
         JPanel panel = new JPanel();
         //panel.setBackground(Color.cyan);
         panel.setBounds(10, 350, 240, 40);
@@ -447,6 +426,55 @@ public class MainFrame {
                 }
             }
         }
+        return panel;
+    }
+
+    private JPanel buildButtonControls() {
+        JPanel panel = new JPanel();
+        panel.setBounds(10, 400, 75, 50);
+        panel.setBackground(Color.cyan);
+        GridLayout layout = new GridLayout(2, 1);
+        panel.setLayout(layout);
+        JButton goButton = new JButton("Go");
+        goButton.setBackground(Color.lightGray);
+        goButton.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        goButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clickedGoButton();
+            }
+        });
+        JButton resetButton = new JButton("Reset");
+        resetButton.setBackground(Color.lightGray);
+        resetButton.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clickedResetButton();
+            }
+        });
+        panel.add(goButton);
+        panel.add(resetButton);
+        return panel;
+    }
+
+    private void clickedGoButton () {
+        System.out.println("Clicked: Go");
+    }
+
+    private void clickedResetButton () {
+        System.out.println("Clicked: Reset");
+    }
+
+    private JPanel buildTimerView () {
+        JPanel panel = new JPanel();
+        panel.setBounds(100, 400, 75, 50);
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        GridLayout layout = new GridLayout(2, 1);
+        panel.setLayout(layout);
+        panel.add(new JLabel("Laufzeit"));
+        this.timerLabel.setText("" + this.timer + "µs");
+        panel.add(this.timerLabel);
         return panel;
     }
 }
