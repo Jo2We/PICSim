@@ -275,7 +275,7 @@ public class Controller {
         System.out.println("error");
     }
 
-    public char[] getMainMemory() {
+    public int[] getMainMemory() {
         return memory.getMainMemory();
     }
 
@@ -299,21 +299,21 @@ public class Controller {
         return this.fullLines;
     }
 
-    public char getW () {
+    public int getW () {
         return this.memory.getW();
     }
 
-    public char getPcl () {
+    public int getPcl () {
         return this.memory.getPcl();
     }
 
-    public char getStatus () {
+    public int getStatus () {
         return this.memory.getStatus();
     }
 
-    public String getText (char charValue) {
+    public String getText (int charValue) {
         String str;
-        int value = (int) charValue;
+        int value = charValue;
         if (value < 16) {
             str = "0" + Integer.toHexString(value);
         } else {
@@ -322,7 +322,7 @@ public class Controller {
         return str;
     }
 
-    public char getStack () {
+    public int getStack () {
         return this.memory.getStack();
     }
 

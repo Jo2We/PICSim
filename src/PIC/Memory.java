@@ -5,14 +5,14 @@ import java.nio.charset.StandardCharsets;
 
 public class Memory {
 
-    char w;
+    int w;
 
     String[] trisa = {"i", "i", "i", "i", "i", "i", "i", "i"};
     String[] trisb = {"i", "i", "i", "i", "i", "i", "i", "i"};
     private int rowsMemory = 32;
     private int columnsMemory = 8;
-    private char[] mainMemory = new char[rowsMemory * 8 + columnsMemory];
-    private char[] stack = new char[8];
+    private int[] mainMemory = new int[rowsMemory * 8 + columnsMemory];
+    private int[] stack = new int[8];
     private int stackpointer = 0;
 
     public Memory() {
@@ -25,33 +25,33 @@ public class Memory {
         this.setStatus(5);
     }
 
-    public char[] getMainMemory() {
+    public int[] getMainMemory() {
         return this.mainMemory;
     }
 
     public void setMainMemoryByIndex(int index, int value) {
         //int hex = Integer.parseInt(value, 16);
-        this.mainMemory[index] = (char) value;
+        this.mainMemory[index] = value;
     }
 
-    public char getW() {
+    public int getW() {
         return w;
     }
 
-    public void setW(char w) {
+    public void setW(int w) {
         this.w = w;
     }
 
-    public char getPcl() {
+    public int getPcl() {
         return mainMemory[2];
     }
 
-    public void setPcl(char pcl) {
+    public void setPcl(int pcl) {
         mainMemory[2] = pcl;
     }
 
     public void pushStack(int value) {
-        stack[stackpointer % 8] = (char) value;
+        stack[stackpointer % 8] = value;
         stackpointer++;
     }
 
@@ -63,16 +63,16 @@ public class Memory {
         return 0;
     }
 
-    public char getStack() {
+    public int getStack() {
         return this.stack[stackpointer];
     }
 
     public void setStatus(int position){
-        char value = this.getStatusByIndex(position);
-        if (value == '0') {
+        int value = this.getStatusByIndex(position);
+        if (value == 0) {
             setMainMemoryBit(3, 1, position);
         }
-        if (value == '1') {
+        if (value == 1) {
             setMainMemoryBit(3, 0, position);
         }
     }
@@ -81,7 +81,7 @@ public class Memory {
         setMainMemoryByIndex(3, 0);
     }
 
-    public char getStatus () {
+    public int getStatus () {
         return this.mainMemory[3];
     }
 

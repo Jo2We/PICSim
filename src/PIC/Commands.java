@@ -74,7 +74,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        char value = memory.getMainMemory()[f];
+        int value = memory.getMainMemory()[f];
         value++;
 
         if (d == 0) {
@@ -101,7 +101,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        char value = memory.getMainMemory()[f];
+        int value = memory.getMainMemory()[f];
 
         if (d == 0) {
             memory.setW(value);
@@ -146,7 +146,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        char value = memory.getMainMemory()[f];
+        int value = memory.getMainMemory()[f];
         value = (char) (value - memory.getW());
 
         if (d == 0) {

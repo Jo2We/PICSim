@@ -15,7 +15,7 @@ public class MainFrame {
     private int columnsMemory = 8;
     private JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory + 1];
     private String[][] labelsMemonryCommands = new String[rowsMemory][columnsMemory + 1];
-    protected char[] mainMemory;
+    protected int[] mainMemory;
 
     private int rowsRARB = 6;
     private int columnsRARB = 8;
