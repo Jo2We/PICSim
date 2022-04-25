@@ -1,8 +1,5 @@
 package PIC;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-
 public class Memory {
 
     char w;
@@ -21,8 +18,6 @@ public class Memory {
                 mainMemory[row * 8 + column] = 0;
             }
         }
-        this.setStatus(6);
-        this.setStatus(5);
     }
 
     public char[] getMainMemory() {
