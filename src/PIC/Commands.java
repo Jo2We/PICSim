@@ -20,13 +20,18 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        char value = (char) (memory.getW() + memory.getMainMemory()[f]);
+        int value = memory.getW() + memory.getMainMemory()[f];
 
-        if (d == 0) {
-            memory.setW(value);
-        } else {
-            memory.setMainMemoryByIndex(f, value);
+        //checkDC
+
+        int fTest = memory.getMainMemory()[f] & 0x0F;
+        int wTest = memory.getW() & 0x0F;
+        int overflowTest = fTest + wTest;
+        if (overflowTest > 15) {
+            memory.setStatus(1);
         }
+        checkCarry(value);
+        checkZeroSave(f, value);
     }
 
     public void andwf(int opcode) /*00 0101 -0000 0000 -|-1111 1111-*/ {
@@ -77,11 +82,7 @@ public class Commands {
         int value = memory.getMainMemory()[f];
         value++;
 
-        if (d == 0) {
-            memory.setW(value);
-        } else {
-            memory.setMainMemoryByIndex(f, value);
-        }
+        checkZeroSave(f, value);
     }
 
     public void incfsz(int opcode) /*00 1111 -0000 0000 -|-1111 1111-*/ {
@@ -103,11 +104,7 @@ public class Commands {
 
         int value = memory.getMainMemory()[f];
 
-        if (d == 0) {
-            memory.setW(value);
-        } else {
-            memory.setMainMemoryByIndex(f, value);
-        }
+        checkZeroSave(f, value);
     }
 
     public void movwf(int opcode) /*00 0000 1 -000 0000 -|-111 1111-*/ {
@@ -139,21 +136,13 @@ public class Commands {
         System.out.println("called subwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
+        
     }
 
     public void swapf(int opcode) /*00 1110 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called swapf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
-
-        int value = memory.getMainMemory()[f];
-        value = (char) (value - memory.getW());
-
-        if (d == 0) {
-            memory.setW(value);
-        } else {
-            memory.setMainMemoryByIndex(f, value);
-        }
     }
 
     public void xorwf(int opcode) /*00 0110 -0000 0000 -|-1111 1111-*/ {
@@ -188,20 +177,27 @@ public class Commands {
 
     public void addlw(int opcode) /*11 111x*/ {
         System.out.println("called addlw with " + opcode);
-
         int k = opcode & 0xff;
         int value = k + memory.getW();
-        saveValue(0, 0, value, memory.getW());
-        //memory.setW((char) (k + memory.getW()));
+
+        //checkDC
+        int kTest = k & 0x0F;
+        int wTest = memory.getW() & 0x0F;
+        int overflowTest = kTest + wTest;
+        if (overflowTest > 15) {
+            memory.setStatus(1);
+        }
+        checkCarry(value);
+        checkZeroSave(-1, value);
     }
 
     public void andlw(int opcode) /*11 1001*/ {
         System.out.println("called andlw with " + opcode);
         int k = opcode & 0xff;
 
-        memory.setW((char) (k & memory.getW()));
+        int value = k & memory.getW();
 
-
+        checkZeroSave(-1, value);
     }
 
     public void call(int opcode) /*10 0*/ {
@@ -232,15 +228,15 @@ public class Commands {
         System.out.println("called iorlw with " + opcode);
         int k = opcode & 0xff;
 
-        memory.setW((char) (k | memory.getW()));
+        int value = k | memory.getW();
 
-
+        checkZeroSave(-1, value);
     }
 
     public void movlw(int opcode) /*11 00xx*/ {
         System.out.println("called movlw with " + opcode);
         int k = opcode & 0xff;
-        memory.setW((char) k);
+        memory.setW(k);
     }
 
     public void retfie() /*00 0000 0000 1001*/ {
@@ -267,8 +263,9 @@ public class Commands {
         System.out.println("called sublw with " + opcode);
         int k = opcode & 0xff;
         int value = k - memory.getW();
-        saveValue(0, 0, value, memory.getW());
-        //memory.setW((char) (k - memory.getW()));
+
+        checkCarry(value);
+        checkZeroSave(-1, value);
     }
 
     public void xorlw(int opcode) /*11 1010*/ {
@@ -276,34 +273,34 @@ public class Commands {
 
         int k = opcode & 0xff;
 
-        memory.setW((char) (k ^ memory.getW() & 0xff));
+        int value = k ^ memory.getW() & 0xff;
+
+        checkZeroSave(-1, value);
 
 
     }
 
-    private void saveValue(int destination, int index, int value, int prevValue) {
+    private void checkZeroSave(int index, int value) {
         if (value == 0) {
             memory.setStatus(2);
         }
 
 
-        if (value > 127 && prevValue <= 127 || value <= 127 && prevValue > 127) {
-            //overflow
-            memory.setStatus(1);
+        if (index < 0) {
+            memory.setW(value);
+        } else {
+            memory.setMainMemoryByIndex(index, value);
         }
 
+
+    }
+
+    private void checkCarry(int value) {
         if (value > 255 || value < 0) {
             //carry
             value += 255;
             value = value % 255;
             memory.setStatus(0);
         }
-        if (destination == 0) {
-            memory.setW((char) value);
-        } else {
-            memory.setMainMemoryByIndex(index, value);
-        }
-
-
     }
 }
