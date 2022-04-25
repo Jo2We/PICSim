@@ -32,7 +32,7 @@ public class MainFrame {
 
     private int statusRows = 2;
     private int statusColumns = 8;
-    private String[] statusStrings = {"IRP", "RP1", "RP2", "TO", "PD", "Z", "DC", "C"};
+    private String[] statusStrings = {"IRP", "RP1", "RP0", "TO", "PD", "Z", "DC", "C"};
 
     private Controller controller;
 
