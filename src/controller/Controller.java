@@ -24,6 +24,8 @@ public class Controller {
     private MainFrame mainFrame;
     private ReloadingMethods reloadingMethods;
 
+    private boolean go = false;
+
     /**
      * constructor
      */
@@ -38,27 +40,33 @@ public class Controller {
     public void runPICSimulator() {
         Input I = new Input();
         this.lines = I.read(this.lines, this.fullLines, this.crossList);
-        //this.crossList.forEach(key -> System.out.println(key));
         this.reloadingMethods = new ReloadingMethods(this);
-        //this.linesStr.forEach((key) -> linesInt.add(getBinaryAsInt(key)));
-
-        for (this.memory.setPcl(0); this.memory.getPcl() < this.lines.size(); this.memory.setPcl(this.memory.getPcl() + 1)) {
-            memory.resetStatus();
-            int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
-            reloadingMethods.reloadCode(index - 1);
-            reloadingMethods.reloadMainMemory();
-            reloadingMethods.reloadSpecialFunctionsRegisterVisible();
-            reloadingMethods.reloadLabelsSpecialFunctionsRegisterHidden();
-            callCommands(lines.get(memory.getPcl()));
-            //System.out.println((int)memory.getStatus());
-            //System.out.println((int)memory.getW());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        do {
+            while (!this.go) {
+                reloadingMethods.reloadMainMemory();
+                reloadingMethods.reloadSpecialFunctionsRegisterVisible();
+                reloadingMethods.reloadLabelsSpecialFunctionsRegisterHidden();
+                reloadingMethods.reloadTimer(command.getTimer());
             }
-            //System.out.println(Integer.toHexString((int)memory.getW()));
-        }
+            for (this.memory.setPcl(0); this.memory.getPcl() < this.lines.size(); this.memory.setPcl(this.memory.getPcl() + 1)) {
+                if (!this.go) {
+                    break;
+                }
+                memory.resetStatus();
+                int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
+                reloadingMethods.reloadCode(index - 1);
+                reloadingMethods.reloadMainMemory();
+                reloadingMethods.reloadSpecialFunctionsRegisterVisible();
+                reloadingMethods.reloadLabelsSpecialFunctionsRegisterHidden();
+                reloadingMethods.reloadTimer(command.getTimer());
+                callCommands(lines.get(memory.getPcl()));
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } while (!this.go);
     }
 
     /**
@@ -289,7 +297,7 @@ public class Controller {
         memory.setMainMemoryByIndex(index, value);
     }
 
-    public void setBitinMemory(int index, int value, int position) {
+    public void setBitInMemory(int index, int value, int position) {
         memory.setMainMemoryBit(index, value, position);
     }
 
@@ -301,23 +309,23 @@ public class Controller {
         memory.setRBTris(value, column);
     }
 
-    public ArrayList<String> getFullLines () {
+    public ArrayList<String> getFullLines() {
         return this.fullLines;
     }
 
-    public int getW () {
+    public int getW() {
         return this.memory.getW();
     }
 
-    public int getPcl () {
+    public int getPcl() {
         return this.memory.getPcl();
     }
 
-    public int getStatus () {
+    public int getStatus() {
         return this.memory.getStatus();
     }
 
-    public String getText (int charValue) {
+    public String getText(int charValue) {
         String str;
         int value = charValue;
         if (value < 16) {
@@ -328,11 +336,24 @@ public class Controller {
         return str;
     }
 
-    public int getStack () {
+    public int getStack() {
         return this.memory.getStack();
     }
 
-    public char getStatusByIndex (int index) {
+    public char getStatusByIndex(int index) {
         return this.memory.getStatusByIndex(index);
+    }
+
+    private void setTimer(double timer) {
+        command.setTimer(timer);
+    }
+
+    public void reset(double timer) {
+        this.setTimer(timer);
+        this.memory.reset();
+    }
+
+    public void setGo (boolean value) {
+        this.go = value;
     }
 }

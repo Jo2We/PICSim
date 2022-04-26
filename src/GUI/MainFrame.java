@@ -43,15 +43,11 @@ public class MainFrame {
         this.controller = controller;
         this.mainMemory = controller.getMainMemory();
         JFrame mainFrame = new JFrame("PIC Simulator");
-        //mainFrame.add(buildGridLayoutMemory());
-        //mainFrame.add(buildMemory());
 
         mainFrame.add(buildTopLineMemory());
-        //mainFrame.add(buildMemory());
         mainFrame.add(buildScrollView());
         mainFrame.add(buildRARB());
         mainFrame.add(buildCodeScrollPane());
-        //mainFrame.add(buildCodeViewColumns());
         mainFrame.add(buildSpecialFunctionsRegisterVisible());
         mainFrame.add(buildSpecialFunctionRegisterHidden());
         mainFrame.add(buildStatusRegister());
@@ -261,22 +257,21 @@ public class MainFrame {
     }
 
     private void toggleRARBPin(ActionEvent ae, JLabel label, int row, int position) {
-        //System.out.println(ae.getActionCommand() + " " + column);
         if (ae.getActionCommand().equals("1")) {
             label.setText("0");
             if (row == 2) { // RA
-                controller.setBitinMemory(5, 0, position);
+                controller.setBitInMemory(5, 0, position);
             }
             if (row == 5) { // RB
-                controller.setBitinMemory(6, 0, position);
+                controller.setBitInMemory(6, 0, position);
             }
         } else {
             label.setText("1");
             if (row == 2) { // RA
-                controller.setBitinMemory(5, 1, position);
+                controller.setBitInMemory(5, 1, position);
             }
             if (row == 5) { // RB
-                controller.setBitinMemory(6, 1, position);
+                controller.setBitInMemory(6, 1, position);
             }
         }
     }
@@ -460,15 +455,19 @@ public class MainFrame {
 
     private void clickedGoButton () {
         System.out.println("Clicked: Go");
+        this.controller.setGo(true);
     }
 
     private void clickedResetButton () {
         System.out.println("Clicked: Reset");
+        this.timer = 0.0;
+        this.controller.reset(this.timer);
+        this.controller.setGo(false);
     }
 
     private JPanel buildTimerView () {
         JPanel panel = new JPanel();
-        panel.setBounds(100, 400, 75, 50);
+        panel.setBounds(100, 400, 150, 50);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(2, 1);
         panel.setLayout(layout);
