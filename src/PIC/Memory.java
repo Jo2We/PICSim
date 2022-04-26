@@ -165,4 +165,10 @@ public class Memory {
         String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[3] & 0xFF)).replace(' ', '0');
         return str.charAt(index);
     }
+
+    public void reset () {
+        for (int index = 0; index < this.mainMemory.length; index++) {
+            this.mainMemory[index] = 0;
+        }
+    }
 }
