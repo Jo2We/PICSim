@@ -1,7 +1,6 @@
 package PIC;
 
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
+
 
 public class Commands {
 
@@ -23,7 +22,6 @@ public class Commands {
         int value = memory.getW() + memory.getMainMemory()[f];
 
         //checkDC
-
         int fTest = memory.getMainMemory()[f] & 0x0F;
         int wTest = memory.getW() & 0x0F;
         int overflowTest = fTest + wTest;
@@ -39,6 +37,10 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
+        int value = memory.getW() & memory.getMainMemory()[f];
+
+        checkZeroSave(f, value);
+
     }
 
     public void clrf(int opcode) /*00 0001 1 -000 0000 -|-111 1111-*/ {
@@ -53,19 +55,29 @@ public class Commands {
     public void clrw(int opcode) /*00 0001 0 -xxx xxxx-*/ {
         System.out.println("called clrw with " + opcode);
 
-        memory.setW((char) 0);
+        memory.setW(0);
+        memory.setMainMemoryBit(3, 1, 2);
+
     }
 
     public void comf(int opcode) /*00 1001 0 -000 0000 -|-111 1111-*/ {
         System.out.println("called comf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
+
+        int value = ~memory.getMainMemory()[f] & 0xF;
+
+        checkZeroSave(f, value);
     }
 
     public void decf(int opcode) /*00 0011 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called decf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
+
+        int value = memory.getMainMemory()[f]--;
+
+        checkZeroSave(f, value);
     }
 
     public void decfsz(int opcode) /*00 1011 -0000 0000 -|-1111 1111-*/ {
@@ -95,6 +107,10 @@ public class Commands {
         System.out.println("called iorwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
+
+        int value = memory.getW() | memory.getMainMemory()[f];
+
+        checkZeroSave(f, value);
     }
 
     public void movf(int opcode) /*00 1000 -0000 0000 -|-1111 1111-*/ {
@@ -136,7 +152,7 @@ public class Commands {
         System.out.println("called subwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
-        
+
     }
 
     public void swapf(int opcode) /*00 1110 -0000 0000 -|-1111 1111-*/ {
@@ -264,6 +280,14 @@ public class Commands {
         int k = opcode & 0xff;
         int value = k - memory.getW();
 
+        int kTest = k & 0x0F;
+        int wTest = memory.getW() & 0x0F;
+        wTest = ~wTest & 0xF;
+        int overflowTest = kTest - wTest;
+        if (overflowTest <= 0) {
+            memory.setStatus(1);
+        }
+
         checkCarry(value);
         checkZeroSave(-1, value);
     }
@@ -271,9 +295,9 @@ public class Commands {
     public void xorlw(int opcode) /*11 1010*/ {
         System.out.println("called xorlw with " + opcode);
 
-        int k = opcode & 0xff;
+        int k = opcode & 0xFF;
 
-        int value = k ^ memory.getW() & 0xff;
+        int value = k ^ memory.getW() & 0xFF;
 
         checkZeroSave(-1, value);
 

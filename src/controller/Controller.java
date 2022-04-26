@@ -8,15 +8,16 @@ import input.Input;
 
 import java.util.ArrayList;
 
+
 public class Controller {
 
     /**
      * attributes
      */
-    private ArrayList<Integer> lines = new ArrayList<Integer>();
-    private ArrayList<String> fullLines = new ArrayList<String>();
+    private ArrayList<Integer> lines = new ArrayList<>();
+    private ArrayList<String> fullLines = new ArrayList<>();
 
-    private ArrayList<String> crossList = new ArrayList<String>();
+    private ArrayList<String> crossList = new ArrayList<>();
 
     Memory memory;
     Commands command;
@@ -76,7 +77,7 @@ public class Controller {
      * finds the command to call out of the binary
      */
     private void callCommands(int dec) {
-        //System.out.println(dec);
+
 
         if (dec < 16384) {
             if (dec < 8192) { // 0

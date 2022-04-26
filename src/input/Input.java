@@ -17,7 +17,7 @@ public class Input {
     public Input() {}
 
     /**
-     * reads the Assambler program file and filters the relevant lines out of the file
+     * reads the Assembler program file and filters the relevant lines out of the file
      * @param lines
      * @return
      */
