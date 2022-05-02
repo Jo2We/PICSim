@@ -51,11 +51,10 @@ public class Controller {
                 if (!this.go) {
                     break;
                 }
-                memory.resetStatus();
                 int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
                 reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
+                memory.resetStatus();
                 callCommands(lines.get(memory.getPcl()));
-                System.out.println(memory.getStatus());
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {

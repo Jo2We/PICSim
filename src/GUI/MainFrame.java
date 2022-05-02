@@ -36,6 +36,8 @@ public class MainFrame {
     private int statusColumns = 8;
     private String[] statusStrings = {"IRP", "RP1", "RP0", "TO", "PD", "Z", "DC", "C"};
 
+    protected JLabel[] statusLabels = new JLabel[8];
+
     protected JLabel timerLabel = new JLabel("", SwingConstants.RIGHT);
     protected double timer = 0.0;
 
@@ -418,6 +420,7 @@ public class MainFrame {
                 }
                 if (row == 1) {
                     label.setText("" + this.controller.getStatusByIndex(column));
+                    this.statusLabels[column] = label;
                     panel.add(label);
                 }
             }

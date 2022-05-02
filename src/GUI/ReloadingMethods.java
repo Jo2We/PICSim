@@ -41,11 +41,18 @@ public class ReloadingMethods extends MainFrame {
         this.timerLabel.setText("" + this.timer + "µs");
     }
 
+    private void reoladStatus () {
+        for (int index = 0; index < this.statusLabels.length; index++) {
+            this.statusLabels[index].setText(String.valueOf(this.controller.getStatusByIndex(index)));
+        }
+    }
+
     public void reloadAll (boolean reloadCode, double timer, int index) {
         this.reloadMainMemory();
         this.reloadSpecialFunctionsRegisterVisible();
         this.reloadLabelsSpecialFunctionsRegisterHidden();
         this.reloadTimer(timer);
+        this.reoladStatus();
         if (reloadCode) {
             this.reloadCode(index);
         }
