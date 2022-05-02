@@ -26,6 +26,8 @@ public class Controller {
 
     private boolean go = false;
 
+    private int breakpoint;
+
     /**
      * constructor
      */
@@ -43,10 +45,7 @@ public class Controller {
         this.reloadingMethods = new ReloadingMethods(this);
         do {
             while (!this.go) {
-                reloadingMethods.reloadMainMemory();
-                reloadingMethods.reloadSpecialFunctionsRegisterVisible();
-                reloadingMethods.reloadLabelsSpecialFunctionsRegisterHidden();
-                reloadingMethods.reloadTimer(command.getTimer());
+                reloadingMethods.reloadAll(false, command.getTimer(), -1);
             }
             for (this.memory.setPcl(0); this.memory.getPcl() < this.lines.size(); this.memory.setPcl(this.memory.getPcl() + 1)) {
                 if (!this.go) {
@@ -54,11 +53,7 @@ public class Controller {
                 }
                 memory.resetStatus();
                 int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
-                reloadingMethods.reloadCode(index - 1);
-                reloadingMethods.reloadMainMemory();
-                reloadingMethods.reloadSpecialFunctionsRegisterVisible();
-                reloadingMethods.reloadLabelsSpecialFunctionsRegisterHidden();
-                reloadingMethods.reloadTimer(command.getTimer());
+                reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
                 callCommands(lines.get(memory.getPcl()));
                 System.out.println(memory.getStatus());
                 try {

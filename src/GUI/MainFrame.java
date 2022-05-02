@@ -340,7 +340,8 @@ public class MainFrame {
 
     private void mouseEventCodeRowClick(ActionEvent ae, int row) {
         System.out.println(ae.getActionCommand());
-        this.codeList.setSelectedIndex(row);
+        //this.codeList.setSelectedIndex(row);
+        this.createBreakpoint(row);
     }
 
     private JPanel buildSpecialFunctionsRegisterVisible() {
@@ -475,5 +476,9 @@ public class MainFrame {
         this.timerLabel.setText("" + this.timer + "µs");
         panel.add(this.timerLabel);
         return panel;
+    }
+
+    private void createBreakpoint (int row) {
+        System.out.println("Breakpoint at row: " + row);
     }
 }
