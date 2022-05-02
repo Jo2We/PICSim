@@ -19,7 +19,7 @@ public class Commands {
      * @param opcode
      */
     public void addwf(int opcode) /*00 0111 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called addwf with " + opcode);
+        System.out.println("called addwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
         int value = memory.getW() + memory.getMainMemory()[f];
@@ -40,7 +40,7 @@ public class Commands {
      * @param opcode
      */
     public void andwf(int opcode) /*00 0101 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called andwf with " + opcode);
+        System.out.println("called andwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -56,7 +56,7 @@ public class Commands {
      * @param opcode
      */
     public void clrf(int opcode) /*00 0001 1 -000 0000 -|-111 1111-*/ {
-        //System.out.println("called clrf with " + opcode);
+        System.out.println("called clrf with " + opcode);
         int f = opcode & 0x7f;
         memory.setMainMemoryByIndex(f, 0);
         memory.setStatus(2);
@@ -83,7 +83,7 @@ public class Commands {
      * @param opcode
      */
     public void comf(int opcode) /*00 1001 0 -000 0000 -|-111 1111-*/ {
-        //System.out.println("called comf with " + opcode);
+        System.out.println("called comf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -98,7 +98,7 @@ public class Commands {
      * @param opcode
      */
     public void decf(int opcode) /*00 0011 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called decf with " + opcode);
+        System.out.println("called decf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -113,7 +113,7 @@ public class Commands {
      * @param opcode
      */
     public void decfsz(int opcode) /*00 1011 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called decfsz with " + opcode);
+        System.out.println("called decfsz with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -139,7 +139,7 @@ public class Commands {
      * @param opcode
      */
     public void incf(int opcode) /*00 1010 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called encf with " + opcode);
+        System.out.println("called encf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
         int value = memory.getMainMemory()[f];
@@ -153,7 +153,7 @@ public class Commands {
      * @param opcode
      */
     public void incfsz(int opcode) /*00 1111 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called incfsz with " + opcode);
+        System.out.println("called incfsz with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -180,7 +180,7 @@ public class Commands {
      * @param opcode
      */
     public void iorwf(int opcode) /*00 0100 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called iorwf with " + opcode);
+        System.out.println("called iorwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -195,7 +195,7 @@ public class Commands {
      * @param opcode
      */
     public void movf(int opcode) /*00 1000 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called movf with " + opcode);
+        System.out.println("called movf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
         int value = memory.getMainMemory()[f];
@@ -208,7 +208,7 @@ public class Commands {
      * @param opcode
      */
     public void movwf(int opcode) /*00 0000 1 -000 0000 -|-111 1111-*/ {
-        //System.out.println("called movwf with " + opcode);
+        System.out.println("called movwf with " + opcode);
         int f = opcode & 0x7f;
         memory.setMainMemoryByIndex(f, memory.getW());
         this.addTimeToTimer(1);
@@ -218,7 +218,7 @@ public class Commands {
      * No Operation | _
      */
     public void nop() /*00 0000 0xx0 0000*/ {
-        //System.out.println("called nop");
+        System.out.println("called nop");
         this.addTimeToTimer(1);
     }
 
@@ -227,7 +227,7 @@ public class Commands {
      * @param opcode
      */
     public void rlf(int opcode) /*00 1101 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called rlf with " + opcode);
+        System.out.println("called rlf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -251,7 +251,7 @@ public class Commands {
      * @param opcode
      */
     public void rrf(int opcode) /*00 1100 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called rrf with " + opcode);
+        System.out.println("called rrf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -278,7 +278,7 @@ public class Commands {
      * @param opcode
      */
     public void subwf(int opcode) /*00 0010 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called subwf with " + opcode);
+        System.out.println("called subwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -298,7 +298,7 @@ public class Commands {
     }
 
     public void swapf(int opcode) /*00 1110 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called swapf with " + opcode);
+        System.out.println("called swapf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -319,7 +319,7 @@ public class Commands {
     }
 
     public void xorwf(int opcode) /*00 0110 -0000 0000 -|-1111 1111-*/ {
-        //System.out.println("called xorwf with " + opcode);
+        System.out.println("called xorwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
@@ -331,7 +331,7 @@ public class Commands {
     }
 
     public void bcf(int opcode) /*01 00*/ {
-        //System.out.println("called bcf with " + opcode);
+        System.out.println("called bcf with " + opcode);
         int f = opcode & 0x7f;
         int b = opcode & 0x38;
 
@@ -341,7 +341,7 @@ public class Commands {
     }
 
     public void bsf(int opcode) /*01 01*/ {
-        //System.out.println("called bsf with " + opcode);
+        System.out.println("called bsf with " + opcode);
         int f = opcode & 0x7f;
         int b = opcode & 0x38;
 
@@ -352,21 +352,21 @@ public class Commands {
     }
 
     public void btfsc(int opcode) /*01 10*/ {
-        //System.out.println("called btfsc with " + opcode);
+        System.out.println("called btfsc with " + opcode);
         int f = opcode & 0x7f;
         int b = opcode & 0x38;
         this.addTimeToTimer(1);// checkTimer
     }
 
     public void btfss(int opcode) /*01 11*/ {
-        //System.out.println("called btfss with " + opcode);
+        System.out.println("called btfss with " + opcode);
         int f = opcode & 0x7f;
         int b = opcode & 0x38;
         this.addTimeToTimer(1);// checkTimer
     }
 
     public void addlw(int opcode) /*11 111x*/ {
-        //System.out.println("called addlw with " + opcode);
+        System.out.println("called addlw with " + opcode);
         int k = opcode & 0xff;
         int value = k + memory.getW();
         //checkDC
@@ -382,7 +382,7 @@ public class Commands {
     }
 
     public void andlw(int opcode) /*11 1001*/ {
-        //System.out.println("called andlw with " + opcode);
+        System.out.println("called andlw with " + opcode);
         int k = opcode & 0xff;
         int value = k & memory.getW();
         checkZeroSave(0, 0, value);
@@ -390,7 +390,7 @@ public class Commands {
     }
 
     public void call(int opcode) /*10 0*/ {
-        //System.out.println("called call with " + opcode);
+        System.out.println("called call with " + opcode);
         int k = opcode & 0x7ff;
         memory.setPcl((char) (k - 1));
         memory.pushStack(k);
@@ -398,19 +398,19 @@ public class Commands {
     }
 
     public void clrwdt() /*00 0000 0110 0100*/ {
-        //System.out.println("called clrwdt");
+        System.out.println("called clrwdt");
         this.addTimeToTimer(1);
     }
 
     public void _goto(int opcode) /*10 0*/ {
-        //System.out.println("called _goto with " + opcode);
+        System.out.println("called _goto with " + opcode);
         int k = opcode & 0x7ff;
         memory.setPcl(k - 1);
         this.addTimeToTimer(2);
     }
 
     public void iorlw(int opcode) /*11 1000*/ {
-        //System.out.println("called iorlw with " + opcode);
+        System.out.println("called iorlw with " + opcode);
         int k = opcode & 0xff;
         int value = k | memory.getW();
         checkZeroSave(0, 0, value);
@@ -418,19 +418,19 @@ public class Commands {
     }
 
     public void movlw(int opcode) /*11 00xx*/ {
-        //System.out.println("called movlw with " + opcode);
+        System.out.println("called movlw with " + opcode);
         int k = opcode & 0xff;
         memory.setW(k);
         this.addTimeToTimer(1);
     }
 
     public void retfie() /*00 0000 0000 1001*/ {
-        //System.out.println("called retfie");
+        System.out.println("called retfie");
         this.addTimeToTimer(2);
     }
 
     public void retlw(int opcode) /*11 01xx*/ {
-        //System.out.println("called retlw with " + opcode);
+        System.out.println("called retlw with " + opcode);
         int k = opcode & 0xff;
 
         memory.setW(k);
@@ -440,7 +440,7 @@ public class Commands {
     }
 
     public void _return() /*00 0000 0000 1000*/ {
-        //System.out.println("called _return");
+        System.out.println("called _return");
 
         memory.setPcl(memory.popStack());
 
@@ -448,12 +448,12 @@ public class Commands {
     }
 
     public void sleep() /*00 0000 0110 0011*/ {
-        //System.out.println("called sleep");
+        System.out.println("called sleep");
         this.addTimeToTimer(1);
     }
 
     public void sublw(int opcode) /*11 110x*/ {
-        //System.out.println("called sublw with " + opcode);
+        System.out.println("called sublw with " + opcode);
         int k = opcode & 0xff;
         int value = k - memory.getW();
 
