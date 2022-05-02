@@ -167,6 +167,7 @@ public class Memory {
     }
 
     public void reset () {
+        this.setW(0);
         for (int index = 0; index < this.mainMemory.length; index++) {
             this.mainMemory[index] = 0;
         }
