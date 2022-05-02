@@ -64,10 +64,10 @@ public class Memory {
 
     public void setStatus(int position){
         int value = this.getStatusByIndex(position);
-        if (value == 0) {
+        if (value == 48) {
             setMainMemoryBit(3, 1, position);
         }
-        if (value == 1) {
+        if (value == 49) {
             setMainMemoryBit(3, 0, position);
         }
     }

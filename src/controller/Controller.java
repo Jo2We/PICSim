@@ -60,8 +60,9 @@ public class Controller {
                 reloadingMethods.reloadLabelsSpecialFunctionsRegisterHidden();
                 reloadingMethods.reloadTimer(command.getTimer());
                 callCommands(lines.get(memory.getPcl()));
+                System.out.println(memory.getStatus());
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
