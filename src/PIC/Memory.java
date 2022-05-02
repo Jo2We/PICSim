@@ -50,8 +50,8 @@ public class Memory {
         stackpointer++;
     }
 
-    public int popStack(){
-        if (stackpointer > 0){
+    public int popStack() {
+        if (stackpointer > 0) {
             stackpointer--;
             return stack[stackpointer];
         }
@@ -62,21 +62,25 @@ public class Memory {
         return this.stack[stackpointer];
     }
 
-    public void setStatus(int position){
-        int value = this.getStatusByIndex(position);
-        if (value == 48) {
+    public void setStatus(int position, int value) {
+        int currValue = this.checkStatusIndex(position);
+        if (currValue == 48 && value == 1) {
             setMainMemoryBit(3, 1, position);
-        }
-        if (value == 49) {
+        } else if (currValue == 49 && value == 0) {
             setMainMemoryBit(3, 0, position);
         }
     }
 
-    public void resetStatus(){
+    public char checkStatusIndex(int index) {
+        String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[3] & 0xFF)).replace(' ', '0');
+        return str.charAt(7-index);
+    }
+
+    public void resetStatus() {
         setMainMemoryByIndex(3, 0);
     }
 
-    public int getStatus () {
+    public int getStatus() {
         return this.mainMemory[3];
     }
 
@@ -163,10 +167,10 @@ public class Memory {
 
     public char getStatusByIndex(int index) {
         String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[3] & 0xFF)).replace(' ', '0');
-        return str.charAt(index);
+        return str.charAt(7-index);
     }
 
-    public void reset () {
+    public void reset() {
         this.setW(0);
         for (int index = 0; index < this.mainMemory.length; index++) {
             this.mainMemory[index] = 0;

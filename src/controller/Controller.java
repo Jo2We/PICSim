@@ -53,7 +53,6 @@ public class Controller {
                 }
                 int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
                 reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
-                memory.resetStatus();
                 callCommands(lines.get(memory.getPcl()));
                 try {
                     Thread.sleep(2000);
