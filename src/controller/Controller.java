@@ -69,6 +69,7 @@ public class Controller {
                     if (this.validBreakpoint(this.memory.getPcl()) && !this.contionueAfterBreakpoint) {
                         break;
                     }
+                    this.setContionueAfterBreakpoint(false);
                     int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
                     reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPcl()));
@@ -382,7 +383,6 @@ public class Controller {
     public void setBreakpoint (int row) {
         this.breakpoint = row;
         this.setContionueAfterBreakpoint(false);
-        System.out.println("Breakpoint at row: " + this.breakpoint);
     }
 
     private boolean validBreakpoint (int row) {
