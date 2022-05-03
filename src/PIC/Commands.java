@@ -76,8 +76,8 @@ public class Commands {
         System.out.println("called clrw with " + opcode);
 
         memory.setW(0);
-        memory.setMainMemoryBit(3, 1, 2);
-
+        //memory.setMainMemoryBit(3, 1, 2);
+        memory.setStatus(2, 1);
 
         this.addTimeToTimer(1);
     }
@@ -92,7 +92,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = ~memory.getMainMemory()[f] & 0xF;
+        int value = ~memory.getMainMemory()[f] & 0xFF;
 
         checkZeroSave(d, f, value);
         this.addTimeToTimer(1);
@@ -108,8 +108,10 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getMainMemory()[f]--;
-
+        int value = memory.getMainMemory()[f];
+        value--;
+        value += 255;
+        value %= 255;
         checkZeroSave(d, f, value);
         this.addTimeToTimer(1);
     }
@@ -126,6 +128,8 @@ public class Commands {
 
         int value = memory.getMainMemory()[f];
         value--;
+        value += 255;
+        value %= 255;
 
         if (value == 0) {
             this.addTimeToTimer(1);
@@ -150,8 +154,7 @@ public class Commands {
         System.out.println("called encf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
-        int value = memory.getMainMemory()[f];
-        value++;
+        int value = memory.getMainMemory()[f]++;
         checkZeroSave(d, f, value);
         this.addTimeToTimer(1);
     }
@@ -297,7 +300,8 @@ public class Commands {
 
         int fvalue = memory.getMainMemory()[f];
         int value = fvalue - memory.getW();
-
+        value += 255;
+        value %= 255;
         int fTest = fvalue & 0xF;
         int wTest = ~memory.getW() & 0xF;
         int overflowTest = fTest - wTest;
@@ -475,7 +479,8 @@ public class Commands {
         System.out.println("called sublw with " + opcode);
         int k = opcode & 0xff;
         int value = k - memory.getW();
-
+        value += 255;
+        value %= 255;
         int kTest = k & 0x0F;
         int wTest = ~memory.getW() + 1 & 0xF;
         int overflowTest = kTest + wTest;
