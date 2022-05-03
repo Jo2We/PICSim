@@ -16,6 +16,7 @@ public class Controller {
      */
     private ArrayList<Integer> lines = new ArrayList<>();
     private ArrayList<String> fullLines = new ArrayList<>();
+
     private ArrayList<String> crossList = new ArrayList<>();
 
     Memory memory;
@@ -25,7 +26,10 @@ public class Controller {
 
     private boolean go = false;
 
+    private boolean reset = false;
+
     private int breakpoint;
+    private boolean contionueAfterBreakpoint = false;
 
     /**
      * constructor
@@ -42,26 +46,56 @@ public class Controller {
         Input I = new Input();
         this.lines = I.read(this.lines, this.fullLines, this.crossList);
         this.reloadingMethods = new ReloadingMethods(this);
+        //this.lines.forEach(key -> System.out.println(key));
+        //System.out.println("-----------------------------------");
+        //this.fullLines.forEach(key -> System.out.println(key));
+        //System.out.println("-----------------------------------");
+        //this.crossList.forEach(key -> System.out.println(key));
+        int tempPcl = 0;
         do {
             while (!this.go) {
                 reloadingMethods.reloadAll(false, command.getTimer(), -1);
             }
-            for (this.memory.setPcl(0); this.memory.getPcl() < this.lines.size(); this.memory.setPcl(this.memory.getPcl() + 1)) {
-                if (!this.go) {
-                    break;
+            do {
+                if (this.memory.getPcl() > 0) {
+                    tempPcl = this.memory.getPcl();
+                } else {
+                    tempPcl = 0;
                 }
-                int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
-                reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
-                callCommands(lines.get(memory.getPcl()));
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                for (this.memory.setPcl(tempPcl); this.memory.getPcl() < this.lines.size(); this.memory.setPcl(this.memory.getPcl() + 1)) {
+                    if (!this.go) {
+                        break;
+                    }
+                    if (this.validBreakpoint(this.memory.getPcl()) && !this.contionueAfterBreakpoint) {
+                        break;
+                    }
+                    int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
+                    reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
+                    callCommands(lines.get(memory.getPcl()));
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
+                while (this.checkContionueOrReset()) {
+                    reloadingMethods.reloadAll(false, command.getTimer(), -1);
+                }
+            } while (this.go);
         } while (!this.go);
     }
 
+    /**
+     * hex to bin calculation
+     * value to return is String
+     *
+     * @param str
+     * @return
+     */
+    private String getBinary(String str) {
+        int num = (Integer.parseInt(str, 16));
+        return Integer.toBinaryString(num);
+    }
 
     /**
      * finds the command to call out of the binary
@@ -330,12 +364,46 @@ public class Controller {
         command.setTimer(timer);
     }
 
+    public void setReset (boolean value) {
+        this.reset = value;
+    }
     public void reset(double timer) {
+        this.setContionueAfterBreakpoint(true);
+        this.setGo(false);
         this.setTimer(timer);
         this.memory.reset();
     }
 
-    public void setGo(boolean value) {
+    public void setGo (boolean value) {
         this.go = value;
+        this.setContionueAfterBreakpoint(false);
+    }
+
+    public void setBreakpoint (int row) {
+        this.breakpoint = row;
+        this.setContionueAfterBreakpoint(false);
+        System.out.println("Breakpoint at row: " + this.breakpoint);
+    }
+
+    private boolean validBreakpoint (int row) {
+        for (int index = 0; index < this.crossList.size(); index++) {
+            if (this.breakpoint == Integer.parseInt(this.crossList.get(index)) && index == row) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setContionueAfterBreakpoint (boolean value) {
+        this.contionueAfterBreakpoint = value;
+    }
+
+    private boolean checkContionueOrReset () {
+        //System.out.println("--reset: " + this.reset);
+        //System.out.println("--continue: " + this.contionueAfterBreakpoint);
+        if (this.reset || this.contionueAfterBreakpoint) {
+            return false;
+        }
+        return true;
     }
 }
