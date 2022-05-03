@@ -2,8 +2,6 @@ package GUI;
 
 import controller.Controller;
 
-import java.util.ArrayList;
-
 public class ReloadingMethods extends MainFrame {
 
     public ReloadingMethods(Controller controller) {
@@ -36,23 +34,23 @@ public class ReloadingMethods extends MainFrame {
         labelsSpecialFunctionsRegisterHidden[1].setText(this.controller.getText(this.controller.getStack()));
     }
 
-    private void reloadTimer (double timer) {
+    private void reloadTimer(double timer) {
         this.timer = timer;
         this.timerLabel.setText("" + this.timer + "µs");
     }
 
-    private void reoladStatus () {
-        for (int index = 0; index < this.statusLabels.length; index++) {
+    private void reloadStatus() {
+        for (int index = this.statusLabels.length - 1; index >= 0; index--) {
             this.statusLabels[index].setText(String.valueOf(this.controller.getStatusByIndex(index)));
         }
     }
 
-    public void reloadAll (boolean reloadCode, double timer, int index) {
+    public void reloadAll(boolean reloadCode, double timer, int index) {
         this.reloadMainMemory();
         this.reloadSpecialFunctionsRegisterVisible();
         this.reloadLabelsSpecialFunctionsRegisterHidden();
         this.reloadTimer(timer);
-        this.reoladStatus();
+        this.reloadStatus();
         if (reloadCode) {
             this.reloadCode(index);
         }

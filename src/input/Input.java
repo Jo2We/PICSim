@@ -14,17 +14,19 @@ public class Input {
     /**
      * constructor
      */
-    public Input() {}
+    public Input() {
+    }
 
     /**
      * reads the Assembler program file and filters the relevant lines out of the file
+     *
      * @param lines
      * @return
      */
     public ArrayList<Integer> read(ArrayList<Integer> lines, ArrayList<String> fullLines, ArrayList<String> crossList) {
         String encoding = "windows-1252";
         try {
-            File source =  new File("res/TPicSim1.LST");
+            File source = new File("res/TPicSim1.LST");
             // System.out.println(source.isFile());
             Scanner myReader = new Scanner(source, Charset.forName(encoding));
             while (myReader.hasNextLine()) {
@@ -32,7 +34,7 @@ public class Input {
                 fullLines.add(data);
                 char character = data.charAt(0);
                 if (character != ' ') {
-                    lines.add(getBinaryAsInt(data.substring(5,9)));
+                    lines.add(getBinaryAsInt(data.substring(5, 9)));
                     crossList.add(data.substring(20, 25));
                 }
             }
@@ -42,36 +44,6 @@ public class Input {
             e.printStackTrace();
         }
         return lines;
-    }
-
-    /**
-     * reads the Assambler program file and filters the relevant lines out of the file
-     * @param lines
-     * @return
-     */
-    public ArrayList<String> readTxt(ArrayList<String> lines) {
-        // res/AllCommandsText.txt
-        try {
-            Scanner scanner = new Scanner(new File("res/test.txt"));
-            String line;
-            while (scanner.hasNextLine()) {
-                line = scanner.nextLine();
-                //System.out.println(line);
-                if (!line.isBlank()) {
-                    lines.add(line);
-                }
-            }
-            scanner.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // lines.forEach((key) -> System.out.println(key));
-        ArrayList<String> linesCut = new ArrayList<String>();
-        for (String key : lines) {
-            linesCut.add(key.substring(5,9));
-        }
-        // linesCut.forEach((key) -> System.out.println(key));
-        return linesCut;
     }
 
     private int getBinaryAsInt(String str) {

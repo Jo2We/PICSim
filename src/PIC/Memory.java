@@ -63,7 +63,7 @@ public class Memory {
     }
 
     public void setStatus(int position, int value) {
-        int currValue = this.checkStatusIndex(position);
+        int currValue = this.getStatusByIndex(position);
         if (currValue == 48 && value == 1) {
             setMainMemoryBit(3, 1, position);
         } else if (currValue == 49 && value == 0) {
@@ -71,14 +71,6 @@ public class Memory {
         }
     }
 
-    public char checkStatusIndex(int index) {
-        String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[3] & 0xFF)).replace(' ', '0');
-        return str.charAt(7-index);
-    }
-
-    public void resetStatus() {
-        setMainMemoryByIndex(3, 0);
-    }
 
     public int getStatus() {
         return this.mainMemory[3];
@@ -167,7 +159,7 @@ public class Memory {
 
     public char getStatusByIndex(int index) {
         String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[3] & 0xFF)).replace(' ', '0');
-        return str.charAt(7-index);
+        return str.charAt(7 - index);
     }
 
     public void reset() {

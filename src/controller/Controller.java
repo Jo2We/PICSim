@@ -16,7 +16,6 @@ public class Controller {
      */
     private ArrayList<Integer> lines = new ArrayList<>();
     private ArrayList<String> fullLines = new ArrayList<>();
-
     private ArrayList<String> crossList = new ArrayList<>();
 
     Memory memory;
@@ -63,17 +62,6 @@ public class Controller {
         } while (!this.go);
     }
 
-    /**
-     * hex to bin calculation
-     * value to return is String
-     *
-     * @param str
-     * @return
-     */
-    private String getBinary(String str) {
-        int num = (Integer.parseInt(str, 16));
-        return Integer.toBinaryString(num);
-    }
 
     /**
      * finds the command to call out of the binary
@@ -347,7 +335,7 @@ public class Controller {
         this.memory.reset();
     }
 
-    public void setGo (boolean value) {
+    public void setGo(boolean value) {
         this.go = value;
     }
 }

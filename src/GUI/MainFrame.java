@@ -34,7 +34,7 @@ public class MainFrame {
 
     private int statusRows = 2;
     private int statusColumns = 8;
-    private String[] statusStrings = {"IRP", "RP1", "RP0", "TO", "PD", "Z", "DC", "C"};
+    private String[] statusStrings = {"C", "DC", "Z", "PD", "TO", "RP0", "RP1", "IRP"};
 
     protected JLabel[] statusLabels = new JLabel[8];
 
@@ -411,7 +411,7 @@ public class MainFrame {
         GridLayout layout = new GridLayout(this.statusRows, this.statusColumns);
         panel.setLayout(layout);
         for (int row = 0; row < this.statusRows; row++) {
-            for (int column = 0; column < this.statusColumns; column++) {
+            for (int column = this.statusColumns - 1; column >= 0; column--) {
                 JLabel label = new JLabel("", SwingConstants.CENTER);
                 label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
                 if (row == 0) {
@@ -457,19 +457,19 @@ public class MainFrame {
         return panel;
     }
 
-    private void clickedGoButton () {
+    private void clickedGoButton() {
         System.out.println("Clicked: Go");
         this.controller.setGo(true);
     }
 
-    private void clickedResetButton () {
+    private void clickedResetButton() {
         System.out.println("Clicked: Reset");
         this.timer = 0.0;
         this.controller.reset(this.timer);
         this.controller.setGo(false);
     }
 
-    private JPanel buildTimerView () {
+    private JPanel buildTimerView() {
         JPanel panel = new JPanel();
         panel.setBounds(100, 400, 150, 50);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
@@ -481,7 +481,7 @@ public class MainFrame {
         return panel;
     }
 
-    private void createBreakpoint (int row) {
+    private void createBreakpoint(int row) {
         System.out.println("Breakpoint at row: " + row);
     }
 }
