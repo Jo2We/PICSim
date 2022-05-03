@@ -373,6 +373,8 @@ public class Controller {
         this.setContionueAfterBreakpoint(true);
         this.setGo(false);
         this.setTimer(timer);
+        int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
+        reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
     }
 
     public void setGo (boolean value) {
