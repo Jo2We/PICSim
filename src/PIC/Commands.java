@@ -411,8 +411,8 @@ public class Commands {
     public void call(int opcode) /*10 0*/ {
         System.out.println("called call with " + opcode);
         int k = opcode & 0x7ff;
-        memory.setPcl((char) (k - 1));
-        memory.pushStack(k);
+        memory.pushStack(memory.getPcl());
+        memory.setPcl(k - 1);
         this.addTimeToTimer(2);
     }
 
