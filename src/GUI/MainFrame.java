@@ -473,10 +473,10 @@ public class MainFrame {
     }
 
     private void clickedResetButton() {
-        this.controller.setReset(true);
         System.out.println("Clicked: Reset");
         this.timer = 0.0;
         this.controller.reset(this.timer);
+        this.controller.setReset(true);
     }
 
     private void clickedContinueButton () {

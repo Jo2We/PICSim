@@ -57,7 +57,7 @@ public class Controller {
                 reloadingMethods.reloadAll(false, command.getTimer(), -1);
             }
             do {
-                if (this.memory.getPcl() > 0) {
+                if (this.memory.getPcl() > 0 && !this.reset) {
                     tempPcl = this.memory.getPcl();
                 } else {
                     tempPcl = 0;
@@ -369,10 +369,10 @@ public class Controller {
         this.reset = value;
     }
     public void reset(double timer) {
+        this.memory.reset();
         this.setContionueAfterBreakpoint(true);
         this.setGo(false);
         this.setTimer(timer);
-        this.memory.reset();
     }
 
     public void setGo (boolean value) {
