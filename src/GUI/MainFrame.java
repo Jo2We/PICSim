@@ -430,9 +430,9 @@ public class MainFrame {
 
     private JPanel buildButtonControls() {
         JPanel panel = new JPanel();
-        panel.setBounds(10, 400, 75, 50);
+        panel.setBounds(10, 400, 75, 75);
         panel.setBackground(Color.cyan);
-        GridLayout layout = new GridLayout(2, 1);
+        GridLayout layout = new GridLayout(3, 1);
         panel.setLayout(layout);
         JButton goButton = new JButton("Go");
         goButton.setBackground(Color.lightGray);
@@ -452,8 +452,18 @@ public class MainFrame {
                 clickedResetButton();
             }
         });
+        JButton continueButton = new JButton("Continue");
+        continueButton.setBackground(Color.lightGray);
+        continueButton.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        continueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clickedContinueButton();
+            }
+        });
         panel.add(goButton);
         panel.add(resetButton);
+        panel.add(continueButton);
         return panel;
     }
 
@@ -463,10 +473,15 @@ public class MainFrame {
     }
 
     private void clickedResetButton() {
+        this.controller.setReset(true);
         System.out.println("Clicked: Reset");
         this.timer = 0.0;
         this.controller.reset(this.timer);
-        this.controller.setGo(false);
+    }
+
+    private void clickedContinueButton () {
+        System.out.println("Clicked: Continue");
+        this.controller.setContionueAfterBreakpoint(true);
     }
 
     private JPanel buildTimerView() {
@@ -482,6 +497,7 @@ public class MainFrame {
     }
 
     private void createBreakpoint(int row) {
-        System.out.println("Breakpoint at row: " + row);
+        System.out.println("Breakpoint at row: " + (row + 1));
+        this.controller.setBreakpoint((row + 1));
     }
 }
