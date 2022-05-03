@@ -110,8 +110,8 @@ public class Commands {
 
         int value = memory.getMainMemory()[f];
         value--;
-        value += 255;
-        value %= 255;
+        value += 256;
+        value %= 256;
         checkZeroSave(d, f, value);
         this.addTimeToTimer(1);
     }
@@ -128,8 +128,8 @@ public class Commands {
 
         int value = memory.getMainMemory()[f];
         value--;
-        value += 255;
-        value %= 255;
+        value += 256;
+        value %= 256;
 
         if (value == 0) {
             this.addTimeToTimer(1);
@@ -154,7 +154,8 @@ public class Commands {
         System.out.println("called encf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
-        int value = memory.getMainMemory()[f]++;
+        int value = memory.getMainMemory()[f];
+        value++;
         checkZeroSave(d, f, value);
         this.addTimeToTimer(1);
     }
@@ -171,7 +172,7 @@ public class Commands {
 
         int value = memory.getMainMemory()[f];
         value++;
-        value %= 255;
+        value %= 256;
         if (value == 0) {
             this.addTimeToTimer(1);
             memory.setPcl(memory.getPcl() + 1);
@@ -249,7 +250,7 @@ public class Commands {
 
         int value = memory.getMainMemory()[f];
         value *= 2;
-        if (value > 255) {
+        if (value > 256) {
             value++;
             memory.setStatus(0, 1);
         }
@@ -300,13 +301,15 @@ public class Commands {
 
         int fvalue = memory.getMainMemory()[f];
         int value = fvalue - memory.getW();
-        value += 255;
-        value %= 255;
+        value += 256;
+        value %= 256;
         int fTest = fvalue & 0xF;
         int wTest = ~memory.getW() & 0xF;
         int overflowTest = fTest - wTest;
         if (overflowTest <= 0) {
             memory.setStatus(1, 1);
+        }else {
+            memory.setStatus(1, 0);
         }
 
         if (value >= 0) {
@@ -479,8 +482,8 @@ public class Commands {
         System.out.println("called sublw with " + opcode);
         int k = opcode & 0xff;
         int value = k - memory.getW();
-        value += 255;
-        value %= 255;
+        value += 256;
+        value %= 256;
         int kTest = k & 0x0F;
         int wTest = ~memory.getW() + 1 & 0xF;
         int overflowTest = kTest + wTest;
@@ -526,10 +529,10 @@ public class Commands {
     }
 
     private int checkCarry(int value) {
-        if (value > 255 || value < 0) {
+        if (value >= 256 || value < 0) {
             //carry
-            value += 255;
-            value = value % 255;
+            value += 256;
+            value = value % 256;
             memory.setStatus(0, 1);
         } else {
             memory.setStatus(0, 0);
