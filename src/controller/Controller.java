@@ -9,12 +9,7 @@ import input.Input;
 import java.util.ArrayList;
 import java.util.Locale;
 
-
 public class Controller {
-
-    /**
-     * attributes
-     */
     private ArrayList<Integer> lines = new ArrayList<>();
     private ArrayList<String> fullLines = new ArrayList<>();
 
@@ -32,9 +27,7 @@ public class Controller {
     private int breakpoint;
     private boolean contionueAfterBreakpoint = false;
 
-    /**
-     * constructor
-     */
+
     public Controller() {
         memory = new Memory();
         command = new Commands(memory);
@@ -103,8 +96,6 @@ public class Controller {
      * finds the command to call out of the binary
      */
     private void callCommands(int dec) {
-
-
         if (dec < 16384) {
             if (dec < 8192) { // 0
                 if (dec < 4096) { // 00
@@ -307,45 +298,97 @@ public class Controller {
         System.out.println("error");
     }
 
+    /**
+     * returns the Main Memory, calls the getMainMemory in Memory
+     * @return
+     */
     public int[] getMainMemory() {
-        return memory.getMainMemory();
+        return this.memory.getMainMemory();
     }
 
+    /**
+     * set method to set a value in the Main Memory,
+     * calls the setMainMemoryByIndex in the Memory with both parameters
+     * @param index index where to set the value
+     * @param value the value to set
+     */
     public void setMainMemoryByIndex(int index, int value) {
-        memory.setMainMemoryByIndex(index, value);
+        this.memory.setMainMemoryByIndex(index, value);
     }
 
+    /**
+     * set method to set a single bit in one value in the Main Memory
+     * @param index index where to set the value
+     * @param value the value contains 8 bits
+     * @param position the position from 0 to 7 which bit to set
+     */
     public void setBitInMemory(int index, int value, int position) {
         memory.setMainMemoryBit(index, value, position);
     }
 
+    /**
+     * set method to set TrisA to input ("i") or output ("o"),
+     * TrisA is stored as array, the column stands for the index in the array
+     * @param value contains a String with a "o" or "i"
+     * @param column index to set in the array
+     */
     public void setRATrisMemory(String value, int column) {
         memory.setRATris(value, column);
     }
 
+    /**
+     * set method to set TrisB to input ("i") or output ("o"),
+     * TrisB is stored as array, the column stands for the index in the array
+     * @param value contains a String with a "o" or "i"
+     * @param column index to set in the array
+     */
     public void setRBTrisMemory(String value, int column) {
         memory.setRBTris(value, column);
     }
 
+    /**
+     * method to return the ArrayList which contains the full lines from the .LST files
+     * @return
+     */
     public ArrayList<String> getFullLines() {
         return this.fullLines;
     }
 
+    /**
+     * get method for w register
+     * @return
+     */
     public int getW() {
         return this.memory.getW();
     }
 
+    /**
+     * get method for pcl
+     * @return
+     */
     public int getPcl() {
         return this.memory.getPcl();
     }
 
+    /**
+     * get method for status register
+     * @return
+     */
     public int getStatus() {
         return this.memory.getStatus();
     }
 
-    public String getText(int charValue) {
+    /**
+     * get method to return the text for every text on the gui
+     * the intValue is the value as int which needs to be casted to a hex value,
+     * if the value is lower than 16 a aditional 0 is put in front of the value
+     * the value is casted from int to String by the toHexString() method
+     * @param intValue value to cast to String
+     * @return
+     */
+    public String getText(int intValue) {
         String str;
-        int value = charValue;
+        int value = intValue;
         if (value < 16) {
             str = "0" + Integer.toHexString(value).toUpperCase();
         } else {
@@ -354,21 +397,44 @@ public class Controller {
         return str;
     }
 
+    /**
+     * get method to get the value where the stackpointer points at
+     * @return
+     */
     public int getStack() {
         return this.memory.getStack();
     }
 
+    /**
+     * get method to get the status by a specific bit selected by index
+     * @param index the index of the bit
+     * @return
+     */
     public char getStatusByIndex(int index) {
         return this.memory.getStatusByIndex(index);
     }
 
+    /**
+     * set method set the timer
+     * @param timer value for the timer to set
+     */
     private void setTimer(double timer) {
-        command.setTimer(timer);
+        this.command.setTimer(timer);
     }
 
+    /**
+     * set method to set the value of the reset
+     * @param value reset value
+     */
     public void setReset (boolean value) {
         this.reset = value;
     }
+
+    /**
+     * method to perform a reset
+     * resets the Main Memory, timer and selects the first line in the Code View,
+     * @param timer value to set
+     */
     public void reset(double timer) {
         this.memory.reset();
         this.setContionueAfterBreakpoint(true);
@@ -378,42 +444,75 @@ public class Controller {
         reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
     }
 
+    /**
+     * set method for go to start the Code in the simulator
+     * @param value value to set
+     */
     public void setGo (boolean value) {
         this.go = value;
         this.setContionueAfterBreakpoint(false);
     }
 
-    public void setBreakpoint (int row) {
-        this.breakpoint = row;
+    /**
+     * set method for the line of the breakpoint
+     * @param line line of the click for the breakpoint
+     */
+    public void setBreakpoint (int line) {
+        this.breakpoint = line;
         this.setContionueAfterBreakpoint(false);
     }
 
-    private boolean validBreakpoint (int row) {
+    /**
+     * method to validate if the breakpoint is in a real Code line,
+     * the crosslist contains every line of the full lines where real Code is,
+     * if the line of the breakpoint matches a value of the crosslist, than it is a real breakpoint and is functional,
+     * returns true if it is a real functional breakpoint, returns false if not
+     * @param line line of the breakpoint
+     * @return
+     */
+    private boolean validBreakpoint (int line) {
         for (int index = 0; index < this.crossList.size(); index++) {
-            if (this.breakpoint == Integer.parseInt(this.crossList.get(index)) && index == row) {
+            if (this.breakpoint == Integer.parseInt(this.crossList.get(index)) && index == line) {
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * set method to set if the simulator should continue if there is a breakpoint,
+     * when clicked on the continue button the value is set to true to interrupt the waiting at a breakpoint
+     * @param value value to set
+     */
     public void setContionueAfterBreakpoint (boolean value) {
         this.contionueAfterBreakpoint = value;
     }
 
+    /**
+     * used to check if one or both of the values are true
+     * @return
+     */
     private boolean checkContionueOrReset () {
-        //System.out.println("--reset: " + this.reset);
-        //System.out.println("--continue: " + this.contionueAfterBreakpoint);
         if (this.reset || this.contionueAfterBreakpoint) {
             return false;
         }
         return true;
     }
 
+    /**
+     * get method for getting the stackpointer,
+     * calls the getStackPointer() in Memory
+     * @return
+     */
     public int getStackPointer () {
         return this.memory.getStackPointer();
     }
 
+    /**
+     * get method for getting the full stack with all values,
+     * calls the getFullStack() in Memory
+     * @return
+     */
     public int [] getFullStack () {
         return this.memory.getFullStack();
     }
