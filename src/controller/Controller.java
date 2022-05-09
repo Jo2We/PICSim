@@ -75,7 +75,7 @@ public class Controller {
                     reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPcl()));
                     try {
-                        Thread.sleep(250);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

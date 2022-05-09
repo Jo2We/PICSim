@@ -249,11 +249,9 @@ public class Commands {
         int d = opcode & 0x80;
 
         int value = memory.getMainMemory()[f];
-        value *= 2;
-        if (value > 256) {
-            value++;
-            memory.setStatus(0, 1);
-        }
+        int carry = Character.getNumericValue(memory.getStatusByIndex(0));
+        value <<= 1;
+        value += carry;
         value = checkCarry(value);
         if (d == 0) {
             memory.setW(value);
@@ -274,13 +272,13 @@ public class Commands {
         int d = opcode & 0x80;
 
         int value = memory.getMainMemory()[f];
+        int carry = Character.getNumericValue(memory.getStatusByIndex(0));
+        if (value %2 == 1){
+            memory.setStatus(0,1);
 
-        if ((value & 1) == 1) {
-            value--;
-            value += 256;
-            memory.setStatus(0, 1);
         }
-        value /= 2;
+        value >>= 1;
+        value += 128*carry;
 
         if (d == 0) {
             memory.setW(value);
