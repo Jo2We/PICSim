@@ -19,7 +19,7 @@ public class ReloadingMethods extends MainFrame {
 
     private void reloadCode(int index) {
         this.codeList.setSelectedIndex(index);
-        this.codeList.ensureIndexIsVisible(index);
+       // this.codeList.ensureIndexIsVisible(index);
     }
 
     private void reloadSpecialFunctionsRegisterVisible() {

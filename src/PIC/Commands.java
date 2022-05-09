@@ -356,7 +356,9 @@ public class Commands {
     public void bcf(int opcode) /*01 00*/ {
         System.out.println("called bcf with " + opcode);
         int f = opcode & 0x7f;
-        int b = opcode & 0x38;
+        int b = opcode & 0x380;
+        b >>= 7;
+
 
         memory.setMainMemoryBit(f, 0, b);
 
@@ -366,7 +368,8 @@ public class Commands {
     public void bsf(int opcode) /*01 01*/ {
         System.out.println("called bsf with " + opcode);
         int f = opcode & 0x7f;
-        int b = opcode & 0x38;
+        int b = opcode & 0x380;
+        b >>= 7;
 
         memory.setMainMemoryBit(f, 1, b);
 
@@ -377,14 +380,30 @@ public class Commands {
     public void btfsc(int opcode) /*01 10*/ {
         System.out.println("called btfsc with " + opcode);
         int f = opcode & 0x7f;
-        int b = opcode & 0x38;
+        int b = opcode & 0x380;
+        b >>= 7;
+
+        if(memory.getMainMemoryBit(f, b) == '0'){
+            nop();
+            memory.setPcl(memory.getPcl()+1);
+        }
+
+
+
         this.addTimeToTimer(1);// checkTimer
     }
 
     public void btfss(int opcode) /*01 11*/ {
         System.out.println("called btfss with " + opcode);
         int f = opcode & 0x7f;
-        int b = opcode & 0x38;
+        int b = opcode & 0x380;
+        b >>= 7;
+
+        if(memory.getMainMemoryBit(f, b) == '1'){
+            nop();
+            memory.setPcl(memory.getPcl()+1);
+        }
+
         this.addTimeToTimer(1);// checkTimer
     }
 

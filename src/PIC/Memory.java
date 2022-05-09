@@ -164,9 +164,13 @@ public class Memory {
         System.out.println();
     }
 
-    public char getStatusByIndex(int index) {
-        String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[3] & 0xFF)).replace(' ', '0');
-        return str.charAt(7 - index);
+    public char getMainMemoryBit(int index, int position){
+        String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[index] & 0xFF)).replace(' ', '0');
+        return str.charAt(7 - position);
+    }
+
+    public char getStatusByIndex(int position) {
+        return getMainMemoryBit(3, position);
     }
 
     public void reset() {
