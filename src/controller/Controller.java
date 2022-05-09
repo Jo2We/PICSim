@@ -347,9 +347,9 @@ public class Controller {
         String str;
         int value = charValue;
         if (value < 16) {
-            str = "0" + Integer.toHexString(value).toUpperCase(Locale.ROOT);
+            str = "0" + Integer.toHexString(value).toUpperCase();
         } else {
-            str = Integer.toHexString(value);
+            str = Integer.toHexString(value).toUpperCase();
         }
         return str;
     }
