@@ -301,14 +301,13 @@ public class Commands {
 
         int fvalue = memory.getMainMemory()[f];
         int value = fvalue - memory.getW();
-        value += 256;
-        value %= 256;
+
         int fTest = fvalue & 0xF;
         int wTest = ~memory.getW() & 0xF;
-        int overflowTest = fTest - wTest;
-        if (overflowTest <= 0) {
+        int overflowTest = fTest + wTest + 1;
+        if (overflowTest >= 16) {
             memory.setStatus(1, 1);
-        }else {
+        } else {
             memory.setStatus(1, 0);
         }
 
@@ -317,6 +316,8 @@ public class Commands {
         } else {
             memory.setStatus(0, 0);
         }
+        value += 256;
+        value %= 256;
         checkZeroSave(d, f, value);
         this.addTimeToTimer(1);
     }
@@ -482,11 +483,10 @@ public class Commands {
         System.out.println("called sublw with " + opcode);
         int k = opcode & 0xff;
         int value = k - memory.getW();
-        value += 256;
-        value %= 256;
+
         int kTest = k & 0x0F;
-        int wTest = ~memory.getW() + 1 & 0xF;
-        int overflowTest = kTest + wTest;
+        int wTest = ~memory.getW() & 0xF;
+        int overflowTest = kTest + wTest + 1;
         if (overflowTest >= 16) {
             memory.setStatus(1, 1);
         } else {
@@ -499,6 +499,8 @@ public class Commands {
         } else {
             memory.setStatus(0, 0);
         }
+        value += 256;
+        value %= 256;
         checkZeroSave(0, 0, value);
         this.addTimeToTimer(1);
     }
