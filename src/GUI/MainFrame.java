@@ -517,7 +517,7 @@ public class MainFrame {
             JLabel label = new JLabel("", SwingConstants.RIGHT);
             label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
             if (this.stackView[index] != 0) {
-                label.setText(Integer.toHexString(this.stackView[index]).toUpperCase());
+                label.setText(this.controller.getText(this.stackView[index]));
                 this.stackViewLabels[index] = label;
             } else {
                 label.setText("00");

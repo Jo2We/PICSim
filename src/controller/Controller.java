@@ -410,6 +410,10 @@ public class Controller {
         return true;
     }
 
+    public int getStackPointer () {
+        return this.memory.getStackPointer();
+    }
+
     public int [] getFullStack () {
         return this.memory.getFullStack();
     }

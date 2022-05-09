@@ -31,7 +31,7 @@ public class ReloadingMethods extends MainFrame {
 
     private void reloadLabelsSpecialFunctionsRegisterHidden() {
         labelsSpecialFunctionsRegisterHidden[0].setText("insert here");
-        labelsSpecialFunctionsRegisterHidden[1].setText(this.controller.getText(this.controller.getStack()));
+        labelsSpecialFunctionsRegisterHidden[1].setText(this.controller.getText(this.controller.getStackPointer()));
     }
 
     private void reloadTimer(double timer) {
@@ -60,7 +60,7 @@ public class ReloadingMethods extends MainFrame {
     public void reloadStackView () {
         for (int index = this.stackView.length - 1; index >= 0; index--) {
             if (this.stackView[index] != 0) {
-                this.stackViewLabels[index].setText(Integer.toHexString(this.stackView[index]).toUpperCase());
+                this.stackViewLabels[index].setText(this.controller.getText(this.stackView[index]));
             } else {
                 this.stackViewLabels[index].setText("00");
             }

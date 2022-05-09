@@ -62,6 +62,10 @@ public class Memory {
         return this.stack[stackpointer];
     }
 
+    public int getStackPointer () {
+        return this.stackpointer;
+    }
+
     public int [] getFullStack () {
         return this.stack;
     }
