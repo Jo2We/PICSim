@@ -41,6 +41,9 @@ public class MainFrame {
     protected JLabel timerLabel = new JLabel("", SwingConstants.RIGHT);
     protected double timer = 0.0;
 
+    protected int [] stackView;
+    protected JLabel[] stackViewLabels = new JLabel[8];
+
     public MainFrame(Controller controller) {
         this.controller = controller;
         this.mainMemory = controller.getMainMemory();
@@ -55,6 +58,7 @@ public class MainFrame {
         mainFrame.add(buildStatusRegister());
         mainFrame.add(buildButtonControls());
         mainFrame.add(buildTimerView());
+        mainFrame.add(buildStackView());
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -499,5 +503,28 @@ public class MainFrame {
     private void createBreakpoint(int row) {
         System.out.println("Breakpoint at row: " + (row + 1));
         this.controller.setBreakpoint((row + 1));
+    }
+
+    private JPanel buildStackView () {
+        JPanel panel = new JPanel();
+        panel.setBounds(850, 10, 50, 150);
+        //panel.setBackground(Color.cyan);
+        GridLayout layout = new GridLayout(8, 1);
+        panel.setLayout(layout);
+        this.stackView = this.controller.getFullStack();
+
+        for (int index = this.stackView.length - 1; index >= 0; index--) {
+            JLabel label = new JLabel("", SwingConstants.RIGHT);
+            label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+            if (this.stackView[index] != 0) {
+                label.setText(Integer.toHexString(this.stackView[index]).toUpperCase());
+                this.stackViewLabels[index] = label;
+            } else {
+                label.setText("00");
+                this.stackViewLabels[index] = label;
+            }
+            panel.add(label);
+        }
+        return panel;
     }
 }

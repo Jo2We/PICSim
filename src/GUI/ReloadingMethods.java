@@ -51,8 +51,19 @@ public class ReloadingMethods extends MainFrame {
         this.reloadLabelsSpecialFunctionsRegisterHidden();
         this.reloadTimer(timer);
         this.reloadStatus();
+        this.reloadStackView();
         if (reloadCode) {
             this.reloadCode(index);
+        }
+    }
+
+    public void reloadStackView () {
+        for (int index = this.stackView.length - 1; index >= 0; index--) {
+            if (this.stackView[index] != 0) {
+                this.stackViewLabels[index].setText(Integer.toHexString(this.stackView[index]).toUpperCase());
+            } else {
+                this.stackViewLabels[index].setText("00");
+            }
         }
     }
 }

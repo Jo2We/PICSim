@@ -62,6 +62,9 @@ public class Memory {
         return this.stack[stackpointer];
     }
 
+    public int [] getFullStack () {
+        return this.stack;
+    }
     public void setStatus(int position, int value) {
         int currValue = this.getStatusByIndex(position);
         if (currValue == 48 && value == 1) {

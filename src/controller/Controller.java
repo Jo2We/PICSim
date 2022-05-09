@@ -7,6 +7,7 @@ import PIC.Memory;
 import input.Input;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class Controller {
@@ -346,7 +347,7 @@ public class Controller {
         String str;
         int value = charValue;
         if (value < 16) {
-            str = "0" + Integer.toHexString(value);
+            str = "0" + Integer.toHexString(value).toUpperCase(Locale.ROOT);
         } else {
             str = Integer.toHexString(value);
         }
@@ -407,5 +408,9 @@ public class Controller {
             return false;
         }
         return true;
+    }
+
+    public int [] getFullStack () {
+        return this.memory.getFullStack();
     }
 }
