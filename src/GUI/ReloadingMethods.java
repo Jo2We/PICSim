@@ -24,6 +24,7 @@ public class ReloadingMethods extends MainFrame {
 
     /**
      * method to select the current line in the Code View
+     *
      * @param line selected line
      */
     private void reloadCode(int line) {
@@ -40,7 +41,7 @@ public class ReloadingMethods extends MainFrame {
         labelsSpecialFunctionsRegisterVisible[1].setText(this.controller.getText(this.mainMemory[4]));
         labelsSpecialFunctionsRegisterVisible[2].setText(this.controller.getText(this.controller.getPcl()));
         labelsSpecialFunctionsRegisterVisible[3].setText("insert here");
-        labelsSpecialFunctionsRegisterVisible[4].setText(this.controller.getText(this.controller.getStatus()));
+        labelsSpecialFunctionsRegisterVisible[4].setText(this.controller.getText(this.controller.getMainMemory()[3]));
     }
 
     /**
@@ -54,6 +55,7 @@ public class ReloadingMethods extends MainFrame {
 
     /**
      * method to reload the timer
+     *
      * @param timer value of the timer
      */
     private void reloadTimer(double timer) {
@@ -66,7 +68,7 @@ public class ReloadingMethods extends MainFrame {
      */
     private void reloadStatus() {
         for (int index = this.statusLabels.length - 1; index >= 0; index--) {
-            this.statusLabels[index].setText(String.valueOf(this.controller.getStatusByIndex(index)));
+            this.statusLabels[index].setText(String.valueOf(this.controller.getMainMemoryBit(3, index)));
         }
     }
 
@@ -74,9 +76,10 @@ public class ReloadingMethods extends MainFrame {
      * method for simple usage, calls every reloading method if selected
      * the Code needs to be reloaded while the code is running, if not the reloadCode is false and
      * the timer and index can be ignored, if not they are functional
+     *
      * @param reloadCode selection if the code needs to be reloaded or not
-     * @param timer value of the timer
-     * @param index line of the current code
+     * @param timer      value of the timer
+     * @param index      line of the current code
      */
     public void reloadAll(boolean reloadCode, double timer, int index) {
         this.reloadMainMemory();
@@ -93,7 +96,7 @@ public class ReloadingMethods extends MainFrame {
     /**
      * method to reload the stack view
      */
-    public void reloadStackView () {
+    public void reloadStackView() {
         for (int index = this.stackView.length - 1; index >= 0; index--) {
             if (this.stackView[index] != 0) {
                 this.stackViewLabels[index].setText(this.controller.getText(this.stackView[index]));

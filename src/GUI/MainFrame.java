@@ -41,7 +41,7 @@ public class MainFrame {
     protected JLabel timerLabel = new JLabel("", SwingConstants.RIGHT);
     protected double timer = 0.0;
 
-    protected int [] stackView;
+    protected int[] stackView;
     protected JLabel[] stackViewLabels = new JLabel[8];
 
     public MainFrame(Controller controller) {
@@ -380,7 +380,7 @@ public class MainFrame {
         panel.add(labelPclath);
         panel.add(new JLabel("Status"));
         JLabel labelStatus = new JLabel("", SwingConstants.CENTER);
-        labelStatus.setText(this.controller.getText(this.controller.getStatus()));
+        labelStatus.setText(this.controller.getText(this.controller.getMainMemory()[3]));
         labelsSpecialFunctionsRegisterVisible[4] = labelStatus;
         panel.add(labelStatus);
         return panel;
@@ -423,7 +423,7 @@ public class MainFrame {
                     panel.add(label);
                 }
                 if (row == 1) {
-                    label.setText("" + this.controller.getStatusByIndex(column));
+                    label.setText("" + this.controller.getMainMemoryBit(3, column));
                     this.statusLabels[column] = label;
                     panel.add(label);
                 }
@@ -483,7 +483,7 @@ public class MainFrame {
         this.controller.setReset(true);
     }
 
-    private void clickedContinueButton () {
+    private void clickedContinueButton() {
         System.out.println("Clicked: Continue");
         this.controller.setContionueAfterBreakpoint(true);
     }
@@ -505,7 +505,7 @@ public class MainFrame {
         this.controller.setBreakpoint((row + 1));
     }
 
-    private JPanel buildStackView () {
+    private JPanel buildStackView() {
         JPanel panel = new JPanel();
         panel.setBounds(850, 10, 50, 150);
         //panel.setBackground(Color.cyan);

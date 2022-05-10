@@ -3,13 +3,11 @@ package PIC;
 
 public class Commands {
 
-    private Memory memory;
+    private final Memory memory;
 
     private double timer = 0.0;
 
-    /**
-     * constructor
-     */
+
     public Commands(Memory m) {
         this.memory = m;
     }
@@ -17,7 +15,7 @@ public class Commands {
     /**
      * Add W and f | C, DC, Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void addwf(int opcode) /*00 0111 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called addwf with " + opcode);
@@ -39,7 +37,7 @@ public class Commands {
     /**
      * AND W with f | Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void andwf(int opcode) /*00 0101 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called andwf with " + opcode);
@@ -56,7 +54,7 @@ public class Commands {
     /**
      * clear f | Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void clrf(int opcode) /*00 0001 1 -000 0000 -|-111 1111-*/ {
         System.out.println("called clrf with " + opcode);
@@ -69,7 +67,7 @@ public class Commands {
     /**
      * clear W | Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
 
     public void clrw(int opcode) /*00 0001 0 -xxx xxxx-*/ {
@@ -85,7 +83,7 @@ public class Commands {
     /**
      * Complement f | Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void comf(int opcode) /*00 1001 0 -000 0000 -|-111 1111-*/ {
         System.out.println("called comf with " + opcode);
@@ -101,7 +99,7 @@ public class Commands {
     /**
      * Decrement f | Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void decf(int opcode) /*00 0011 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called decf with " + opcode);
@@ -119,7 +117,7 @@ public class Commands {
     /**
      * Decrement f, skip if 0 | _
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void decfsz(int opcode) /*00 1011 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called decfsz with " + opcode);
@@ -148,7 +146,7 @@ public class Commands {
     /**
      * Increment f | Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void incf(int opcode) /*00 1010 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called encf with " + opcode);
@@ -163,7 +161,7 @@ public class Commands {
     /**
      * Increment f, Skip if 0 | _
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void incfsz(int opcode) /*00 1111 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called incfsz with " + opcode);
@@ -191,7 +189,7 @@ public class Commands {
     /**
      * Inclusive OR W with f | Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void iorwf(int opcode) /*00 0100 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called iorwf with " + opcode);
@@ -207,7 +205,7 @@ public class Commands {
     /**
      * Move f | Z
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void movf(int opcode) /*00 1000 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called movf with " + opcode);
@@ -221,7 +219,7 @@ public class Commands {
     /**
      * Move w to f | _
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void movwf(int opcode) /*00 0000 1 -000 0000 -|-111 1111-*/ {
         System.out.println("called movwf with " + opcode);
@@ -241,7 +239,7 @@ public class Commands {
     /**
      * Rotate Left f through Carry | C
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void rlf(int opcode) /*00 1101 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called rlf with " + opcode);
@@ -249,7 +247,7 @@ public class Commands {
         int d = opcode & 0x80;
 
         int value = memory.getMainMemory()[f];
-        int carry = Character.getNumericValue(memory.getStatusByIndex(0));
+        int carry = memory.getMainMemoryBit(3, 0);
         value <<= 1;
         value += carry;
         value = checkCarry(value);
@@ -264,7 +262,7 @@ public class Commands {
     /**
      * Rotate Right f through Carry | C
      *
-     * @param opcode
+     * @param opcode opcode
      */
     public void rrf(int opcode) /*00 1100 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called rrf with " + opcode);
@@ -272,13 +270,13 @@ public class Commands {
         int d = opcode & 0x80;
 
         int value = memory.getMainMemory()[f];
-        int carry = Character.getNumericValue(memory.getStatusByIndex(0));
-        if (value %2 == 1){
-            memory.setStatus(0,1);
+        int carry = memory.getMainMemoryBit(3, 0);
+        if (value % 2 == 1) {
+            memory.setStatus(0, 1);
 
         }
         value >>= 1;
-        value += 128*carry;
+        value += 128 * carry;
 
         if (d == 0) {
             memory.setW(value);
@@ -290,7 +288,9 @@ public class Commands {
     }
 
     /**
-     * @param opcode
+     * Subtract W from f (f-w) | C, DC, Z
+     *
+     * @param opcode opcode
      */
     public void subwf(int opcode) /*00 0010 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called subwf with " + opcode);
@@ -320,6 +320,11 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Swap nibbles in f | _
+     *
+     * @param opcode opcode
+     */
     public void swapf(int opcode) /*00 1110 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called swapf with " + opcode);
         int f = opcode & 0x7f;
@@ -341,6 +346,11 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Exclusive OR W with f | Z
+     *
+     * @param opcode opcode
+     */
     public void xorwf(int opcode) /*00 0110 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called xorwf with " + opcode);
         int f = opcode & 0x7f;
@@ -353,6 +363,11 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Bit Clear f | _
+     *
+     * @param opcode opcode
+     */
     public void bcf(int opcode) /*01 00*/ {
         System.out.println("called bcf with " + opcode);
         int f = opcode & 0x7f;
@@ -365,6 +380,11 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Bit Set f | _
+     *
+     * @param opcode opcode
+     */
     public void bsf(int opcode) /*01 01*/ {
         System.out.println("called bsf with " + opcode);
         int f = opcode & 0x7f;
@@ -377,36 +397,50 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Bit Test f, Skip if Clear | _
+     *
+     * @param opcode opcode
+     */
     public void btfsc(int opcode) /*01 10*/ {
         System.out.println("called btfsc with " + opcode);
         int f = opcode & 0x7f;
         int b = opcode & 0x380;
         b >>= 7;
 
-        if(memory.getMainMemoryBit(f, b) == '0'){
+        if (memory.getMainMemoryBit(f, b) == 0) {
             nop();
-            memory.setPcl(memory.getPcl()+1);
+            memory.setPcl(memory.getPcl() + 1);
         }
-
 
 
         this.addTimeToTimer(1);// checkTimer
     }
 
+    /**
+     * Bit test f, Skip if Set | _
+     *
+     * @param opcode opcode
+     */
     public void btfss(int opcode) /*01 11*/ {
         System.out.println("called btfss with " + opcode);
         int f = opcode & 0x7f;
         int b = opcode & 0x380;
         b >>= 7;
 
-        if(memory.getMainMemoryBit(f, b) == '1'){
+        if (memory.getMainMemoryBit(f, b) == 1) {
             nop();
-            memory.setPcl(memory.getPcl()+1);
+            memory.setPcl(memory.getPcl() + 1);
         }
 
         this.addTimeToTimer(1);// checkTimer
     }
 
+    /**
+     * Add literal and W | C, DC, Z
+     *
+     * @param opcode opcode
+     */
     public void addlw(int opcode) /*11 111x*/ {
         System.out.println("called addlw with " + opcode);
         int k = opcode & 0xff;
@@ -425,6 +459,11 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * AND literal with W | Z
+     *
+     * @param opcode opcode
+     */
     public void andlw(int opcode) /*11 1001*/ {
         System.out.println("called andlw with " + opcode);
         int k = opcode & 0xff;
@@ -433,6 +472,11 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * call Subroutine | _
+     *
+     * @param opcode opcode
+     */
     public void call(int opcode) /*10 0*/ {
         System.out.println("called call with " + opcode);
         int k = opcode & 0x7ff;
@@ -441,11 +485,19 @@ public class Commands {
         this.addTimeToTimer(2);
     }
 
+    /**
+     * Clear Watchdig Timer | TO, PD
+     */
     public void clrwdt() /*00 0000 0110 0100*/ {
         System.out.println("called clrwdt");
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Go to Address | _
+     *
+     * @param opcode opcode
+     */
     public void _goto(int opcode) /*10 0*/ {
         System.out.println("called _goto with " + opcode);
         int k = opcode & 0x7ff;
@@ -453,6 +505,11 @@ public class Commands {
         this.addTimeToTimer(2);
     }
 
+    /**
+     * Inclusive OR literal with W | Z
+     *
+     * @param opcode opcode
+     */
     public void iorlw(int opcode) /*11 1000*/ {
         System.out.println("called iorlw with " + opcode);
         int k = opcode & 0xff;
@@ -461,6 +518,11 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Move literal to W | _
+     *
+     * @param opcode opcode
+     */
     public void movlw(int opcode) /*11 00xx*/ {
         System.out.println("called movlw with " + opcode);
         int k = opcode & 0xff;
@@ -468,11 +530,19 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Return from Interrupt | _
+     */
     public void retfie() /*00 0000 0000 1001*/ {
         System.out.println("called retfie");
         this.addTimeToTimer(2);
     }
 
+    /**
+     * Return with literal in W | _
+     *
+     * @param opcode opcode
+     */
     public void retlw(int opcode) /*11 01xx*/ {
         System.out.println("called retlw with " + opcode);
         int k = opcode & 0xff;
@@ -483,6 +553,9 @@ public class Commands {
         this.addTimeToTimer(2);
     }
 
+    /**
+     * Return from Subroutine | _
+     */
     public void _return() /*00 0000 0000 1000*/ {
         System.out.println("called _return");
 
@@ -491,11 +564,19 @@ public class Commands {
         this.addTimeToTimer(2);
     }
 
+    /**
+     * Go into standby mode | TO, PD
+     */
     public void sleep() /*00 0000 0110 0011*/ {
         System.out.println("called sleep");
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Subtract W from literal | C, DC, Z
+     *
+     * @param opcode opcode
+     */
     public void sublw(int opcode) /*11 110x*/ {
         System.out.println("called sublw with " + opcode);
         int k = opcode & 0xff;
@@ -522,6 +603,11 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * Exclusive OR literal with W | Z
+     *
+     * @param opcode opcode
+     */
     public void xorlw(int opcode) /*11 1010*/ {
         System.out.println("called xorlw with " + opcode);
 
@@ -533,6 +619,13 @@ public class Commands {
         this.addTimeToTimer(1);
     }
 
+    /**
+     * check if Zero flag needs to be set, save value in w or f
+     *
+     * @param destination 0 or 1 -> w or f
+     * @param index       index if saved into f
+     * @param value       value to be checked and saved
+     */
     private void checkZeroSave(int destination, int index, int value) {
 
         if (destination == 0) {
@@ -547,6 +640,13 @@ public class Commands {
         }
     }
 
+    /**
+     * check if carry needs to be set
+     * adjust values to be positive and lov´wer than 256
+     *
+     * @param value value to be checked
+     * @return adjusted value
+     */
     private int checkCarry(int value) {
         if (value >= 256 || value < 0) {
             //carry

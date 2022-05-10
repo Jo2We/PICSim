@@ -2,28 +2,25 @@ package input;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner; // Import the Scanner class to read text files
 
 public class Input {
 
-    /**
-     * constructor
-     */
     public Input() {
     }
 
     /**
-     * reads the Assembler program file and filters the relevant lines out of the file
+     * reads the Assembler program file
+     * saves the relevant lines cut to relevant length
+     * saves all lines for usage in ui
+     * creates a crosslist to reference both lists
      *
-     * @param lines
-     * @return
+     * @param lines     Arraylist to save the hex values of commands
+     * @param fullLines Arraylist to save all lines to later show in ui
+     * @param crossList Arraylist to reference between lines and fulllines
      */
-    public ArrayList<Integer> read(ArrayList<Integer> lines, ArrayList<String> fullLines, ArrayList<String> crossList) {
+    public void read(ArrayList<Integer> lines, ArrayList<String> fullLines, ArrayList<String> crossList) {
         String encoding = "windows-1252";
         try {
             File source = new File("res/TPicSim6.LST");
@@ -34,7 +31,7 @@ public class Input {
                 fullLines.add(data);
                 char character = data.charAt(0);
                 if (character != ' ') {
-                    lines.add(getBinaryAsInt(data.substring(5, 9)));
+                    lines.add(getHexStringAsInt(data.substring(5, 9)));
                     crossList.add(data.substring(20, 25));
                 }
             }
@@ -43,10 +40,15 @@ public class Input {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        return lines;
     }
 
-    private int getBinaryAsInt(String str) {
+    /**
+     * returns the base10 value as int from a hex string value
+     *
+     * @param str hex string
+     * @return decimal int
+     */
+    private int getHexStringAsInt(String str) {
         return Integer.parseInt(str, 16);
     }
 }
