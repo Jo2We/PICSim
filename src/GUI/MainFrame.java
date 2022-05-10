@@ -5,7 +5,6 @@ import controller.Controller;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -16,14 +15,11 @@ public class MainFrame {
     protected int rowsMemory = 32;
     protected int columnsMemory = 8;
     protected JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory + 1];
-    private String[][] labelsMemonryCommands = new String[rowsMemory][columnsMemory + 1];
+    private final String[][] labelsMemoryCommands = new String[rowsMemory][columnsMemory + 1];
     protected int[] mainMemory;
 
-    private int rowsRARB = 6;
-    private int columnsRARB = 8;
-    private JLabel[][] labelsRARB = new JLabel[rowsRARB][columnsRARB + 1];
-
-    private String memoryManipulation = "0";
+    private final int rowsRARB = 6;
+    private final int columnsRARB = 8;
 
     private ArrayList<String> fullLines;
 
@@ -32,9 +28,9 @@ public class MainFrame {
     protected JLabel[] labelsSpecialFunctionsRegisterVisible = new JLabel[5];
     protected JLabel[] labelsSpecialFunctionsRegisterHidden = new JLabel[2];
 
-    private int statusRows = 2;
-    private int statusColumns = 8;
-    private String[] statusStrings = {"C", "DC", "Z", "PD", "TO", "RP0", "RP1", "IRP"};
+    private final int statusRows = 2;
+    private final int statusColumns = 8;
+    private final String[] statusStrings = {"C", "DC", "Z", "PD", "TO", "RP0", "RP1", "IRP"};
 
     protected JLabel[] statusLabels = new JLabel[8];
 
@@ -68,6 +64,17 @@ public class MainFrame {
         mainFrame.setVisible(true);
     }
 
+    /**
+     * method to build the visual component of the Main Memory,
+     * build with a 2 dimensional array contains an additional column for the left index,
+     * the main element is a JPanel with an GridLayout, which contains JLabels with the value
+     * of the memory block,
+     * every JLabels has an MouseListener to detect if the field is clicked to manipulate the memory block,
+     * the values for the JLabels are saved in a global attribute
+     *
+     * this method is called once in the program to build the view element
+     * @return JPanel
+     */
     private JPanel buildMemory() {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(rowsMemory, columnsMemory + 1);
@@ -78,18 +85,18 @@ public class MainFrame {
         for (int row = 0; row < rowsMemory; row++) {
             panel.add(labelsMemory[row][0]);
             for (int column = 1; column < columnsMemory + 1; column++) {
-                String content = String.format("%02d", (int) this.mainMemory[row * 8 + (column - 1)]);
+                String content = String.format("%02d", this.mainMemory[row * 8 + (column - 1)]);
                 //String.valueOf((int)this.mainMemory[row * 8 + (column - 1)])
                 labelsMemory[row][column] = new JLabel(content, SwingConstants.CENTER);
                 labelsMemory[row][column].setFont(new Font("Arial", Font.PLAIN, 10));
                 labelsMemory[row][column].setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-                labelsMemonryCommands[row][column] = "clicked: " + row + " " + column;
+                labelsMemoryCommands[row][column] = "clicked: " + row + " " + column;
                 int rowCommand = row;
                 int columnCommand = column;
                 labelsMemory[row][column].addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        mouseEventMemoryClick(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, labelsMemonryCommands[rowCommand][columnCommand]));
+                        mouseEventMemoryClick(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, labelsMemoryCommands[rowCommand][columnCommand]));
                     }
 
                     @Override
@@ -114,6 +121,10 @@ public class MainFrame {
         return panel;
     }
 
+    /**
+     * method to make the Main Memory scrollable to minimate usage of place in the gui
+     * @return JPanel
+     */
     private ScrollPane buildScrollView() {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setBounds(10, 25, 240, 300);
@@ -121,6 +132,10 @@ public class MainFrame {
         return scrollPane;
     }
 
+    /**
+     * method to build the headline of the Main Memory for the index of the columns
+     * @return JPanel
+     */
     private JPanel buildTopLineMemory() {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(1, columnsMemory);
@@ -141,6 +156,15 @@ public class MainFrame {
         return panel;
     }
 
+    /**
+     * methode to build the view for RA and RB,
+     * the main element is a JPanel with a GridLayout,
+     * in row 0 and 3 are for the index of RA and RB,
+     * in row 1 and 4 are the TRISA and TRISB,
+     * in row 2 and 5 are the bits of PINA and PINB,
+     * both TRISA/B and PINA/B are using JLabels with MouseListener to detect if they are clicked
+     * @return JPanel
+     */
     private JPanel buildRARB() {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(rowsRARB, columnsRARB + 1);
@@ -220,29 +244,47 @@ public class MainFrame {
             }
         }
         panel.setBounds(260, 10, 200, 120);
-        //panel.setBackground(Color.gray);
         panel.setLayout(layout);
-
-
         return panel;
     }
 
+    /**
+     * method is call if one block in the Main Memory was clicked,
+     * extracts the row and column of the ActionEvent and parses them to int,
+     * a new JFrame is created with the row and column as parameter to manipulate the memory block
+     * @param ae ActionEvent with payload
+     */
     private void mouseEventMemoryClick(ActionEvent ae) {
         System.out.println(ae.getActionCommand());
         String[] str = ae.getActionCommand().substring(9).split(" ");
         int row = Integer.parseInt(str[0]);
         int column = Integer.parseInt(str[1]);
-        MemoryManipulationFrame memoryManipulationFrame = new MemoryManipulationFrame(Integer.toHexString(row * 8), row, column, this);
+        new MemoryManipulationFrame(Integer.toHexString(row * 8), row, column, this);
     }
 
+    /**
+     * method is called to store the manipulation of a memory block,
+     * calls the setMainMemoryByIndex with the index of the memory block and the manipulated value
+     * @param row row of the memory block
+     * @param column column of the memory block
+     * @param value manipulated value
+     */
     public void storeMemoryManipulation(int row, int column, String value) {
         int num = Integer.parseInt(value, 16);
-        controller.setMainMemoryByIndex(row * 8 + column, num);
+        this.controller.setMainMemoryByIndex(row * 8 + column, num);
         this.labelsMemory[row][column].setText(this.controller.getText((char) num));
     }
 
+    /**
+     * method to toggle the value of the TRISA and TRISB,
+     * is toggled by click on it, uses the ActionEvent, JLabel, row and column to toggle te value,
+     * toggled values are saved in the Memory, calls setRATrisMemory od setRBTrisMemory
+     * @param ae contains the current value, must be toggled from i to o or o to i
+     * @param label the JLabel to toggle
+     * @param row row of the clicked field
+     * @param column column of the clicked field
+     */
     private void toggleRARBTris(ActionEvent ae, JLabel label, int row, int column) {
-        //System.out.println(ae.getActionCommand());
         if (ae.getActionCommand().equals("i")) {
             label.setText("o");
             if (row == 1) {
@@ -262,26 +304,41 @@ public class MainFrame {
         }
     }
 
-    private void toggleRARBPin(ActionEvent ae, JLabel label, int row, int position) {
+    /**
+     * method to toggle the value of the PINA and PINB,
+     * is toggled by click on it, uses the ActionEvent, JLabel, row and column to toggle te value,
+     * toggled values are saved in the Memory, calls setBitInMemory depends on RA or RB,
+     * RA is saved in block 5 in the Main Memory, RB in block 6
+     * @param ae contains the current value, must be toggled from 1 to 0 or 0 to 1
+     * @param label the JLabel to toggle
+     * @param row row of the clicked field
+     * @param column column of the clicked field
+     */
+    private void toggleRARBPin(ActionEvent ae, JLabel label, int row, int column) {
         if (ae.getActionCommand().equals("1")) {
             label.setText("0");
             if (row == 2) { // RA
-                controller.setBitInMemory(5, 0, position);
+                controller.setBitInMemory(5, 0, column);
             }
             if (row == 5) { // RB
-                controller.setBitInMemory(6, 0, position);
+                controller.setBitInMemory(6, 0, column);
             }
         } else {
             label.setText("1");
             if (row == 2) { // RA
-                controller.setBitInMemory(5, 1, position);
+                controller.setBitInMemory(5, 1, column);
             }
             if (row == 5) { // RB
-                controller.setBitInMemory(6, 1, position);
+                controller.setBitInMemory(6, 1, column);
             }
         }
     }
 
+    /**
+     * method to build the scrollable Code view,
+     * using two JLists, one for the line of the code and the other for the acual code
+     * @return JScrollPane
+     */
     private JScrollPane buildCodeScrollPane() {
         this.fullLines = this.controller.getFullLines();
         JSplitPane panel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -301,11 +358,15 @@ public class MainFrame {
         return scrollPane;
     }
 
+    /**
+     * method to build the JList for the number of lines of the code,
+     * with MouseListener for usage with breakpoints
+     * @return JList
+     */
     private JList buildCodeRowPanel() {
         String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
             lines[index] = lines[index].substring(20, 25);
-            //System.out.println(lines[index]);
         }
         this.rowList = new JList(lines);
         this.rowList.addMouseListener(new MouseListener() {
@@ -333,23 +394,37 @@ public class MainFrame {
         return this.rowList;
     }
 
+    /**
+     * method to build the JList for the code,
+     * is disabled
+     * @return JList
+     */
     private JList buildCodePanel() {
         String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
             lines[index] = lines[index].substring(26);
-            //System.out.println(lines[index]);
         }
         this.codeList = new JList(lines);
         this.codeList.setEnabled(false);
         return this.codeList;
     }
 
+    /**
+     * method to handle a click on a number of a line in the Code View,
+     * selects the line and creates breakpoint
+     * @param ae ActionEvent
+     * @param row index of the clicked line
+     */
     private void mouseEventCodeRowClick(ActionEvent ae, int row) {
         System.out.println(ae.getActionCommand());
-        //this.codeList.setSelectedIndex(row);
         this.createBreakpoint(row);
     }
 
+    /**
+     * method th build the visible special functions register,
+     * contains w register, FSR, PCL, PCLATH, Status
+     * @return JPanel
+     */
     private JPanel buildSpecialFunctionsRegisterVisible() {
         JPanel panel = new JPanel();
         panel.setBounds(500, 10, 150, 150);
@@ -386,6 +461,11 @@ public class MainFrame {
         return panel;
     }
 
+    /**
+     * method to build the hidden special function register,
+     * contains PC and Stackpointer
+     * @return JPanel
+     */
     private JPanel buildSpecialFunctionRegisterHidden() {
         JPanel panel = new JPanel();
         panel.setBounds(675, 10, 150, 150);
@@ -407,6 +487,11 @@ public class MainFrame {
         return panel;
     }
 
+    /**
+     * method to build the status register,
+     * contains all flags
+     * @return JPanel
+     */
     private JPanel buildStatusRegister() {
         JPanel panel = new JPanel();
         //panel.setBackground(Color.cyan);
@@ -432,6 +517,11 @@ public class MainFrame {
         return panel;
     }
 
+    /**
+     * method to build the buttons to control the running code,
+     * buttons go, reset and continue with ActionListener
+     * @return JPanel
+     */
     private JPanel buildButtonControls() {
         JPanel panel = new JPanel();
         panel.setBounds(10, 400, 75, 75);
@@ -441,41 +531,34 @@ public class MainFrame {
         JButton goButton = new JButton("Go");
         goButton.setBackground(Color.lightGray);
         goButton.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-        goButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickedGoButton();
-            }
-        });
+        goButton.addActionListener(e -> clickedGoButton());
         JButton resetButton = new JButton("Reset");
         resetButton.setBackground(Color.lightGray);
         resetButton.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickedResetButton();
-            }
-        });
+        resetButton.addActionListener(e -> clickedResetButton());
         JButton continueButton = new JButton("Continue");
         continueButton.setBackground(Color.lightGray);
         continueButton.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-        continueButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickedContinueButton();
-            }
-        });
+        continueButton.addActionListener(e -> clickedContinueButton());
         panel.add(goButton);
         panel.add(resetButton);
         panel.add(continueButton);
         return panel;
     }
 
+    /**
+     * method is called if the go button was clicked,
+     * sets the go in Controller to true
+     */
     private void clickedGoButton() {
         System.out.println("Clicked: Go");
         this.controller.setGo(true);
     }
 
+    /**
+     * method is called if the reset button was clicked,
+     * sets the timer to 0, triggers the reset of the code and sets the reset in Controller
+     */
     private void clickedResetButton() {
         System.out.println("Clicked: Reset");
         this.timer = 0.0;
@@ -483,11 +566,19 @@ public class MainFrame {
         this.controller.setReset(true);
     }
 
+    /**
+     * method is called if the continue button was clicked,
+     * sets continue in Controller
+     */
     private void clickedContinueButton () {
         System.out.println("Clicked: Continue");
         this.controller.setContionueAfterBreakpoint(true);
     }
 
+    /**
+     * method to build the view of the runtime timer
+     * @return JPanel
+     */
     private JPanel buildTimerView() {
         JPanel panel = new JPanel();
         panel.setBounds(100, 400, 150, 50);
@@ -500,11 +591,21 @@ public class MainFrame {
         return panel;
     }
 
+    /**
+     * method is called after a click on a row in the code view to create a breakpoint,
+     * sets the row of the breakpoint in Controller
+     * @param row clicked row
+     */
     private void createBreakpoint(int row) {
         System.out.println("Breakpoint at row: " + (row + 1));
         this.controller.setBreakpoint((row + 1));
     }
 
+    /**
+     * method to build the visual component of the stack,
+     * contains 8 JLabels
+     * @return JPanel
+     */
     private JPanel buildStackView () {
         JPanel panel = new JPanel();
         panel.setBounds(850, 10, 50, 150);
@@ -518,11 +619,10 @@ public class MainFrame {
             label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
             if (this.stackView[index] != 0) {
                 label.setText(this.controller.getText(this.stackView[index]));
-                this.stackViewLabels[index] = label;
             } else {
                 label.setText("00");
-                this.stackViewLabels[index] = label;
             }
+            this.stackViewLabels[index] = label;
             panel.add(label);
         }
         return panel;
