@@ -1,8 +1,7 @@
-package GUI;
+package gui;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 public class MemoryManipulationFrame {
 
@@ -35,12 +34,9 @@ public class MemoryManipulationFrame {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setBounds(10, 150, 430, 30);
         JButton button = new JButton("OK");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainPICFrame.storeMemoryManipulation(row, column, textField.getText());
-                mainFrame.dispose();
-            }
+        button.addActionListener(e -> {
+            mainPICFrame.storeMemoryManipulation(row, column, textField.getText());
+            mainFrame.dispose();
         });
         button.setSize(60, 20);
         button.setVisible(true);

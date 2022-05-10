@@ -1,4 +1,4 @@
-package PIC;
+package pic;
 
 
 public class Commands {

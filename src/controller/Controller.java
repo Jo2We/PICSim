@@ -1,18 +1,17 @@
 package controller;
 
-import GUI.MainFrame;
-import GUI.ReloadingMethods;
-import PIC.Commands;
-import PIC.Memory;
+import gui.ReloadingMethods;
+import pic.Commands;
+import pic.Memory;
 import input.Input;
 
 import java.util.ArrayList;
 
 public class Controller {
-    private ArrayList<Integer> lines = new ArrayList<>();
-    private ArrayList<String> fullLines = new ArrayList<>();
+    private final ArrayList<Integer> lines = new ArrayList<>();
+    private final ArrayList<String> fullLines = new ArrayList<>();
 
-    private ArrayList<String> crossList = new ArrayList<>();
+    private final ArrayList<String> crossList = new ArrayList<>();
 
     Memory memory;
     Commands command;
@@ -39,7 +38,7 @@ public class Controller {
         I.read(this.lines, this.fullLines, this.crossList);
         this.reloadingMethods = new ReloadingMethods(this);
 
-        int tempPcl = 0;
+        int tempPcl;
         do {
             while (!this.go) {
                 reloadingMethods.reloadAll(false, command.getTimer(), -1);
@@ -111,16 +110,10 @@ public class Controller {
                                             command.nop();
                                             return;
                                         }
-                                        if (dec < 96) { // 00 0000 010 | 64 - 95
-
-                                        }
                                         // 00 0000 011 | 96 - 127
                                         if (dec < 112) { // 00 0000 0110 | 96 - 111
                                             if (dec < 104) { // 00 0000 0110 0 | 96 - 103
                                                 if (dec < 100) { // 00 0000 0110 00 | 96 - 99
-                                                    if (dec < 98) { // 00 0000 0110 000 | 96 - 97 |
-
-                                                    }
                                                     // 00 0000 0110 001 | 98 - 99 | sleep
                                                     command.sleep();
                                                     return;
@@ -290,15 +283,14 @@ public class Controller {
      * the value is casted from int to String by the toHexString() method
      *
      * @param intValue value to cast to String
-     * @return
+     * @return casted String
      */
     public String getText(int intValue) {
         String str;
-        int value = intValue;
-        if (value < 16) {
-            str = "0" + Integer.toHexString(value).toUpperCase();
+        if (intValue < 16) {
+            str = "0" + Integer.toHexString(intValue).toUpperCase();
         } else {
-            str = Integer.toHexString(value).toUpperCase();
+            str = Integer.toHexString(intValue).toUpperCase();
         }
         return str;
     }
@@ -325,7 +317,7 @@ public class Controller {
      * returns true if it is a real functional breakpoint, returns false if not
      *
      * @param line line of the breakpoint
-     * @return
+     * @return bool if breakpoint is valid
      */
     private boolean validBreakpoint(int line) {
         for (int index = 0; index < this.crossList.size(); index++) {
@@ -339,13 +331,10 @@ public class Controller {
     /**
      * used to check if one or both of the values are true
      *
-     * @return
+     * @return bool if continue = true
      */
     private boolean checkContionueOrReset() {
-        if (this.reset || this.contionueAfterBreakpoint) {
-            return false;
-        }
-        return true;
+        return !this.reset && !this.contionueAfterBreakpoint;
     }
 
 

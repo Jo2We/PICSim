@@ -4,10 +4,10 @@
                     00004           ;eines Tabellenzugriffs getestet
                     00005           ;(c) St. Lehmann  
                     00006           ;19.04.2014 
-                    00007           ;18.10.2018 mod. für HSO es wird die Tabelle durch ein ORG 100H auf die
+                    00007           ;18.10.2018 mod. fï¿½r HSO es wird die Tabelle durch ein ORG 100H auf die
                     00008           ;                        Adresse 100H gelegt. 
                     00009           
-                    00010           list c=132          ;Zeilenlänge im LST auf 132 Zeichen setzen
+                    00010           list c=132          ;Zeilenlï¿½nge im LST auf 132 Zeichen setzen
                     00011             
                     00012           ;Definition einiger Symbole
                     00013           indirect equ 0
@@ -24,7 +24,7 @@
                     00024           ;Festlegen des Codebeginns
                     00025           org 0
                     00026  start    
-0000 3000           00027           movlw 0             ;Index für Tabellenzugriff in 0FH
+0000 3000           00027           movlw 0             ;Index fï¿½r Tabellenzugriff in 0FH
 0001 008F           00028           movwf 0fh
 0002 3005           00029           movlw 5             ;insgesamt 5 Tabellenzugriffe
 0003 008E           00030           movwf 0eh
@@ -45,8 +45,8 @@
 0011 2100           00045           call tabelle        ;Fehler, der ADDWF PCL kommt nicht in die Tabelle. Grund: in W steht 5
                     00046           ;im PC 109 bzw. nach dem Fetch 10A. Zu diesem Wert wird 5 addiert und
                     00047           ;die oberen Bits auf 0 gesetzt (PCLATH=0). Damit steht im PC der Wert
-                    00048           ;0Fh. Dorthin springt der PIC durch den ADDWF-Befehl. Hier verweilt
-                    00049           ;das Programm während der Stack immer weiter wächst.
+                    00048           ;0Fh. Dorthin springt der pic durch den ADDWF-Befehl. Hier verweilt
+                    00049           ;das Programm wï¿½hrend der Stack immer weiter wï¿½chst.
                     00050             
                     00051           
                     00052  ende     

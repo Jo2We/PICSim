@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import controller.Controller;
 
@@ -18,18 +18,14 @@ public class MainFrame {
     private final String[][] labelsMemoryCommands = new String[rowsMemory][columnsMemory + 1];
     protected int[] mainMemory;
 
-    private final int rowsRARB = 6;
-    private final int columnsRARB = 8;
 
     private ArrayList<String> fullLines;
 
-    protected JList rowList;
-    protected JList codeList;
+    protected JList<String> rowList;
+    protected JList<String> codeList;
     protected JLabel[] labelsSpecialFunctionsRegisterVisible = new JLabel[5];
     protected JLabel[] labelsSpecialFunctionsRegisterHidden = new JLabel[2];
 
-    private final int statusRows = 2;
-    private final int statusColumns = 8;
     private final String[] statusStrings = {"C", "DC", "Z", "PD", "TO", "RP0", "RP1", "IRP"};
 
     protected JLabel[] statusLabels = new JLabel[8];
@@ -71,8 +67,9 @@ public class MainFrame {
      * of the memory block,
      * every JLabels has an MouseListener to detect if the field is clicked to manipulate the memory block,
      * the values for the JLabels are saved in a global attribute
-     *
+     * <p>
      * this method is called once in the program to build the view element
+     *
      * @return JPanel
      */
     private JPanel buildMemory() {
@@ -123,6 +120,7 @@ public class MainFrame {
 
     /**
      * method to make the Main Memory scrollable to minimate usage of place in the gui
+     *
      * @return JPanel
      */
     private ScrollPane buildScrollView() {
@@ -134,6 +132,7 @@ public class MainFrame {
 
     /**
      * method to build the headline of the Main Memory for the index of the columns
+     *
      * @return JPanel
      */
     private JPanel buildTopLineMemory() {
@@ -163,26 +162,27 @@ public class MainFrame {
      * in row 1 and 4 are the TRISA and TRISB,
      * in row 2 and 5 are the bits of PINA and PINB,
      * both TRISA/B and PINA/B are using JLabels with MouseListener to detect if they are clicked
+     *
      * @return JPanel
      */
     private JPanel buildRARB() {
         JPanel panel = new JPanel();
-        GridLayout layout = new GridLayout(rowsRARB, columnsRARB + 1);
-        for (int row = 0; row < rowsRARB; row++) {
-            for (int column = columnsRARB; column >= 0; column--) {
+        GridLayout layout = new GridLayout(6, 8 + 1);
+        for (int row = 0; row < 6; row++) {
+            for (int column = 8; column >= 0; column--) {
                 JLabel label = new JLabel("", SwingConstants.CENTER);
                 label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-                if (row == 0 && column == columnsRARB) {
+                if (row == 0 && column == 8) {
                     label.setText("RA");
                 }
-                if ((row == 1 || row == 4) && column == columnsRARB) {
+                if ((row == 1 || row == 4) && column == 8) {
                     label.setText("Tris");
                     label.setFont(new Font("Arial", Font.PLAIN, 12));
                 }
-                if ((row == 2 || row == 5) && column == columnsRARB) {
+                if ((row == 2 || row == 5) && column == 8) {
                     label.setText("Pin");
                 }
-                if (row == 3 && column == columnsRARB) {
+                if (row == 3 && column == 8) {
                     label.setText("RB");
                 }
                 if ((row == 0 || row == 3) && column < 8) {
@@ -252,6 +252,7 @@ public class MainFrame {
      * method is call if one block in the Main Memory was clicked,
      * extracts the row and column of the ActionEvent and parses them to int,
      * a new JFrame is created with the row and column as parameter to manipulate the memory block
+     *
      * @param ae ActionEvent with payload
      */
     private void mouseEventMemoryClick(ActionEvent ae) {
@@ -265,9 +266,10 @@ public class MainFrame {
     /**
      * method is called to store the manipulation of a memory block,
      * calls the setMainMemoryByIndex with the index of the memory block and the manipulated value
-     * @param row row of the memory block
+     *
+     * @param row    row of the memory block
      * @param column column of the memory block
-     * @param value manipulated value
+     * @param value  manipulated value
      */
     public void storeMemoryManipulation(int row, int column, String value) {
         int num = Integer.parseInt(value, 16);
@@ -279,9 +281,10 @@ public class MainFrame {
      * method to toggle the value of the TRISA and TRISB,
      * is toggled by click on it, uses the ActionEvent, JLabel, row and column to toggle te value,
      * toggled values are saved in the Memory, calls setRATrisMemory od setRBTrisMemory
-     * @param ae contains the current value, must be toggled from i to o or o to i
-     * @param label the JLabel to toggle
-     * @param row row of the clicked field
+     *
+     * @param ae     contains the current value, must be toggled from i to o or o to i
+     * @param label  the JLabel to toggle
+     * @param row    row of the clicked field
      * @param column column of the clicked field
      */
     private void toggleRARBTris(ActionEvent ae, JLabel label, int row, int column) {
@@ -309,9 +312,10 @@ public class MainFrame {
      * is toggled by click on it, uses the ActionEvent, JLabel, row and column to toggle te value,
      * toggled values are saved in the Memory, calls setBitInMemory depends on RA or RB,
      * RA is saved in block 5 in the Main Memory, RB in block 6
-     * @param ae contains the current value, must be toggled from 1 to 0 or 0 to 1
-     * @param label the JLabel to toggle
-     * @param row row of the clicked field
+     *
+     * @param ae     contains the current value, must be toggled from 1 to 0 or 0 to 1
+     * @param label  the JLabel to toggle
+     * @param row    row of the clicked field
      * @param column column of the clicked field
      */
     private void toggleRARBPin(ActionEvent ae, JLabel label, int row, int column) {
@@ -337,6 +341,7 @@ public class MainFrame {
     /**
      * method to build the scrollable Code view,
      * using two JLists, one for the line of the code and the other for the acual code
+     *
      * @return JScrollPane
      */
     private JScrollPane buildCodeScrollPane() {
@@ -361,14 +366,15 @@ public class MainFrame {
     /**
      * method to build the JList for the number of lines of the code,
      * with MouseListener for usage with breakpoints
+     *
      * @return JList
      */
-    private JList buildCodeRowPanel() {
+    private JList<String> buildCodeRowPanel() {
         String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
             lines[index] = lines[index].substring(20, 25);
         }
-        this.rowList = new JList(lines);
+        this.rowList = new JList<>(lines);
         this.rowList.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -397,14 +403,15 @@ public class MainFrame {
     /**
      * method to build the JList for the code,
      * is disabled
+     *
      * @return JList
      */
-    private JList buildCodePanel() {
+    private JList<String> buildCodePanel() {
         String[] lines = fullLines.toArray(new String[0]);
         for (int index = 0; index < lines.length; index++) {
             lines[index] = lines[index].substring(26);
         }
-        this.codeList = new JList(lines);
+        this.codeList = new JList<>(lines);
         this.codeList.setEnabled(false);
         return this.codeList;
     }
@@ -412,7 +419,8 @@ public class MainFrame {
     /**
      * method to handle a click on a number of a line in the Code View,
      * selects the line and creates breakpoint
-     * @param ae ActionEvent
+     *
+     * @param ae  ActionEvent
      * @param row index of the clicked line
      */
     private void mouseEventCodeRowClick(ActionEvent ae, int row) {
@@ -423,6 +431,7 @@ public class MainFrame {
     /**
      * method th build the visible special functions register,
      * contains w register, FSR, PCL, PCLATH, Status
+     *
      * @return JPanel
      */
     private JPanel buildSpecialFunctionsRegisterVisible() {
@@ -464,6 +473,7 @@ public class MainFrame {
     /**
      * method to build the hidden special function register,
      * contains PC and Stackpointer
+     *
      * @return JPanel
      */
     private JPanel buildSpecialFunctionRegisterHidden() {
@@ -490,6 +500,7 @@ public class MainFrame {
     /**
      * method to build the status register,
      * contains all flags
+     *
      * @return JPanel
      */
     private JPanel buildStatusRegister() {
@@ -497,10 +508,10 @@ public class MainFrame {
         //panel.setBackground(Color.cyan);
         panel.setBounds(10, 350, 240, 40);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-        GridLayout layout = new GridLayout(this.statusRows, this.statusColumns);
+        GridLayout layout = new GridLayout(2, 8);
         panel.setLayout(layout);
-        for (int row = 0; row < this.statusRows; row++) {
-            for (int column = this.statusColumns - 1; column >= 0; column--) {
+        for (int row = 0; row < 2; row++) {
+            for (int column = 8 - 1; column >= 0; column--) {
                 JLabel label = new JLabel("", SwingConstants.CENTER);
                 label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
                 if (row == 0) {
@@ -520,6 +531,7 @@ public class MainFrame {
     /**
      * method to build the buttons to control the running code,
      * buttons go, reset and continue with ActionListener
+     *
      * @return JPanel
      */
     private JPanel buildButtonControls() {
@@ -578,6 +590,7 @@ public class MainFrame {
 
     /**
      * method to build the view of the runtime timer
+     *
      * @return JPanel
      */
     private JPanel buildTimerView() {
@@ -595,6 +608,7 @@ public class MainFrame {
     /**
      * method is called after a click on a row in the code view to create a breakpoint,
      * sets the row of the breakpoint in Controller
+     *
      * @param row clicked row
      */
     private void createBreakpoint(int row) {
@@ -606,6 +620,7 @@ public class MainFrame {
     /**
      * method to build the visual component of the stack,
      * contains 8 JLabels
+     *
      * @return JPanel
      */
     private JPanel buildStackView() {

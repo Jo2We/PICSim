@@ -1,4 +1,4 @@
-package PIC;
+package pic;
 
 import java.util.Arrays;
 
@@ -109,7 +109,8 @@ public class Memory {
 
     /**
      * returns the value(0 or 1) of the selcted bit of the selected main memory byte
-     * @param index main memory byte
+     *
+     * @param index    main memory byte
      * @param position bit in byte
      * @return 0 or 1, value of bit
      */
