@@ -22,6 +22,11 @@ public class Memory {
      * @param position bit in byte
      */
     public void setMainMemoryBit(int index, int value, int position) {
+
+        if (index == 0) {
+            index = getMainMemory()[4];
+        }
+
         int currValue = this.getMainMemoryBit(index, position);
         if (currValue == 0 && value == 1) {
             switch (position) {
@@ -133,7 +138,17 @@ public class Memory {
         return this.mainMemory;
     }
 
+    public int getMainMemoryIndex(int index) {
+        if (index == 0) {
+            index = getMainMemory()[4];
+        }
+        return getMainMemory()[index];
+    }
+
     public void setMainMemoryByIndex(int index, int value) {
+        if (index == 0) {
+            index = getMainMemory()[4];
+        }
         this.mainMemory[index] = value;
     }
 

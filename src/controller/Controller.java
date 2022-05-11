@@ -61,7 +61,7 @@ public class Controller {
                     reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPcl()));
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -304,6 +304,7 @@ public class Controller {
     public void reset(double timer) {
         this.memory.reset();
         this.setContionueAfterBreakpoint(true);
+        this.setBreakpoint(-1);
         this.setGo(false);
         this.setTimer(timer);
         int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
