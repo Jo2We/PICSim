@@ -5,7 +5,6 @@ public class Commands {
 
     private final Memory memory;
 
-    private double timer = 0.0;
 
 
     public Commands(Memory m) {
@@ -31,7 +30,7 @@ public class Commands {
         }
         value = checkCarry(value);
         checkZeroSave(d, f, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -48,7 +47,7 @@ public class Commands {
 
         checkZeroSave(d, f, value);
 
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -61,7 +60,7 @@ public class Commands {
         int f = opcode & 0x7f;
         memory.setMainMemoryByIndex(f, 0);
         memory.setStatus(2, 1);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -77,7 +76,7 @@ public class Commands {
         //memory.setMainMemoryBit(3, 1, 2);
         memory.setStatus(2, 1);
 
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -93,7 +92,7 @@ public class Commands {
         int value = ~memory.getMainMemoryIndex(f) & 0xFF;
 
         checkZeroSave(d, f, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -111,7 +110,7 @@ public class Commands {
         value += 256;
         value %= 256;
         checkZeroSave(d, f, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -130,7 +129,7 @@ public class Commands {
         value %= 256;
 
         if (value == 0) {
-            this.addTimeToTimer(1);
+            memory.increaseTimer(1);
             memory.setPcl(memory.getPcl() + 1);
         }
 
@@ -140,7 +139,7 @@ public class Commands {
             memory.setMainMemoryByIndex(f, value);
         }
 
-        this.addTimeToTimer(1);// checkTimer
+        memory.increaseTimer(1);
     }
 
     /**
@@ -155,7 +154,7 @@ public class Commands {
         int value = memory.getMainMemoryIndex(f);
         value++;
         checkZeroSave(d, f, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -172,7 +171,7 @@ public class Commands {
         value++;
         value %= 256;
         if (value == 0) {
-            this.addTimeToTimer(1);
+            memory.increaseTimer(1);
             memory.setPcl(memory.getPcl() + 1);
 
         }
@@ -183,7 +182,7 @@ public class Commands {
         }
 
 
-        this.addTimeToTimer(1);// checkTimer
+        memory.increaseTimer(1);
     }
 
     /**
@@ -199,7 +198,7 @@ public class Commands {
         int value = memory.getW() | memory.getMainMemoryIndex(f);
 
         checkZeroSave(d, f, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -213,7 +212,7 @@ public class Commands {
         int d = opcode & 0x80;
         int value = memory.getMainMemoryIndex(f);
         checkZeroSave(d, f, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -225,7 +224,7 @@ public class Commands {
         System.out.println("called movwf with " + opcode);
         int f = opcode & 0x7f;
         memory.setMainMemoryByIndex(f, memory.getW());
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -233,7 +232,7 @@ public class Commands {
      */
     public void nop() /*00 0000 0xx0 0000*/ {
         System.out.println("called nop");
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -256,7 +255,7 @@ public class Commands {
         } else {
             memory.setMainMemoryByIndex(f, value);
         }
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -284,7 +283,7 @@ public class Commands {
             memory.setMainMemoryByIndex(f, value);
         }
 
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -317,7 +316,7 @@ public class Commands {
         value += 256;
         value %= 256;
         checkZeroSave(d, f, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -343,7 +342,7 @@ public class Commands {
             memory.setMainMemoryByIndex(f, value);
         }
 
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -360,7 +359,7 @@ public class Commands {
 
         checkZeroSave(d, f, value);
 
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -377,7 +376,7 @@ public class Commands {
 
         memory.setMainMemoryBit(f, 0, b);
 
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -394,7 +393,7 @@ public class Commands {
         memory.setMainMemoryBit(f, 1, b);
 
 
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -414,7 +413,7 @@ public class Commands {
         }
 
 
-        this.addTimeToTimer(1);// checkTimer
+        memory.increaseTimer(1);
     }
 
     /**
@@ -433,7 +432,7 @@ public class Commands {
             memory.setPcl(memory.getPcl() + 1);
         }
 
-        this.addTimeToTimer(1);// checkTimer
+        memory.increaseTimer(1);
     }
 
     /**
@@ -456,7 +455,7 @@ public class Commands {
         }
         value = checkCarry(value);
         checkZeroSave(0, 0, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -469,7 +468,7 @@ public class Commands {
         int k = opcode & 0xff;
         int value = k & memory.getW();
         checkZeroSave(0, 0, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -482,15 +481,15 @@ public class Commands {
         int k = opcode & 0x7ff;
         memory.pushStack(memory.getPcl());
         memory.setPcl(k - 1);
-        this.addTimeToTimer(2);
+        memory.increaseTimer(2);
     }
 
     /**
-     * Clear Watchdig Timer | TO, PD
+     * Clear Watchdog Timer | TO, PD
      */
     public void clrwdt() /*00 0000 0110 0100*/ {
         System.out.println("called clrwdt");
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -502,7 +501,7 @@ public class Commands {
         System.out.println("called _goto with " + opcode);
         int k = opcode & 0x7ff;
         memory.setPcl(k - 1);
-        this.addTimeToTimer(2);
+        memory.increaseTimer(2);
     }
 
     /**
@@ -515,7 +514,7 @@ public class Commands {
         int k = opcode & 0xff;
         int value = k | memory.getW();
         checkZeroSave(0, 0, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -527,7 +526,7 @@ public class Commands {
         System.out.println("called movlw with " + opcode);
         int k = opcode & 0xff;
         memory.setW(k);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -535,7 +534,7 @@ public class Commands {
      */
     public void retfie() /*00 0000 0000 1001*/ {
         System.out.println("called retfie");
-        this.addTimeToTimer(2);
+        memory.increaseTimer(2);
     }
 
     /**
@@ -550,7 +549,7 @@ public class Commands {
         memory.setW(k);
         memory.setPcl(memory.popStack());
 
-        this.addTimeToTimer(2);
+        memory.increaseTimer(2);
     }
 
     /**
@@ -561,7 +560,7 @@ public class Commands {
 
         memory.setPcl(memory.popStack());
 
-        this.addTimeToTimer(2);
+        memory.increaseTimer(2);
     }
 
     /**
@@ -569,7 +568,7 @@ public class Commands {
      */
     public void sleep() /*00 0000 0110 0011*/ {
         System.out.println("called sleep");
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -600,7 +599,7 @@ public class Commands {
         value += 256;
         value %= 256;
         checkZeroSave(0, 0, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -616,7 +615,7 @@ public class Commands {
         int value = k ^ memory.getW() & 0xFF;
 
         checkZeroSave(0, 0, value);
-        this.addTimeToTimer(1);
+        memory.increaseTimer(1);
     }
 
     /**
@@ -659,16 +658,5 @@ public class Commands {
         return value;
     }
 
-    private void addTimeToTimer(int cycle) {
-        this.timer += cycle;
-        memory.setMainMemoryByIndex(1, memory.getMainMemoryIndex(1) + 1);
-    }
 
-    public double getTimer() {
-        return this.timer;
-    }
-
-    public void setTimer(double timer) {
-        this.timer = timer;
-    }
 }

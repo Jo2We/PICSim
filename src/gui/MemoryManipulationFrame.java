@@ -9,7 +9,7 @@ public class MemoryManipulationFrame {
         //zu int + row zu hex
         int hex = Integer.parseInt(strRow, 16);
         hex += column;
-        JFrame mainFrame = new JFrame("Manipulate Memory at index " + Integer.toHexString(hex));
+        JFrame mainFrame = new JFrame("Manipulate Memory at index " + Integer.toHexString(hex).toUpperCase());
         mainFrame.add(buildInput(mainFrame, mainPICFrame, row, column));
 
         mainFrame.setSize(480, 240);

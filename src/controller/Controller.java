@@ -41,7 +41,7 @@ public class Controller {
         int tempPcl;
         do {
             while (!this.go) {
-                reloadingMethods.reloadAll(false, command.getTimer(), -1);
+                reloadingMethods.reloadAll(false, memory.getTimer(), -1);
             }
             do {
                 if (this.memory.getPcl() > 0 && !this.reset) {
@@ -58,16 +58,16 @@ public class Controller {
                     }
                     this.setContionueAfterBreakpoint(false);
                     int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
-                    reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
+                    reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPcl()));
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(250);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
                 while (this.checkContionueOrReset()) {
-                    reloadingMethods.reloadAll(false, command.getTimer(), -1);
+                    reloadingMethods.reloadAll(false, memory.getTimer(), -1);
                 }
             } while (this.go);
         } while (!this.go);
@@ -301,14 +301,14 @@ public class Controller {
      *
      * @param timer value to set
      */
-    public void reset(double timer) {
+    public void reset(int timer) {
         this.memory.reset();
         this.setContionueAfterBreakpoint(true);
         this.setBreakpoint(-1);
         this.setGo(false);
         this.setTimer(timer);
         int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
-        reloadingMethods.reloadAll(true, command.getTimer(), (index - 1));
+        reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
     }
 
     /**
@@ -423,8 +423,8 @@ public class Controller {
         return this.memory.getMainMemoryBit(position, index);
     }
 
-    private void setTimer(double timer) {
-        this.command.setTimer(timer);
+    private void setTimer(int timer) {
+        this.memory.setTimer(timer);
     }
 
 

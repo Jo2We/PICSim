@@ -12,6 +12,9 @@ public class Memory {
     private final int[] mainMemory = new int[rowsMemory * columnsMemory];
     private final int[] stack = new int[8];
     private int stackpointer = 0;
+    private int timer = 0;
+    private int inhibitTimer = 0;
+    private int prescaler = 0;
 
     /**
      * set a bit in the main memory 0 or 1
@@ -25,6 +28,10 @@ public class Memory {
 
         if (index == 0) {
             index = getMainMemory()[4];
+        }
+
+        if (getMainMemoryBit(3, 5) == 1){
+            index += 128;
         }
 
         int currValue = this.getMainMemoryBit(index, position);
@@ -132,6 +139,15 @@ public class Memory {
         Arrays.fill(this.mainMemory, 0);
     }
 
+    public void increaseTimer(int cycle) {
+        this.timer += cycle;
+        if (getMainMemoryBit(3, 5) == 0){
+            setMainMemoryByIndex(1, getMainMemoryIndex(1) + 1);
+        }
+    }
+
+
+
     // getter and setter
 
     public int[] getMainMemory() {
@@ -182,5 +198,13 @@ public class Memory {
 
     public int getStackPointer() {
         return this.stackpointer;
+    }
+
+    public int getTimer() {
+        return this.timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
     }
 }

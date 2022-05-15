@@ -2,6 +2,8 @@ package gui;
 
 import controller.Controller;
 
+import java.awt.*;
+
 public class ReloadingMethods extends MainFrame {
 
     public ReloadingMethods(Controller controller) {
@@ -16,7 +18,11 @@ public class ReloadingMethods extends MainFrame {
         this.mainMemory = this.controller.getMainMemory();
         for (int row = 0; row < rowsMemory; row++) {
             for (int column = 0; column < columnsMemory; column++) {
-                labelsMemory[row][column + 1].setText(this.controller.getText(this.mainMemory[row * 8 + column]));
+                if (row%2 == 0){
+                    labelsMemory[row][column].setOpaque(true);
+                    labelsMemory[row][column].setBackground(Color.cyan);
+                }
+                labelsMemory[row][column].setText(this.controller.getText(this.mainMemory[row * 8 + column]));
             }
         }
     }
@@ -58,7 +64,7 @@ public class ReloadingMethods extends MainFrame {
      *
      * @param timer value of the timer
      */
-    private void reloadTimer(double timer) {
+    private void reloadTimer(int timer) {
         this.timer = timer;
         this.timerLabel.setText("" + this.timer + "µs");
     }
@@ -81,7 +87,7 @@ public class ReloadingMethods extends MainFrame {
      * @param timer      value of the timer
      * @param index      line of the current code
      */
-    public void reloadAll(boolean reloadCode, double timer, int index) {
+    public void reloadAll(boolean reloadCode, int timer, int index) {
         this.reloadMainMemory();
         this.reloadSpecialFunctionsRegisterVisible();
         this.reloadLabelsSpecialFunctionsRegisterHidden();

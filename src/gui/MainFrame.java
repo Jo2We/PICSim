@@ -14,8 +14,8 @@ public class MainFrame {
     protected Controller controller;
     protected int rowsMemory = 32;
     protected int columnsMemory = 8;
-    protected JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory + 1];
-    private final String[][] labelsMemoryCommands = new String[rowsMemory][columnsMemory + 1];
+    protected JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory];
+    private final String[][] labelsMemoryCommands = new String[rowsMemory][columnsMemory];
     protected int[] mainMemory;
 
 
@@ -31,7 +31,7 @@ public class MainFrame {
     protected JLabel[] statusLabels = new JLabel[8];
 
     protected JLabel timerLabel = new JLabel("", SwingConstants.RIGHT);
-    protected double timer = 0.0;
+    protected int timer = 0;
 
     protected int[] stackView;
     protected JLabel[] stackViewLabels = new JLabel[8];
@@ -77,12 +77,17 @@ public class MainFrame {
         GridLayout layout = new GridLayout(rowsMemory, columnsMemory + 1);
         panel.setLayout(layout);
         for (int row = 0; row < rowsMemory; row++) {
-            labelsMemory[row][0] = new JLabel(Integer.toHexString(row * 8), SwingConstants.CENTER);
+            labelsMemory[row][0] = new JLabel(Integer.toHexString((int) Math.floor(row/2)).toUpperCase(), SwingConstants.CENTER);
         }
         for (int row = 0; row < rowsMemory; row++) {
             panel.add(labelsMemory[row][0]);
-            for (int column = 1; column < columnsMemory + 1; column++) {
-                String content = String.format("%02d", this.mainMemory[row * 8 + (column - 1)]);
+            for (int column = 0; column < columnsMemory; column++) {
+//                if (row%2 == 0){
+//                    labelsMemory[row][column].setOpaque(true);
+//                    labelsMemory[row][column].setBackground(Color.red);
+//                }
+                //coloums+1/-1?
+                String content = String.format("%02d", this.mainMemory[row * 8 + column]);
                 //String.valueOf((int)this.mainMemory[row * 8 + (column - 1)])
                 labelsMemory[row][column] = new JLabel(content, SwingConstants.CENTER);
                 labelsMemory[row][column].setFont(new Font("Arial", Font.PLAIN, 10));
@@ -139,18 +144,14 @@ public class MainFrame {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(1, columnsMemory);
         panel.setLayout(layout);
-        panel.setBounds(34, 10, 178, 15);
+        panel.setBounds(35, 10, 185, 15);
         for (int column = 0; column < columnsMemory; column++) {
             JLabel label = new JLabel("", SwingConstants.CENTER);
             label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-            if (column == 0) {
-                label.setText("00");
-                panel.add(label);
-            }
-            if (column > 0) {
-                label.setText("0" + column);
-                panel.add(label);
-            }
+
+            label.setText(column + "/" + Integer.toHexString(column + 8).toUpperCase());
+            panel.add(label);
+
         }
         return panel;
     }
@@ -573,7 +574,7 @@ public class MainFrame {
      */
     private void clickedResetButton() {
         System.out.println("Clicked: Reset");
-        this.timer = 0.0;
+        this.timer = 0;
         this.controller.reset(this.timer);
         this.controller.setReset(true);
     }
