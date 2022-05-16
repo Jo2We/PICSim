@@ -17,20 +17,8 @@ public class ReloadingMethods extends MainFrame {
     private void reloadMainMemory() {
         this.mainMemory = this.controller.getMainMemory();
         for (int row = 0; row < rowsMemory; row++) {
-            for (int column = 0; column < columnsMemory; column++) {
-                if (row % 2 == 0 && column %2 == 1) {
-                    labelsMemory[row][column].setOpaque(true);
-                    labelsMemory[row][column].setBackground(Color.lightGray);
-                }
-                else if (row % 2 == 1 && column %2 == 0) {
-                    labelsMemory[row][column].setOpaque(true);
-                    labelsMemory[row][column].setBackground(Color.lightGray);
-                }
-                else if (row % 2 == 1 && column %2 == 1) {
-                    labelsMemory[row][column].setOpaque(true);
-                    labelsMemory[row][column].setBackground(Color.gray);
-                }
-                labelsMemory[row][column].setText(this.controller.getText(this.mainMemory[row * 8 + column]));
+            for (int column = 1; column < columnsMemory + 1; column++) {
+                labelsMemory[row][column].setText(this.controller.getText(this.mainMemory[row * 8 + (column - 1)]));
             }
         }
     }
