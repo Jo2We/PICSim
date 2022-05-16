@@ -177,12 +177,12 @@ public class Memory {
     public void increaseTimer(int cycle) {
         this.timer += cycle;
         if (getMainMemoryBit(131, 5) == 0 && inhibitTimer == 0 && prescalerCounter == 0) {
-            int value = getMainMemoryByIndex(1) + 1;
+            int value = getMainMemoryByIndex(1) + cycle;
             if (value > 255) {
                 value %= 256;
                 //interrupt
             }
-            setMainMemoryByIndex(1, value);
+            this.mainMemory[1] = value;
         }
         inhibitTimer = inhibitTimer > 0 ? --inhibitTimer : 0;
 
