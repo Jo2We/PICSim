@@ -27,8 +27,12 @@ public class MainFrame {
     protected JLabel[] labelsSpecialFunctionsRegisterHidden = new JLabel[2];
 
     private final String[] statusStrings = {"C", "DC", "Z", "PD", "TO", "RP0", "RP1", "IRP"};
+    private final String[] intconStrings = {"RBIF", "INTF", "T0IF", "RBIE", "INTE", "T0IE", "EEIE", "GIE"};
+    private final String[] optionStrings = {"PS0", "PS1", "PS2", "PSA", "T0SE", "T0CS", "INTEDG", "RBPU"};
 
     protected JLabel[] statusLabels = new JLabel[8];
+    protected JLabel[] intconLabels = new JLabel[8];
+    protected JLabel[] optionLabels = new JLabel[8];
 
     protected JLabel timerLabel = new JLabel("", SwingConstants.RIGHT);
     protected int timer = 0;
@@ -51,10 +55,12 @@ public class MainFrame {
         mainFrame.add(buildButtonControls());
         mainFrame.add(buildTimerView());
         mainFrame.add(buildStackView());
+        mainFrame.add(buildIntconRegister());
+        mainFrame.add(buildOptionRegister());
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(990, 900);
+        mainFrame.setSize(1100, 900);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
         mainFrame.setVisible(true);
@@ -76,10 +82,10 @@ public class MainFrame {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(rowsMemory, columnsMemory + 1);
         panel.setLayout(layout);
-        panel.setBounds(10, 25, 210, 550);
+        panel.setBounds(10, 25, 290, 550);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         for (int row = 0; row < rowsMemory; row++) {
-            labelsMemory[row][0] = new JLabel(Integer.toHexString((int) Math.floor(row/2)).toUpperCase(), SwingConstants.CENTER);
+            labelsMemory[row][0] = new JLabel(Integer.toHexString((int) Math.floor((float)row/2)).toUpperCase(), SwingConstants.CENTER);
             if (row % 2 == 1) {
                 labelsMemory[row][0].setOpaque(true);
                 labelsMemory[row][0].setBackground(Color.lightGray);
@@ -144,7 +150,7 @@ public class MainFrame {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(1, columnsMemory);
         panel.setLayout(layout);
-        panel.setBounds(35, 10, 185, 15);
+        panel.setBounds(42, 10, 260, 15);
         for (int column = 0; column < columnsMemory; column++) {
             JLabel label = new JLabel("", SwingConstants.CENTER);
             label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
@@ -244,7 +250,7 @@ public class MainFrame {
                 panel.add(label);
             }
         }
-        panel.setBounds(260, 10, 200, 120);
+        panel.setBounds(420, 10, 200, 120);
         panel.setLayout(layout);
         return panel;
     }
@@ -359,7 +365,7 @@ public class MainFrame {
         panel.setLeftComponent(buildCodeRowPanel());
         panel.setRightComponent(buildCodePanel());
         JScrollPane scrollPane = new JScrollPane(panel);
-        scrollPane.setBounds(260, 200, 650, 600);
+        scrollPane.setBounds(420, 200, 650, 600);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         return scrollPane;
     }
@@ -437,7 +443,7 @@ public class MainFrame {
      */
     private JPanel buildSpecialFunctionsRegisterVisible() {
         JPanel panel = new JPanel();
-        panel.setBounds(500, 10, 150, 150);
+        panel.setBounds(660, 10, 150, 180);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(6, 2);
         panel.setLayout(layout);
@@ -479,7 +485,7 @@ public class MainFrame {
      */
     private JPanel buildSpecialFunctionRegisterHidden() {
         JPanel panel = new JPanel();
-        panel.setBounds(675, 10, 150, 150);
+        panel.setBounds(835, 10, 150, 180);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(5, 2);
         panel.setLayout(layout);
@@ -505,28 +511,8 @@ public class MainFrame {
      * @return JPanel
      */
     private JPanel buildStatusRegister() {
-        JPanel panel = new JPanel();
-        //panel.setBackground(Color.cyan);
-        panel.setBounds(10, 600, 240, 40);
-        //panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-        GridLayout layout = new GridLayout(2, 8);
-        panel.setLayout(layout);
-        for (int row = 0; row < 2; row++) {
-            for (int column = 8 - 1; column >= 0; column--) {
-                JLabel label = new JLabel("", SwingConstants.CENTER);
-                label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-                if (row == 0) {
-                    label.setText(statusStrings[column]);
-                    panel.add(label);
-                }
-                if (row == 1) {
-                    label.setText("" + this.controller.getMainMemoryBit(3, column));
-                    this.statusLabels[column] = label;
-                    panel.add(label);
-                }
-            }
-        }
-        return panel;
+        int [] position = {10, 600, 400, 40};
+        return this.buildRegister(this.statusStrings, 3, position, this.statusLabels);
     }
 
     /**
@@ -537,7 +523,7 @@ public class MainFrame {
      */
     private JPanel buildButtonControls() {
         JPanel panel = new JPanel();
-        panel.setBounds(10, 650, 75, 75);
+        panel.setBounds(325, 10, 75, 75);
         panel.setBackground(Color.cyan);
         GridLayout layout = new GridLayout(3, 1);
         panel.setLayout(layout);
@@ -579,7 +565,6 @@ public class MainFrame {
         this.controller.setReset(true);
     }
 
-
     /**
      * method is called if the continue button was clicked,
      * sets continue in Controller
@@ -596,7 +581,7 @@ public class MainFrame {
      */
     private JPanel buildTimerView() {
         JPanel panel = new JPanel();
-        panel.setBounds(100, 650, 150, 50);
+        panel.setBounds(420, 140, 200, 50);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(2, 1);
         panel.setLayout(layout);
@@ -617,7 +602,6 @@ public class MainFrame {
         this.controller.setBreakpoint((row + 1));
     }
 
-
     /**
      * method to build the visual component of the stack,
      * contains 8 JLabels
@@ -626,7 +610,7 @@ public class MainFrame {
      */
     private JPanel buildStackView() {
         JPanel panel = new JPanel();
-        panel.setBounds(850, 10, 50, 150);
+        panel.setBounds(1010, 10, 50, 180);
         //panel.setBackground(Color.cyan);
         GridLayout layout = new GridLayout(8, 1);
         panel.setLayout(layout);
@@ -642,6 +626,54 @@ public class MainFrame {
             }
             this.stackViewLabels[index] = label;
             panel.add(label);
+        }
+        return panel;
+    }
+
+    /**
+     * method to build the INTCON register
+     * @return JPanel
+     */
+    private JPanel buildIntconRegister () {
+        int[] position = {10, 660, 400, 40};
+        return this.buildRegister(this.intconStrings, 0x0B, position, this.intconLabels);
+    }
+
+    /**
+     * method to build the OPTION register
+     * @return JPanel
+     */
+    private JPanel buildOptionRegister() {
+        int[] position = {10, 720, 400, 40};
+        return this.buildRegister(this.optionStrings, 0x81, position, this.optionLabels);
+    }
+
+    /**
+     * method to create registers
+     * @param registerName names of the different Bits
+     * @param mainMemoryAdress adress in MainMemory
+     * @param position position in the gui
+     * @return JPanel
+     */
+    private JPanel buildRegister (String[] registerName, int mainMemoryAdress, int[] position, JLabel[] register) {
+        JPanel panel = new JPanel();
+        panel.setBounds(position[0], position[1], position[2], position[3]);
+        GridLayout layout = new GridLayout(2, 8);
+        panel.setLayout(layout);
+        for (int row = 0; row < 2; row++) {
+            for (int column = 7; column >= 0; column--) {
+                JLabel label = new JLabel("", SwingConstants.CENTER);
+                label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+                if (row == 0) {
+                    label.setText(registerName[column]);
+                    panel.add(label);
+                }
+                if (row == 1) {
+                    label.setText("" + this.controller.getMainMemoryBit(mainMemoryAdress, column));
+                    register[column] = label;
+                    panel.add(label);
+                }
+            }
         }
         return panel;
     }

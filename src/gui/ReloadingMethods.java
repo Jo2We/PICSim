@@ -2,8 +2,6 @@ package gui;
 
 import controller.Controller;
 
-import java.awt.*;
-
 public class ReloadingMethods extends MainFrame {
 
     public ReloadingMethods(Controller controller) {
@@ -66,11 +64,13 @@ public class ReloadingMethods extends MainFrame {
     }
 
     /**
-     * method to reload the Status Register
+     * method to reload the Status, INTCON and OPTION Register
      */
-    private void reloadStatus() {
+    private void reloadRegisters() {
         for (int index = this.statusLabels.length - 1; index >= 0; index--) {
             this.statusLabels[index].setText(String.valueOf(this.controller.getMainMemoryBit(3, index)));
+            this.intconLabels[index].setText(String.valueOf(this.controller.getMainMemoryBit(0x0B, index)));
+            this.optionLabels[index].setText(String.valueOf(this.controller.getMainMemoryBit(0x81, index)));
         }
     }
 
@@ -87,7 +87,7 @@ public class ReloadingMethods extends MainFrame {
         this.reloadMainMemory();
         this.reloadSpecialFunctionsRegisterVisible();
         this.reloadLabelsSpecialFunctionsRegisterHidden();
-        this.reloadStatus();
+        this.reloadRegisters();
         this.reloadStackView();
         if (reloadCode) {
             this.reloadTimer(timer);
@@ -98,7 +98,7 @@ public class ReloadingMethods extends MainFrame {
     /**
      * method to reload the stack view
      */
-    public void reloadStackView() {
+    private void reloadStackView() {
         for (int index = this.stackView.length - 1; index >= 0; index--) {
             if (this.stackView[index] != 0) {
                 this.stackViewLabels[index].setText(this.controller.getText(this.stackView[index]));
