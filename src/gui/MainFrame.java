@@ -14,8 +14,8 @@ public class MainFrame {
     protected Controller controller;
     protected int rowsMemory = 32;
     protected int columnsMemory = 8;
-    protected JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory];
-    private final String[][] labelsMemoryCommands = new String[rowsMemory][columnsMemory];
+    protected JLabel[][] labelsMemory = new JLabel[rowsMemory][columnsMemory + 1];
+    private final String[][] labelsMemoryCommands = new String[rowsMemory][columnsMemory + 1];
     protected int[] mainMemory;
 
 
@@ -42,7 +42,7 @@ public class MainFrame {
         JFrame mainFrame = new JFrame("PIC Simulator");
 
         mainFrame.add(buildTopLineMemory());
-        mainFrame.add(buildScrollView());
+        mainFrame.add(buildMemory());
         mainFrame.add(buildRARB());
         mainFrame.add(buildCodeScrollPane());
         mainFrame.add(buildSpecialFunctionsRegisterVisible());
@@ -76,23 +76,37 @@ public class MainFrame {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(rowsMemory, columnsMemory + 1);
         panel.setLayout(layout);
+        panel.setBounds(10, 25, 210, 550);
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         for (int row = 0; row < rowsMemory; row++) {
             labelsMemory[row][0] = new JLabel(Integer.toHexString((int) Math.floor(row/2)).toUpperCase(), SwingConstants.CENTER);
+            if (row % 2 == 1) {
+                labelsMemory[row][0].setOpaque(true);
+                labelsMemory[row][0].setBackground(Color.lightGray);
+            }
         }
         for (int row = 0; row < rowsMemory; row++) {
             panel.add(labelsMemory[row][0]);
-            for (int column = 0; column < columnsMemory; column++) {
-//                if (row%2 == 0){
-//                    labelsMemory[row][column].setOpaque(true);
-//                    labelsMemory[row][column].setBackground(Color.red);
-//                }
-                String content = String.format("%02d", this.mainMemory[row * 8 + column]);
+            for (int column = 1; column < columnsMemory + 1; column++) {
+                String content = String.format("%02d", this.mainMemory[row * 8 + (column - 1)]);
                 //String.valueOf((int)this.mainMemory[row * 8 + (column - 1)])
                 labelsMemory[row][column] = new JLabel(content, SwingConstants.CENTER);
                 labelsMemory[row][column].setFont(new Font("Arial", Font.PLAIN, 10));
-                labelsMemoryCommands[row][column] = "clicked: " + row + " " + column;
+                labelsMemoryCommands[row][column] = "clicked: " + row + " " + (column - 1);
+                if (row % 2 == 0 && (column - 1) % 2 == 1) {
+                    labelsMemory[row][column].setOpaque(true);
+                    labelsMemory[row][column].setBackground(Color.lightGray);
+                }
+                else if (row % 2 == 1 && (column - 1) % 2 == 0) {
+                    labelsMemory[row][column].setOpaque(true);
+                    labelsMemory[row][column].setBackground(Color.lightGray);
+                }
+                else if (row % 2 == 1 && (column - 1) % 2 == 1) {
+                    labelsMemory[row][column].setOpaque(true);
+                    labelsMemory[row][column].setBackground(Color.gray);
+                }
                 int rowCommand = row;
-                int columnCommand = column;
+                int columnCommand = (column - 1);
                 labelsMemory[row][column].addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -119,18 +133,6 @@ public class MainFrame {
             }
         }
         return panel;
-    }
-
-    /**
-     * method to make the Main Memory scrollable to minimate usage of place in the gui
-     *
-     * @return JPanel
-     */
-    private ScrollPane buildScrollView() {
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setBounds(10, 25, 210, 550);
-        scrollPane.add(buildMemory());
-        return scrollPane;
     }
 
     /**
@@ -506,7 +508,7 @@ public class MainFrame {
         JPanel panel = new JPanel();
         //panel.setBackground(Color.cyan);
         panel.setBounds(10, 600, 240, 40);
-        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        //panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(2, 8);
         panel.setLayout(layout);
         for (int row = 0; row < 2; row++) {
