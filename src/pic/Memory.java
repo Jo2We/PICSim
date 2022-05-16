@@ -14,7 +14,9 @@ public class Memory {
     private int stackpointer = 0;
     private int timer = 0;
     private int inhibitTimer = 0;
-    private int prescaler = 0;
+    private int prescalerCounter = 0;
+
+    private boolean switched = false;
 
     /**
      * set a bit in the main memory 0 or 1
@@ -30,9 +32,20 @@ public class Memory {
             index = getMainMemory()[4];
         }
 
-        if (getMainMemoryBit(3, 5) == 1){
+        if (index == 1) {
+            inhibitTimer += 2;
+        }
+
+        if (getMainMemoryBit(3, 5) == 1 && !switched) {
             index += 128;
         }
+
+        if (!(index <= 11 || index >= 128 && index <= 139) && !switched) {
+            switched = true;
+            setMainMemoryBit((index + 128) % 256, value, position);
+        }
+
+        switched = false;
 
         int currValue = this.getMainMemoryBit(index, position);
         if (currValue == 0 && value == 1) {
@@ -62,6 +75,28 @@ public class Memory {
                 }
             }
         }
+    }
+
+    public void setMainMemoryByIndex(int index, int value) {
+        if (index == 0) {
+            index = getMainMemory()[4];
+        }
+        if (index == 1) {
+            inhibitTimer += 2;
+        }
+
+        if (getMainMemoryBit(3, 5) == 1 && !switched) {
+            index += 128;
+        }
+
+        if (!(index <= 11 || index >= 128 && index <= 139) && !switched) {
+            switched = true;
+            setMainMemoryByIndex((index + 128) % 256, value);
+        }
+
+        switched = false;
+
+        this.mainMemory[index] = value;
     }
 
     /**
@@ -141,11 +176,22 @@ public class Memory {
 
     public void increaseTimer(int cycle) {
         this.timer += cycle;
-        if (getMainMemoryBit(3, 5) == 0){
-            setMainMemoryByIndex(1, getMainMemoryIndex(1) + 1);
+        if (getMainMemoryBit(131, 5) == 0 && inhibitTimer == 0 && prescalerCounter == 0) {
+            int value = getMainMemoryByIndex(1) + 1;
+            if (value > 255) {
+                value %= 256;
+                //interrupt
+            }
+            setMainMemoryByIndex(1, value);
         }
-    }
+        inhibitTimer = inhibitTimer > 0 ? --inhibitTimer : 0;
 
+        int prescaler = getMainMemory()[129] & 7;
+
+        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) Math.pow(2, prescaler);
+
+
+    }
 
 
     // getter and setter
@@ -154,19 +200,13 @@ public class Memory {
         return this.mainMemory;
     }
 
-    public int getMainMemoryIndex(int index) {
+    public int getMainMemoryByIndex(int index) {
         if (index == 0) {
             index = getMainMemory()[4];
         }
         return getMainMemory()[index];
     }
 
-    public void setMainMemoryByIndex(int index, int value) {
-        if (index == 0) {
-            index = getMainMemory()[4];
-        }
-        this.mainMemory[index] = value;
-    }
 
     public void setStatus(int position, int value) {
         setMainMemoryBit(3, value, position);

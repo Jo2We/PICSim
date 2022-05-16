@@ -20,9 +20,9 @@ public class Commands {
         System.out.println("called addwf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
-        int value = memory.getW() + memory.getMainMemoryIndex(f);
+        int value = memory.getW() + memory.getMainMemoryByIndex(f);
         //checkDC
-        int fTest = memory.getMainMemoryIndex(f) & 0x0F;
+        int fTest = memory.getMainMemoryByIndex(f) & 0x0F;
         int wTest = memory.getW() & 0x0F;
         int overflowTest = fTest + wTest;
         if (overflowTest > 15) {
@@ -43,7 +43,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getW() & memory.getMainMemoryIndex(f);
+        int value = memory.getW() & memory.getMainMemoryByIndex(f);
 
         checkZeroSave(d, f, value);
 
@@ -89,7 +89,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = ~memory.getMainMemoryIndex(f) & 0xFF;
+        int value = ~memory.getMainMemoryByIndex(f) & 0xFF;
 
         checkZeroSave(d, f, value);
         memory.increaseTimer(1);
@@ -105,7 +105,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getMainMemoryIndex(f);
+        int value = memory.getMainMemoryByIndex(f);
         value--;
         value += 256;
         value %= 256;
@@ -123,7 +123,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getMainMemoryIndex(f);
+        int value = memory.getMainMemoryByIndex(f);
         value--;
         value += 256;
         value %= 256;
@@ -151,7 +151,7 @@ public class Commands {
         System.out.println("called encf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
-        int value = memory.getMainMemoryIndex(f);
+        int value = memory.getMainMemoryByIndex(f);
         value++;
         checkZeroSave(d, f, value);
         memory.increaseTimer(1);
@@ -167,7 +167,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getMainMemoryIndex(f);
+        int value = memory.getMainMemoryByIndex(f);
         value++;
         value %= 256;
         if (value == 0) {
@@ -195,7 +195,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getW() | memory.getMainMemoryIndex(f);
+        int value = memory.getW() | memory.getMainMemoryByIndex(f);
 
         checkZeroSave(d, f, value);
         memory.increaseTimer(1);
@@ -210,7 +210,7 @@ public class Commands {
         System.out.println("called movf with " + opcode);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
-        int value = memory.getMainMemoryIndex(f);
+        int value = memory.getMainMemoryByIndex(f);
         checkZeroSave(d, f, value);
         memory.increaseTimer(1);
     }
@@ -245,7 +245,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getMainMemoryIndex(f);
+        int value = memory.getMainMemoryByIndex(f);
         int carry = memory.getMainMemoryBit(3, 0);
         value <<= 1;
         value += carry;
@@ -268,7 +268,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getMainMemoryIndex(f);
+        int value = memory.getMainMemoryByIndex(f);
         int carry = memory.getMainMemoryBit(3, 0);
         if (value % 2 == 1) {
             memory.setStatus(0, 1);
@@ -296,7 +296,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int fvalue = memory.getMainMemoryIndex(f);
+        int fvalue = memory.getMainMemoryByIndex(f);
         int value = fvalue - memory.getW();
 
         int fTest = fvalue & 0xF;
@@ -329,7 +329,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getMainMemoryIndex(f);
+        int value = memory.getMainMemoryByIndex(f);
 
         int upperbits = value & 0xF0;
         int lowerbits = value & 0x0F;
@@ -355,7 +355,7 @@ public class Commands {
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
-        int value = memory.getMainMemoryIndex(f) ^ memory.getW() & 0xFF;
+        int value = memory.getMainMemoryByIndex(f) ^ memory.getW() & 0xFF;
 
         checkZeroSave(d, f, value);
 

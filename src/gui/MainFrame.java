@@ -54,7 +54,7 @@ public class MainFrame {
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(1080, 720);
+        mainFrame.setSize(990, 900);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
         mainFrame.setVisible(true);
@@ -86,12 +86,10 @@ public class MainFrame {
 //                    labelsMemory[row][column].setOpaque(true);
 //                    labelsMemory[row][column].setBackground(Color.red);
 //                }
-                //coloums+1/-1?
                 String content = String.format("%02d", this.mainMemory[row * 8 + column]);
                 //String.valueOf((int)this.mainMemory[row * 8 + (column - 1)])
                 labelsMemory[row][column] = new JLabel(content, SwingConstants.CENTER);
                 labelsMemory[row][column].setFont(new Font("Arial", Font.PLAIN, 10));
-                labelsMemory[row][column].setBorder(BorderFactory.createLineBorder(Color.gray, 1));
                 labelsMemoryCommands[row][column] = "clicked: " + row + " " + column;
                 int rowCommand = row;
                 int columnCommand = column;
@@ -130,7 +128,7 @@ public class MainFrame {
      */
     private ScrollPane buildScrollView() {
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setBounds(10, 25, 240, 300);
+        scrollPane.setBounds(10, 25, 210, 550);
         scrollPane.add(buildMemory());
         return scrollPane;
     }
@@ -359,7 +357,7 @@ public class MainFrame {
         panel.setLeftComponent(buildCodeRowPanel());
         panel.setRightComponent(buildCodePanel());
         JScrollPane scrollPane = new JScrollPane(panel);
-        scrollPane.setBounds(260, 200, 650, 450);
+        scrollPane.setBounds(260, 200, 650, 600);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         return scrollPane;
     }
@@ -507,7 +505,7 @@ public class MainFrame {
     private JPanel buildStatusRegister() {
         JPanel panel = new JPanel();
         //panel.setBackground(Color.cyan);
-        panel.setBounds(10, 350, 240, 40);
+        panel.setBounds(10, 600, 240, 40);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(2, 8);
         panel.setLayout(layout);
@@ -537,7 +535,7 @@ public class MainFrame {
      */
     private JPanel buildButtonControls() {
         JPanel panel = new JPanel();
-        panel.setBounds(10, 400, 75, 75);
+        panel.setBounds(10, 650, 75, 75);
         panel.setBackground(Color.cyan);
         GridLayout layout = new GridLayout(3, 1);
         panel.setLayout(layout);
@@ -596,7 +594,7 @@ public class MainFrame {
      */
     private JPanel buildTimerView() {
         JPanel panel = new JPanel();
-        panel.setBounds(100, 400, 150, 50);
+        panel.setBounds(100, 650, 150, 50);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(2, 1);
         panel.setLayout(layout);
