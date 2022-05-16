@@ -184,7 +184,7 @@ public class Memory {
             }
             this.mainMemory[1] = value;
         }
-        inhibitTimer = inhibitTimer > 0 ? --inhibitTimer : 0;
+        inhibitTimer = inhibitTimer > 0 ? inhibitTimer-cycle : 0;
 
         int prescaler = getMainMemory()[129] & 7;
 
