@@ -40,23 +40,36 @@ public class MainFrame {
     protected int[] stackView;
     protected JLabel[] stackViewLabels = new JLabel[8];
 
+
     public MainFrame(Controller controller) {
         this.controller = controller;
         this.mainMemory = controller.getMainMemory();
         JFrame mainFrame = new JFrame("PIC Simulator");
 
-        mainFrame.add(buildTopLineMemory());
-        mainFrame.add(buildMemory());
-        mainFrame.add(buildRARB());
-        mainFrame.add(buildCodeScrollPane());
-        mainFrame.add(buildSpecialFunctionsRegisterVisible());
-        mainFrame.add(buildSpecialFunctionRegisterHidden());
-        mainFrame.add(buildStatusRegister());
-        mainFrame.add(buildButtonControls());
-        mainFrame.add(buildTimerView());
-        mainFrame.add(buildStackView());
-        mainFrame.add(buildIntconRegister());
-        mainFrame.add(buildOptionRegister());
+        int[] positionTopLineMemory = {42, 10, 260, 15};
+        mainFrame.add(buildTopLineMemory(positionTopLineMemory));
+        int[] positionMemory = {10, 25, 290, 550};
+        mainFrame.add(buildMemory(positionMemory));
+        int[] positionRARB = {420, 10, 268, 120};
+        mainFrame.add(buildRARB(positionRARB));
+        int[] positionCodeScrollPane = {420, 200, 650, 600};
+        mainFrame.add(buildCodeScrollPane(positionCodeScrollPane));
+        int[] positionSpecialFunctionsRegisterVisible = {698, 10, 150, 180};
+        mainFrame.add(buildSpecialFunctionsRegisterVisible(positionSpecialFunctionsRegisterVisible));
+        int[] positionSpecialFunctionRegisterHidden = {858, 10, 150, 180};
+        mainFrame.add(buildSpecialFunctionRegisterHidden(positionSpecialFunctionRegisterHidden));
+        int[] positionStatusRegister = {10, 600, 400, 40};
+        mainFrame.add(buildStatusRegister(positionStatusRegister));
+        int[] positionButtonControls = {325, 10, 75, 75};
+        mainFrame.add(buildButtonControls(positionButtonControls));
+        int[] positionTimerView = {420, 140, 200, 50};
+        mainFrame.add(buildTimerView(positionTimerView));
+        int[] positionStack = {1018, 10, 50, 180};
+        mainFrame.add(buildStackView(positionStack));
+        int[] positionIntconRegister = {10, 660, 400, 40};
+        mainFrame.add(buildIntconRegister(positionIntconRegister));
+        int[] positionOptionRegister = {10, 720, 400, 40};
+        mainFrame.add(buildOptionRegister(positionOptionRegister));
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,11 +91,11 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildMemory() {
+    private JPanel buildMemory(int[] position) {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(rowsMemory, columnsMemory + 1);
         panel.setLayout(layout);
-        panel.setBounds(10, 25, 290, 550);
+        panel.setBounds(position[0], position[1], position[2], position[3]);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         for (int row = 0; row < rowsMemory; row++) {
             labelsMemory[row][0] = new JLabel(Integer.toHexString((int) Math.floor((float)row/2)).toUpperCase(), SwingConstants.CENTER);
@@ -112,7 +125,7 @@ public class MainFrame {
                     labelsMemory[row][column].setBackground(Color.gray);
                 }
                 int rowCommand = row;
-                int columnCommand = (column - 1);
+                int columnCommand = column;
                 labelsMemory[row][column].addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -146,11 +159,11 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildTopLineMemory() {
+    private JPanel buildTopLineMemory(int[] position) {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(1, columnsMemory);
         panel.setLayout(layout);
-        panel.setBounds(42, 10, 260, 15);
+        panel.setBounds(position[0], position[1], position[2], position[3]);
         for (int column = 0; column < columnsMemory; column++) {
             JLabel label = new JLabel("", SwingConstants.CENTER);
             label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
@@ -172,7 +185,7 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildRARB() {
+    private JPanel buildRARB(int[] position) {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(6, 8 + 1);
         for (int row = 0; row < 6; row++) {
@@ -250,7 +263,7 @@ public class MainFrame {
                 panel.add(label);
             }
         }
-        panel.setBounds(420, 10, 200, 120);
+        panel.setBounds(position[0], position[1], position[2], position[3]);
         panel.setLayout(layout);
         return panel;
     }
@@ -351,7 +364,7 @@ public class MainFrame {
      *
      * @return JScrollPane
      */
-    private JScrollPane buildCodeScrollPane() {
+    private JScrollPane buildCodeScrollPane(int[] position) {
         this.fullLines = this.controller.getFullLines();
         JSplitPane panel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         JPanel panelRows = new JPanel();
@@ -365,7 +378,7 @@ public class MainFrame {
         panel.setLeftComponent(buildCodeRowPanel());
         panel.setRightComponent(buildCodePanel());
         JScrollPane scrollPane = new JScrollPane(panel);
-        scrollPane.setBounds(420, 200, 650, 600);
+        scrollPane.setBounds(position[0], position[1], position[2], position[3]);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         return scrollPane;
     }
@@ -441,9 +454,9 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildSpecialFunctionsRegisterVisible() {
+    private JPanel buildSpecialFunctionsRegisterVisible(int[] position) {
         JPanel panel = new JPanel();
-        panel.setBounds(660, 10, 150, 180);
+        panel.setBounds(position[0], position[1], position[2], position[3]);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(6, 2);
         panel.setLayout(layout);
@@ -483,9 +496,9 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildSpecialFunctionRegisterHidden() {
+    private JPanel buildSpecialFunctionRegisterHidden(int[] position) {
         JPanel panel = new JPanel();
-        panel.setBounds(835, 10, 150, 180);
+        panel.setBounds(position[0], position[1], position[2], position[3]);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(5, 2);
         panel.setLayout(layout);
@@ -510,8 +523,7 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildStatusRegister() {
-        int [] position = {10, 600, 400, 40};
+    private JPanel buildStatusRegister(int[] position) {
         return this.buildRegister(this.statusStrings, 3, position, this.statusLabels);
     }
 
@@ -521,9 +533,9 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildButtonControls() {
+    private JPanel buildButtonControls(int[]position) {
         JPanel panel = new JPanel();
-        panel.setBounds(325, 10, 75, 75);
+        panel.setBounds(position[0], position[1], position[2], position[3]);
         panel.setBackground(Color.cyan);
         GridLayout layout = new GridLayout(3, 1);
         panel.setLayout(layout);
@@ -579,9 +591,9 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildTimerView() {
+    private JPanel buildTimerView(int[] position) {
         JPanel panel = new JPanel();
-        panel.setBounds(420, 140, 200, 50);
+        panel.setBounds(position[0], position[1], position[2], position[3]);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         GridLayout layout = new GridLayout(2, 1);
         panel.setLayout(layout);
@@ -608,10 +620,9 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildStackView() {
+    private JPanel buildStackView(int[] position) {
         JPanel panel = new JPanel();
-        panel.setBounds(1010, 10, 50, 180);
-        //panel.setBackground(Color.cyan);
+        panel.setBounds(position[0], position[1], position[2], position[3]);
         GridLayout layout = new GridLayout(8, 1);
         panel.setLayout(layout);
         this.stackView = this.controller.getFullStack();
@@ -634,8 +645,7 @@ public class MainFrame {
      * method to build the INTCON register
      * @return JPanel
      */
-    private JPanel buildIntconRegister () {
-        int[] position = {10, 660, 400, 40};
+    private JPanel buildIntconRegister (int[] position) {
         return this.buildRegister(this.intconStrings, 0x0B, position, this.intconLabels);
     }
 
@@ -643,8 +653,7 @@ public class MainFrame {
      * method to build the OPTION register
      * @return JPanel
      */
-    private JPanel buildOptionRegister() {
-        int[] position = {10, 720, 400, 40};
+    private JPanel buildOptionRegister(int[] position) {
         return this.buildRegister(this.optionStrings, 0x81, position, this.optionLabels);
     }
 
