@@ -92,6 +92,8 @@ public class ReloadingMethods extends MainFrame {
         if (reloadCode) {
             this.reloadTimer(timer);
             this.reloadCode(index);
+            this.reloadTris();
+            this.reloadPins();
         }
     }
 
@@ -104,6 +106,34 @@ public class ReloadingMethods extends MainFrame {
                 this.stackViewLabels[index].setText(this.controller.getText(this.stackView[index]));
             } else {
                 this.stackViewLabels[index].setText("00");
+            }
+        }
+    }
+
+    /**
+     * method to reload the pins view
+     */
+    private void reloadPins () {
+        if (!(this.ra == this.mainMemory[0x05]) || !(this.rb == this.mainMemory[0x06])) {
+            this.ra = this.mainMemory[0x05];
+            this.rb = this.mainMemory[0x06];
+            for (int index = 0; index < 8; index++) {
+                this.raLabels[index].setText("" + this.controller.getMainMemoryBit(0x05, index));
+                this.rbLabels[index].setText("" + this.controller.getMainMemoryBit(0x06, index));
+            }
+        }
+    }
+
+    /**
+     * method to reload the tris view
+     */
+    private void reloadTris () {
+        if (!(this.trisa == this.mainMemory[0x85]) || !(this.trisb == this.mainMemory[0x86])) {
+            this.trisa = this.mainMemory[0x85];
+            this.trisb = this.mainMemory[0x86];
+            for (int index = 0; index < 8; index++) {
+                this.trisaLabels[index].setText("" + (this.controller.getMainMemoryBit(0x85, index) == 1 ? "i" : "o"));
+                this.trisbLabels[index].setText("" + (this.controller.getMainMemoryBit(0x86, index) == 1 ? "i" : "o"));
             }
         }
     }

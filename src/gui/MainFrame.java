@@ -5,6 +5,7 @@ import controller.Controller;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -39,6 +40,15 @@ public class MainFrame {
 
     protected int[] stackView;
     protected JLabel[] stackViewLabels = new JLabel[8];
+
+    protected JLabel[] raLabels = new JLabel[8];
+    protected JLabel[] trisaLabels = new JLabel[8];
+    protected int trisa = 0;
+    protected int ra = 0;
+    protected JLabel[] rbLabels = new JLabel[8];
+    protected JLabel[] trisbLabels = new JLabel[8];
+    protected int trisb = 0;
+    protected int rb = 0;
 
 
     public MainFrame(Controller controller) {
@@ -212,10 +222,18 @@ public class MainFrame {
                 int col = column;
                 if ((row == 1 || row == 4) && column < 8) {
                     label.setText("i");
+                    if (row == 1) {
+                        this.controller.setBitInMemory(0x85, 1, column);
+                        this.trisaLabels[column] = label;
+                    }
+                    if (row == 4) {
+                        this.controller.setBitInMemory(0x86, 1, column);
+                        this.trisbLabels[column] = label;
+                    }
                     label.addMouseListener(new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            toggleRARBTris(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, label.getText()), label, ro, col);
+                            toggleRARBTris(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, label.getText()), ro, col);
                         }
 
                         @Override
@@ -236,6 +254,14 @@ public class MainFrame {
                     });
                 }
                 if ((row == 2 || row == 5) && column < 8) {
+                    if (row == 2) {
+                        this.controller.setBitInMemory(0x85, 1, column);
+                        this.raLabels[column] = label;
+                    }
+                    if (row == 5) {
+                        this.controller.setBitInMemory(0x86, 1, column);
+                        this.rbLabels[column] = label;
+                    }
                     label.setText("0");
                     label.addMouseListener(new MouseListener() {
                         @Override
@@ -303,26 +329,30 @@ public class MainFrame {
      * toggled values are saved in the Memory, calls setRATrisMemory od setRBTrisMemory
      *
      * @param ae     contains the current value, must be toggled from i to o or o to i
-     * @param label  the JLabel to toggle
      * @param row    row of the clicked field
      * @param column column of the clicked field
      */
-    private void toggleRARBTris(ActionEvent ae, JLabel label, int row, int column) {
-        if (ae.getActionCommand().equals("i")) {
-            label.setText("o");
-            if (row == 1) {
-                controller.setRATrisMemory("o", column);
+    private void toggleRARBTris(ActionEvent ae, int row, int column) {
+        if (row == 1) {
+            if (this.trisaLabels[column].getText().equals("o")) {
+                this.trisaLabels[column].setText("i");
+                this.controller.setBitInMemory(0x85, 1, column);
+                this.controller.setRATrisMemory("i", column);
+            } else {
+                this.trisaLabels[column].setText("o");
+                this.controller.setBitInMemory(0x85, 0, column);
+                this.controller.setRATrisMemory("o", column);
             }
-            if (row == 4) {
-                controller.setRBTrisMemory("o", column);
-            }
-        } else {
-            label.setText("i");
-            if (row == 1) {
-                controller.setRATrisMemory("i", column);
-            }
-            if (row == 4) {
-                controller.setRBTrisMemory("i", column);
+        }
+        if (row == 4) {
+            if (this.trisbLabels[column].getText().equals("o")) {
+                this.trisbLabels[column].setText("i");
+                this.controller.setBitInMemory(0x86, 1, column);
+                this.controller.setRBTrisMemory("i", column);
+            } else {
+                this.trisbLabels[column].setText("o");
+                this.controller.setBitInMemory(0x86, 0, column);
+                this.controller.setRBTrisMemory("o", column);
             }
         }
     }
@@ -342,10 +372,10 @@ public class MainFrame {
         if (ae.getActionCommand().equals("1")) {
             label.setText("0");
             if (row == 2) { // RA
-                controller.setBitInMemory(5, 0, column);
+                this.controller.setBitInMemory(5, 0, column);
             }
             if (row == 5) { // RB
-                controller.setBitInMemory(6, 0, column);
+                this.controller.setBitInMemory(6, 0, column);
             }
         } else {
             label.setText("1");
@@ -678,6 +708,7 @@ public class MainFrame {
                     panel.add(label);
                 }
                 if (row == 1) {
+                    this.controller.setBitInMemory(mainMemoryAdress, 0, column);
                     label.setText("" + this.controller.getMainMemoryBit(mainMemoryAdress, column));
                     register[column] = label;
                     panel.add(label);

@@ -61,7 +61,7 @@ public class Controller {
                     reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPcl()));
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -419,8 +419,8 @@ public class Controller {
         return this.memory.getStack();
     }
 
-    public int getMainMemoryBit(int position, int index) {
-        return this.memory.getMainMemoryBit(position, index);
+    public int getMainMemoryBit(int index, int position) {
+        return this.memory.getMainMemoryBit(index, position);
     }
 
     private void setTimer(int timer) {
