@@ -419,8 +419,8 @@ public class Controller {
         return this.memory.getStack();
     }
 
-    public int getMainMemoryBit(int position, int index) {
-        return this.memory.getMainMemoryBit(position, index);
+    public int getMainMemoryBit(int index, int position) {
+        return this.memory.getMainMemoryBit(index, position);
     }
 
     private void setTimer(int timer) {

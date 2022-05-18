@@ -137,6 +137,11 @@ public class Memory {
      */
     public void setRATris(String value, int column) {
         this.trisa[7 - column] = value;
+        if (value.equals("o")) {
+            this.setMainMemoryBit(0x85, 0, column);
+        } else {
+            this.setMainMemoryBit(0x85, 1, column);
+        }
         System.out.print("TRISA: ");
         for (String key : this.trisa) {
             System.out.print(key + " ");
@@ -153,6 +158,11 @@ public class Memory {
      */
     public void setRBTris(String value, int column) {
         this.trisb[7 - column] = value;
+        if (value.equals("o")) {
+            this.setMainMemoryBit(0x86, 0, column);
+        } else {
+            this.setMainMemoryBit(0x86, 1, column);
+        }
         System.out.print("TRISB: ");
         for (String key : this.trisb) {
             System.out.print(key + " ");
@@ -178,6 +188,8 @@ public class Memory {
     public void reset() {
         this.setW(0);
         Arrays.fill(this.mainMemory, 0);
+        this.mainMemory[0x85] = 0xFF;
+        this.mainMemory[0x86] = 0xFF;
     }
 
     public void increaseTimer(int cycle) {
