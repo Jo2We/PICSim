@@ -273,6 +273,8 @@ public class Commands {
         int carry = memory.getMainMemoryBit(3, 0);
         if (value % 2 == 1) {
             memory.setStatus(0, 1);
+        } else {
+            memory.setStatus(0, 0);
 
         }
         value >>= 1;

@@ -14,6 +14,7 @@ public class Memory {
     private int stackpointer = 0;
     private int timer = 0;
     private int inhibitTimer = 0;
+    int prescaler;
     private int prescalerCounter = 0;
 
     private boolean switched = false;
@@ -34,6 +35,8 @@ public class Memory {
 
         if (index == 1) {
             inhibitTimer += 2;
+            prescaler = getMainMemory()[129] & 7;
+            prescalerCounter = prescaler;
         }
 
         if (getMainMemoryBit(3, 5) == 1 && !switched) {
@@ -81,14 +84,15 @@ public class Memory {
         if (index == 0) {
             index = getMainMemory()[4];
         }
-        if (index == 1) {
-            inhibitTimer += 2;
-            int prescaler = getMainMemory()[129] & 7;
-            prescalerCounter = (int) Math.pow(2, prescaler);
-        }
 
         if (getMainMemoryBit(3, 5) == 1 && !switched) {
             index += 128;
+        }
+
+        if (index == 1) {
+            inhibitTimer += 2;
+            int prescaler = getMainMemory()[129] & 7;
+            prescalerCounter = (int) Math.pow(2, prescaler+1);
         }
 
         if (!(index == 1 || index == 5 || index == 6 || index == 8 || index == 9 || index == 129 || index == 133 || index == 134 || index == 136 || index == 137) && !switched) {
@@ -190,9 +194,9 @@ public class Memory {
 
         inhibitTimer = inhibitTimer > 0 ? inhibitTimer - cycle : 0;
 
-        int prescaler = getMainMemory()[129] & 7;
+        prescaler = getMainMemory()[129] & 7;
 
-        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) Math.pow(2, prescaler);
+        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) Math.pow(2, prescaler+1);
 
 
     }
