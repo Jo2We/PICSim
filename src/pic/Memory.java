@@ -40,7 +40,7 @@ public class Memory {
             index += 128;
         }
 
-        if (!(index <= 11 || index >= 128 && index <= 139) && !switched) {
+        if (!(index == 1 || index == 5 || index == 6 || index == 8 || index == 9 || index == 129 || index == 133 || index == 134 || index == 136 || index == 137) && !switched) {
             switched = true;
             setMainMemoryBit((index + 128) % 256, value, position);
         }
@@ -83,20 +83,22 @@ public class Memory {
         }
         if (index == 1) {
             inhibitTimer += 2;
+            int prescaler = getMainMemory()[129] & 7;
+            prescalerCounter = (int) Math.pow(2, prescaler);
         }
 
         if (getMainMemoryBit(3, 5) == 1 && !switched) {
             index += 128;
         }
 
-        if (!(index <= 11 || index >= 128 && index <= 139) && !switched) {
+        if (!(index == 1 || index == 5 || index == 6 || index == 8 || index == 9 || index == 129 || index == 133 || index == 134 || index == 136 || index == 137) && !switched) {
             switched = true;
             setMainMemoryByIndex((index + 128) % 256, value);
         }
 
         switched = false;
 
-        this.mainMemory[index] = value;
+        this.mainMemory[index] = value % 256;
     }
 
     /**
@@ -184,7 +186,9 @@ public class Memory {
             }
             this.mainMemory[1] = value;
         }
-        inhibitTimer = inhibitTimer > 0 ? inhibitTimer-cycle : 0;
+
+
+        inhibitTimer = inhibitTimer > 0 ? inhibitTimer - cycle : 0;
 
         int prescaler = getMainMemory()[129] & 7;
 
