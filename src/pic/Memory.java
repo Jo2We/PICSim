@@ -92,7 +92,7 @@ public class Memory {
         if (index == 1) {
             inhibitTimer += 2;
             int prescaler = getMainMemory()[129] & 7;
-            prescalerCounter = (int) Math.pow(2, prescaler+1);
+            prescalerCounter = (int) Math.pow(2, prescaler + 1);
         }
 
         if (!(index == 1 || index == 5 || index == 6 || index == 8 || index == 9 || index == 129 || index == 133 || index == 134 || index == 136 || index == 137) && !switched) {
@@ -198,7 +198,9 @@ public class Memory {
             int value = getMainMemoryByIndex(1) + cycle;
             if (value > 255) {
                 value %= 256;
-                //interrupt
+                if (getMainMemoryBit(11, 5) == 1) {
+                    setMainMemoryBit(11, 1, 2);
+                }
             }
             this.mainMemory[1] = value;
         }
@@ -208,7 +210,7 @@ public class Memory {
 
         prescaler = getMainMemory()[129] & 7;
 
-        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) Math.pow(2, prescaler+1);
+        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) Math.pow(2, prescaler + 1);
 
 
     }
