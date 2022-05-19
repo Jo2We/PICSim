@@ -202,6 +202,7 @@ public class Memory {
         System.out.println("Laufzeit: " + this.timer);
 
 
+
         inhibitTimer = inhibitTimer > 0 ? inhibitTimer - 1 : 0;
 
         prescaler = getMainMemory()[129] & 7;

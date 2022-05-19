@@ -25,7 +25,7 @@ public class Controller {
     private boolean continueAfterBreakpoint = false;
 
 
-    private int frequency = 4;
+    private int frequency = 8;
     private int pc;
 
 
