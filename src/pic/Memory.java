@@ -199,7 +199,6 @@ public class Memory {
 
     public void increaseTimer() {
         this.timer += (16 / this.controller.getFrequency());
-        System.out.println("Laufzeit: " + this.timer);
 
 
 
