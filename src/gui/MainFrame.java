@@ -240,23 +240,27 @@ public class MainFrame {
                     label.addMouseListener(new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            toggleRARBTris(new ActionEvent(MainFrame.this, ActionEvent.ACTION_PERFORMED, label.getText()), ro, col);
+                            toggleRARBTris(ro, col);
                         }
 
                         @Override
                         public void mousePressed(MouseEvent e) {
+
                         }
 
                         @Override
                         public void mouseReleased(MouseEvent e) {
+
                         }
 
                         @Override
                         public void mouseEntered(MouseEvent e) {
+
                         }
 
                         @Override
                         public void mouseExited(MouseEvent e) {
+
                         }
                     });
                 }
@@ -335,11 +339,10 @@ public class MainFrame {
      * is toggled by click on it, uses the ActionEvent, JLabel, row and column to toggle te value,
      * toggled values are saved in the Memory, calls setRATrisMemory od setRBTrisMemory
      *
-     * @param ae     contains the current value, must be toggled from i to o or o to i
      * @param row    row of the clicked field
      * @param column column of the clicked field
      */
-    private void toggleRARBTris(ActionEvent ae, int row, int column) {
+    private void toggleRARBTris(int row, int column) {
         if (row == 1) {
             if (this.trisaLabels[column].getText().equals("o")) {
                 this.trisaLabels[column].setText("i");
