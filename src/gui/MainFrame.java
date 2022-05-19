@@ -80,11 +80,11 @@ public class MainFrame {
         mainFrame.add(buildIntconRegister(positionIntconRegister));
         int[] positionOptionRegister = {10, 770, 400, 40};
         mainFrame.add(buildOptionRegister(positionOptionRegister));
-        int[] positionStatusRegisterTopline = {10, 575, 400, 20};
+        int[] positionStatusRegisterTopline = {10, 575, 400, 30};
         mainFrame.add(buildRegisterTopline(positionStatusRegisterTopline, "Status-Register"));
-        int[] positionIntconRegisterTopline = {10, 655, 400, 20};
+        int[] positionIntconRegisterTopline = {10, 655, 400, 30};
         mainFrame.add(buildRegisterTopline(positionIntconRegisterTopline, "INTCON-Register"));
-        int[] positionOptionRegisterTopline = {10, 735, 400, 20};
+        int[] positionOptionRegisterTopline = {10, 735, 400, 30};
         mainFrame.add(buildRegisterTopline(positionOptionRegisterTopline, "OPTION-Register"));
         int[] positionFrequency = {575, 140, 100, 50};
         mainFrame.add(buildFrquencyDropDown(positionFrequency));
