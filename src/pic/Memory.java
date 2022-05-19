@@ -200,7 +200,6 @@ public class Memory {
 
     public void operationTimer() {
         this.timer += (16 / this.controller.getFrequency());
-        System.out.println("Laufzeit: " + this.timer);
 
 
         if (getMainMemoryBit(129, 5) == 0) {
