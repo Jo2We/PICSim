@@ -383,14 +383,21 @@ public class MainFrame {
             label.setText("0");
             if (row == 2) { // RA
                 this.controller.setBitInMemory(5, 0, column);
+                if (column == 4 && controller.getMainMemoryBit(129, 5) == 1 && controller.getMainMemoryBit(131, 4) == 1) {
+                    controller.increaseTimer();
+                }
             }
             if (row == 5) { // RB
                 this.controller.setBitInMemory(6, 0, column);
+
             }
         } else {
             label.setText("1");
             if (row == 2) { // RA
                 controller.setBitInMemory(5, 1, column);
+                if (column == 4 && controller.getMainMemoryBit(129, 5) == 1 && controller.getMainMemoryBit(131, 4) == 0) {
+                    controller.increaseTimer();
+                }
             }
             if (row == 5) { // RB
                 controller.setBitInMemory(6, 1, column);
@@ -775,6 +782,7 @@ public class MainFrame {
 
     /**
      * method to select the frequency of the simulator
+     *
      * @param position position
      * @return JPanel
      */
@@ -792,11 +800,12 @@ public class MainFrame {
 
     /**
      * method to toggle the values of the status, intcon and option register
+     *
      * @param mainMemoryAdress adress of the register
-     * @param label label to show the value
-     * @param column position to set bit
+     * @param label            label to show the value
+     * @param column           position to set bit
      */
-    private void clickedRegister (int mainMemoryAdress, JLabel label, int column) {
+    private void clickedRegister(int mainMemoryAdress, JLabel label, int column) {
         if (label.getText().equals("0")) {
             label.setText("1");
             this.controller.setBitInMemory(mainMemoryAdress, 1, column);

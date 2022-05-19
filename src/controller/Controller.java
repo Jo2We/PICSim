@@ -68,6 +68,7 @@ public class Controller {
                     this.pc++;
                     try {
                         Thread.sleep((90 - (10 * this.frequency)));
+                        //Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -405,6 +406,10 @@ public class Controller {
 
     public void setRBTrisMemory(String value, int column) {
         memory.setRBTris(value, column);
+    }
+
+    public void increaseTimer(){
+        memory.increaseTimer();
     }
 
     public int getW() {

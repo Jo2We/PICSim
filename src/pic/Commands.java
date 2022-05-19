@@ -29,7 +29,7 @@ public class Commands {
         }
         value = checkCarry(value);
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -46,7 +46,7 @@ public class Commands {
         int value = memory.getW() & memory.getMainMemoryByIndex(f);
 
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -60,7 +60,7 @@ public class Commands {
         int f = opcode & 0x7f;
         memory.setMainMemoryByIndex(f, 0);
         memory.setStatus(2, 1);
-        memory.increaseTimer();
+        memory.operationTimer();
     }
 
     /**
@@ -75,7 +75,7 @@ public class Commands {
         memory.setW(0);
         //memory.setMainMemoryBit(3, 1, 2);
         memory.setStatus(2, 1);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -92,7 +92,7 @@ public class Commands {
         int value = ~memory.getMainMemoryByIndex(f) & 0xFF;
 
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -111,7 +111,7 @@ public class Commands {
         value += 256;
         value %= 256;
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -131,7 +131,7 @@ public class Commands {
         value %= 256;
 
         if (value == 0) {
-            memory.increaseTimer();
+            memory.operationTimer();
             memory.setPcl(memory.getPcl() + 1);
         }
 
@@ -140,7 +140,7 @@ public class Commands {
         } else {
             memory.setMainMemoryByIndex(f, value);
         }
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -156,7 +156,7 @@ public class Commands {
         int value = memory.getMainMemoryByIndex(f);
         value++;
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -174,7 +174,7 @@ public class Commands {
         value++;
         value %= 256;
         if (value == 0) {
-            memory.increaseTimer();
+            memory.operationTimer();
             memory.setPcl(memory.getPcl() + 1);
 
         }
@@ -184,7 +184,7 @@ public class Commands {
             memory.setMainMemoryByIndex(f, value);
         }
 
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -201,7 +201,7 @@ public class Commands {
         int value = memory.getW() | memory.getMainMemoryByIndex(f);
 
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -216,7 +216,7 @@ public class Commands {
         int d = opcode & 0x80;
         int value = memory.getMainMemoryByIndex(f);
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -229,7 +229,7 @@ public class Commands {
         System.out.println("called movwf with " + opcode);
         int f = opcode & 0x7f;
         memory.setMainMemoryByIndex(f, memory.getW());
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -238,7 +238,7 @@ public class Commands {
      */
     public void nop() /*00 0000 0xx0 0000*/ {
         System.out.println("called nop");
-        memory.increaseTimer();
+        memory.operationTimer();
     }
 
     /**
@@ -261,7 +261,7 @@ public class Commands {
         } else {
             memory.setMainMemoryByIndex(f, value);
         }
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -291,7 +291,7 @@ public class Commands {
         } else {
             memory.setMainMemoryByIndex(f, value);
         }
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -325,7 +325,7 @@ public class Commands {
         value += 256;
         value %= 256;
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -351,7 +351,7 @@ public class Commands {
         } else {
             memory.setMainMemoryByIndex(f, value);
         }
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -368,7 +368,7 @@ public class Commands {
         int value = memory.getMainMemoryByIndex(f) ^ memory.getW() & 0xFF;
 
         checkZeroSave(d, f, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -378,7 +378,7 @@ public class Commands {
      * @param opcode opcode
      */
     public void bcf(int opcode) /*01 00*/ {
-        memory.increaseTimer();
+        memory.operationTimer();
         int f = opcode & 0x7f;
         int b = opcode & 0x380;
         b >>= 7;
@@ -401,7 +401,7 @@ public class Commands {
         b >>= 7;
 
         memory.setMainMemoryBit(f, 1, b);
-        memory.increaseTimer();
+        memory.operationTimer();
 
 
     }
@@ -421,7 +421,7 @@ public class Commands {
             nop();
             memory.setPcl(memory.getPcl() + 1);
         }
-        memory.increaseTimer();
+        memory.operationTimer();
 
 
     }
@@ -441,7 +441,7 @@ public class Commands {
             nop();
             memory.setPcl(memory.getPcl() + 1);
         }
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -465,7 +465,7 @@ public class Commands {
         }
         value = checkCarry(value);
         checkZeroSave(0, 0, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -479,7 +479,7 @@ public class Commands {
         int k = opcode & 0xff;
         int value = k & memory.getW();
         checkZeroSave(0, 0, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -493,8 +493,8 @@ public class Commands {
         int k = opcode & 0x7ff;
         memory.pushStack(memory.getPcl());
         memory.setPcl(k - 1);
-        memory.increaseTimer();
-        memory.increaseTimer();
+        memory.operationTimer();
+        memory.operationTimer();
 
 
     }
@@ -504,7 +504,7 @@ public class Commands {
      */
     public void clrwdt() /*00 0000 0110 0100*/ {
         System.out.println("called clrwdt");
-        memory.increaseTimer();
+        memory.operationTimer();
     }
 
     /**
@@ -516,8 +516,8 @@ public class Commands {
         System.out.println("called _goto with " + opcode);
         int k = opcode & 0x7ff;
         memory.setPcl(k - 1);
-        memory.increaseTimer();
-        memory.increaseTimer();
+        memory.operationTimer();
+        memory.operationTimer();
 
     }
 
@@ -531,7 +531,7 @@ public class Commands {
         int k = opcode & 0xff;
         int value = k | memory.getW();
         checkZeroSave(0, 0, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -544,7 +544,7 @@ public class Commands {
         System.out.println("called movlw with " + opcode);
         int k = opcode & 0xff;
         memory.setW(k);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -553,8 +553,8 @@ public class Commands {
      */
     public void retfie() /*00 0000 0000 1001*/ {
         System.out.println("called retfie");
-        memory.increaseTimer();
-        memory.increaseTimer();
+        memory.operationTimer();
+        memory.operationTimer();
 
     }
 
@@ -569,8 +569,8 @@ public class Commands {
 
         memory.setW(k);
         memory.setPcl(memory.popStack());
-        memory.increaseTimer();
-        memory.increaseTimer();
+        memory.operationTimer();
+        memory.operationTimer();
 
 
     }
@@ -582,8 +582,8 @@ public class Commands {
         System.out.println("called _return");
 
         memory.setPcl(memory.popStack());
-        memory.increaseTimer();
-        memory.increaseTimer();
+        memory.operationTimer();
+        memory.operationTimer();
 
 
     }
@@ -593,7 +593,7 @@ public class Commands {
      */
     public void sleep() /*00 0000 0110 0011*/ {
         System.out.println("called sleep");
-        memory.increaseTimer();
+        memory.operationTimer();
     }
 
     /**
@@ -624,7 +624,7 @@ public class Commands {
         value += 256;
         value %= 256;
         checkZeroSave(0, 0, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 
@@ -640,7 +640,7 @@ public class Commands {
         int value = k ^ memory.getW() & 0xFF;
 
         checkZeroSave(0, 0, value);
-        memory.increaseTimer();
+        memory.operationTimer();
 
     }
 

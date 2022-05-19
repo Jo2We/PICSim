@@ -20,7 +20,7 @@ public class Memory {
     private int prescalerCounter = 0;
     private boolean switched = false;
 
-    public Memory (Controller controller) {
+    public Memory(Controller controller) {
         this.controller = controller;
     }
 
@@ -197,19 +197,39 @@ public class Memory {
         this.mainMemory[0x86] = 0xFF;
     }
 
-    public void increaseTimer() {
+
+    public void operationTimer() {
         this.timer += (16 / this.controller.getFrequency());
         System.out.println("Laufzeit: " + this.timer);
 
 
+        if (getMainMemoryBit(129, 5) == 0) {
+            inhibitTimer = inhibitTimer > 0 ? inhibitTimer - 1 : 0;
 
-        inhibitTimer = inhibitTimer > 0 ? inhibitTimer - 1 : 0;
+            prescaler = getMainMemory()[129] & 7;
+            prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
 
+
+            if (inhibitTimer == 0 && prescalerCounter == 0) {
+                int value = getMainMemoryByIndex(1) + 1;
+                if (value > 255) {
+                    value %= 256;
+                    if (getMainMemoryBit(11, 5) == 1) {
+                        setMainMemoryBit(11, 1, 2);
+                        // Interrupt für Timer 0
+                    }
+                }
+                this.mainMemory[1] = value;
+            }
+        }
+    }
+
+    public void increaseTimer() {
         prescaler = getMainMemory()[129] & 7;
-        prescalerCounter = prescalerCounter > 0 ? prescalerCounter-1 : (int) (Math.pow(2, prescaler + 1)-1);
+        prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
 
 
-        if (getMainMemoryBit(131, 5) == 0 && inhibitTimer == 0 && prescalerCounter == 0) {
+        if (prescalerCounter == 0) {
             int value = getMainMemoryByIndex(1) + 1;
             if (value > 255) {
                 value %= 256;
