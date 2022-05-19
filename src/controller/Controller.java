@@ -22,11 +22,14 @@ public class Controller {
     private boolean reset = false;
 
     private int breakpoint;
-    private boolean contionueAfterBreakpoint = false;
+    private boolean continueAfterBreakpoint = false;
+
+    private int frequency = 1;
+    private int pc;
 
 
     public Controller() {
-        memory = new Memory();
+        memory = new Memory(this);
         command = new Commands(memory);
     }
 
@@ -53,20 +56,22 @@ public class Controller {
                     if (!this.go) {
                         break;
                     }
-                    if (this.validBreakpoint(this.memory.getPcl()) && !this.contionueAfterBreakpoint) {
+                    if (this.validBreakpoint(this.memory.getPcl()) && !this.continueAfterBreakpoint) {
                         break;
                     }
-                    this.setContionueAfterBreakpoint(false);
+                    this.setContinueAfterBreakpoint(false);
                     int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
                     reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPcl()));
+                    System.out.println(this.pc);
+                    this.pc++;
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep((90 - (10 * this.frequency)));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                while (this.checkContionueOrReset()) {
+                while (this.checkContinueOrReset()) {
                     reloadingMethods.reloadAll(false, memory.getTimer(), -1);
                 }
             } while (this.go);
@@ -303,12 +308,13 @@ public class Controller {
      */
     public void reset(int timer) {
         this.memory.reset();
-        this.setContionueAfterBreakpoint(true);
+        this.setContinueAfterBreakpoint(true);
         this.setBreakpoint(-1);
         this.setGo(false);
         this.setTimer(timer);
         int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
         reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
+        this.pc = 0;
     }
 
     /**
@@ -334,8 +340,8 @@ public class Controller {
      *
      * @return bool if continue = true
      */
-    private boolean checkContionueOrReset() {
-        return !this.reset && !this.contionueAfterBreakpoint;
+    private boolean checkContinueOrReset() {
+        return !this.reset && !this.continueAfterBreakpoint;
     }
 
 
@@ -347,8 +353,8 @@ public class Controller {
      *
      * @param value value to set
      */
-    public void setContionueAfterBreakpoint(boolean value) {
-        this.contionueAfterBreakpoint = value;
+    public void setContinueAfterBreakpoint(boolean value) {
+        this.continueAfterBreakpoint = value;
     }
 
     /**
@@ -358,7 +364,7 @@ public class Controller {
      */
     public void setGo(boolean value) {
         this.go = value;
-        this.setContionueAfterBreakpoint(false);
+        this.setContinueAfterBreakpoint(false);
     }
 
     /**
@@ -368,7 +374,7 @@ public class Controller {
      */
     public void setBreakpoint(int line) {
         this.breakpoint = line;
-        this.setContionueAfterBreakpoint(false);
+        this.setContinueAfterBreakpoint(false);
     }
 
     public ArrayList<String> getFullLines() {
@@ -427,5 +433,21 @@ public class Controller {
         this.memory.setTimer(timer);
     }
 
+    public void setFrequency (String strFrequency) {
+        switch (strFrequency) {
+            case "1 MHz" -> this.frequency = 1;
+            case "2 MHz" -> this.frequency = 2;
+            case "3 MHz" -> this.frequency = 3;
+            case "4 MHz" -> this.frequency = 4;
+            case "5 MHz" -> this.frequency = 5;
+            case "6 MHz" -> this.frequency = 6;
+            case "7 MHz" -> this.frequency = 7;
+            case "8 MHz" -> this.frequency = 8;
+        }
+        System.out.println("Frequency: " + this.frequency + " MHz");
+    }
 
+    public int getFrequency () {
+        return this.frequency;
+    }
 }

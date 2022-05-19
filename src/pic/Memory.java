@@ -1,9 +1,11 @@
 package pic;
 
+import controller.Controller;
+
 import java.util.Arrays;
 
 public class Memory {
-
+    private Controller controller;
     int w;
     String[] trisa = {"i", "i", "i", "i", "i", "i", "i", "i"};
     String[] trisb = {"i", "i", "i", "i", "i", "i", "i", "i"};
@@ -16,8 +18,11 @@ public class Memory {
     private int inhibitTimer = 0;
     int prescaler;
     private int prescalerCounter = 0;
-
     private boolean switched = false;
+
+    public Memory (Controller controller) {
+        this.controller = controller;
+    }
 
     /**
      * set a bit in the main memory 0 or 1
@@ -193,8 +198,8 @@ public class Memory {
     }
 
     public void increaseTimer(int cycle) {
-        this.timer += cycle;
-
+        this.timer += (16 / this.controller.getFrequency()) * cycle;
+        System.out.println("Laufzeit: " + this.timer);
 
 
         inhibitTimer = inhibitTimer > 0 ? inhibitTimer - cycle : 0;
@@ -209,6 +214,7 @@ public class Memory {
                 value %= 256;
                 if (getMainMemoryBit(11, 5) == 1) {
                     setMainMemoryBit(11, 1, 2);
+                    // Interrupt für Timer 0
                 }
             }
             this.mainMemory[1] = value;
