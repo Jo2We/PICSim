@@ -5,7 +5,6 @@ import controller.Controller;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -613,7 +612,7 @@ public class MainFrame {
      */
     private void clickedContinueButton() {
         System.out.println("Clicked: Continue");
-        this.controller.setContionueAfterBreakpoint(true);
+        this.controller.setContinueAfterBreakpoint(true);
     }
 
     /**

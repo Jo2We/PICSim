@@ -22,7 +22,7 @@ public class Controller {
     private boolean reset = false;
 
     private int breakpoint;
-    private boolean contionueAfterBreakpoint = false;
+    private boolean continueAfterBreakpoint = false;
 
 
     public Controller() {
@@ -53,10 +53,10 @@ public class Controller {
                     if (!this.go) {
                         break;
                     }
-                    if (this.validBreakpoint(this.memory.getPcl()) && !this.contionueAfterBreakpoint) {
+                    if (this.validBreakpoint(this.memory.getPcl()) && !this.continueAfterBreakpoint) {
                         break;
                     }
-                    this.setContionueAfterBreakpoint(false);
+                    this.setContinueAfterBreakpoint(false);
                     int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
                     reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPcl()));
@@ -303,7 +303,7 @@ public class Controller {
      */
     public void reset(int timer) {
         this.memory.reset();
-        this.setContionueAfterBreakpoint(true);
+        this.setContinueAfterBreakpoint(true);
         this.setBreakpoint(-1);
         this.setGo(false);
         this.setTimer(timer);
@@ -335,7 +335,7 @@ public class Controller {
      * @return bool if continue = true
      */
     private boolean checkContionueOrReset() {
-        return !this.reset && !this.contionueAfterBreakpoint;
+        return !this.reset && !this.continueAfterBreakpoint;
     }
 
 
@@ -347,8 +347,8 @@ public class Controller {
      *
      * @param value value to set
      */
-    public void setContionueAfterBreakpoint(boolean value) {
-        this.contionueAfterBreakpoint = value;
+    public void setContinueAfterBreakpoint(boolean value) {
+        this.continueAfterBreakpoint = value;
     }
 
     /**
@@ -358,7 +358,7 @@ public class Controller {
      */
     public void setGo(boolean value) {
         this.go = value;
-        this.setContionueAfterBreakpoint(false);
+        this.setContinueAfterBreakpoint(false);
     }
 
     /**
@@ -368,7 +368,7 @@ public class Controller {
      */
     public void setBreakpoint(int line) {
         this.breakpoint = line;
-        this.setContionueAfterBreakpoint(false);
+        this.setContinueAfterBreakpoint(false);
     }
 
     public ArrayList<String> getFullLines() {

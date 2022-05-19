@@ -201,7 +201,7 @@ public class Memory {
 
         prescaler = getMainMemory()[129] & 7;
 
-        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) Math.pow(2, prescaler + 1)-1;
+        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) (Math.pow(2, prescaler + 1)-1);
 
         if (getMainMemoryBit(131, 5) == 0 && inhibitTimer == 0 && prescalerCounter == 0) {
             int value = getMainMemoryByIndex(1) + cycle;
