@@ -49,7 +49,7 @@ public class MainFrame {
     protected int trisb = 0;
     protected int rb = 0;
     protected JComboBox<String> jComboBox;
-    private final String[] frequencies = {"1 MHz", "2 MHz", "3 MHz", "4 MHz", "5 MHz", "6 MHz", "7 MHz", "8 MHz"};
+    private final String[] frequencies = {"8 MHz", "7 MHz", "6 MHz", "5 MHz", "4 MHz", "3 MHz", "2 MHz", "1 MHz"};
 
     public MainFrame(Controller controller) {
         this.controller = controller;
@@ -62,13 +62,13 @@ public class MainFrame {
         mainFrame.add(buildMemory(positionMemory));
         int[] positionRARB = {420, 10, 268, 120};
         mainFrame.add(buildRARB(positionRARB));
-        int[] positionCodeScrollPane = {420, 200, 650, 600};
+        int[] positionCodeScrollPane = {420, 200, 650, 650};
         mainFrame.add(buildCodeScrollPane(positionCodeScrollPane));
         int[] positionSpecialFunctionsRegisterVisible = {698, 10, 150, 180};
         mainFrame.add(buildSpecialFunctionsRegisterVisible(positionSpecialFunctionsRegisterVisible));
         int[] positionSpecialFunctionRegisterHidden = {858, 10, 150, 180};
         mainFrame.add(buildSpecialFunctionRegisterHidden(positionSpecialFunctionRegisterHidden));
-        int[] positionStatusRegister = {10, 600, 400, 40};
+        int[] positionStatusRegister = {10, 610, 400, 40};
         mainFrame.add(buildStatusRegister(positionStatusRegister));
         int[] positionButtonControls = {325, 10, 75, 75};
         mainFrame.add(buildButtonControls(positionButtonControls));
@@ -76,15 +76,15 @@ public class MainFrame {
         mainFrame.add(buildTimerView(positionTimerView));
         int[] positionStack = {1018, 10, 50, 180};
         mainFrame.add(buildStackView(positionStack));
-        int[] positionIntconRegister = {10, 670, 400, 40};
+        int[] positionIntconRegister = {10, 690, 400, 40};
         mainFrame.add(buildIntconRegister(positionIntconRegister));
-        int[] positionOptionRegister = {10, 740, 400, 40};
+        int[] positionOptionRegister = {10, 770, 400, 40};
         mainFrame.add(buildOptionRegister(positionOptionRegister));
         int[] positionStatusRegisterTopline = {10, 575, 400, 20};
         mainFrame.add(buildRegisterTopline(positionStatusRegisterTopline, "Status-Register"));
-        int[] positionIntconRegisterTopline = {10, 645, 400, 20};
+        int[] positionIntconRegisterTopline = {10, 655, 400, 20};
         mainFrame.add(buildRegisterTopline(positionIntconRegisterTopline, "INTCON-Register"));
-        int[] positionOptionRegisterTopline = {10, 715, 400, 20};
+        int[] positionOptionRegisterTopline = {10, 735, 400, 20};
         mainFrame.add(buildRegisterTopline(positionOptionRegisterTopline, "OPTION-Register"));
         int[] positionFrequency = {575, 140, 100, 50};
         mainFrame.add(buildFrquencyDropDown(positionFrequency));
@@ -722,6 +722,33 @@ public class MainFrame {
                     this.controller.setBitInMemory(mainMemoryAdress, 0, column);
                     label.setText("" + this.controller.getMainMemoryBit(mainMemoryAdress, column));
                     register[column] = label;
+                    int col = column;
+                    register[column].addMouseListener(new MouseListener() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            clickedRegister(mainMemoryAdress, register[col], col);
+                        }
+
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+
+                        }
+
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+
+                        }
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+
+                        }
+                    });
                     panel.add(label);
                 }
             }
@@ -758,5 +785,21 @@ public class MainFrame {
         panel.add(jComboBox);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         return panel;
+    }
+
+    /**
+     * method to toggle the values of the status, intcon and option register
+     * @param mainMemoryAdress adress of the register
+     * @param label label to show the value
+     * @param column position to set bit
+     */
+    private void clickedRegister (int mainMemoryAdress, JLabel label, int column) {
+        if (label.getText().equals("0")) {
+            label.setText("1");
+            this.controller.setBitInMemory(mainMemoryAdress, 1, column);
+        } else {
+            label.setText("0");
+            this.controller.setBitInMemory(mainMemoryAdress, 0, column);
+        }
     }
 }

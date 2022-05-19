@@ -199,7 +199,6 @@ public class Memory {
 
     public void increaseTimer(int cycle) {
         this.timer += (16 / this.controller.getFrequency()) * cycle;
-        System.out.println("Laufzeit: " + this.timer);
 
 
         inhibitTimer = inhibitTimer > 0 ? inhibitTimer - cycle : 0;
