@@ -48,7 +48,8 @@ public class MainFrame {
     protected JLabel[] trisbLabels = new JLabel[8];
     protected int trisb = 0;
     protected int rb = 0;
-
+    protected JComboBox<String> jComboBox;
+    private final String[] frequencies = {"1 MHz", "2 MHz", "3 MHz", "4 MHz", "5 MHz", "6 MHz", "7 MHz", "8 MHz"};
 
     public MainFrame(Controller controller) {
         this.controller = controller;
@@ -71,14 +72,23 @@ public class MainFrame {
         mainFrame.add(buildStatusRegister(positionStatusRegister));
         int[] positionButtonControls = {325, 10, 75, 75};
         mainFrame.add(buildButtonControls(positionButtonControls));
-        int[] positionTimerView = {420, 140, 200, 50};
+        int[] positionTimerView = {420, 140, 150, 50};
         mainFrame.add(buildTimerView(positionTimerView));
         int[] positionStack = {1018, 10, 50, 180};
         mainFrame.add(buildStackView(positionStack));
-        int[] positionIntconRegister = {10, 660, 400, 40};
+        int[] positionIntconRegister = {10, 670, 400, 40};
         mainFrame.add(buildIntconRegister(positionIntconRegister));
-        int[] positionOptionRegister = {10, 720, 400, 40};
+        int[] positionOptionRegister = {10, 740, 400, 40};
         mainFrame.add(buildOptionRegister(positionOptionRegister));
+        int[] positionStatusRegisterTopline = {10, 575, 400, 20};
+        mainFrame.add(buildRegisterTopline(positionStatusRegisterTopline, "Status-Register"));
+        int[] positionIntconRegisterTopline = {10, 645, 400, 20};
+        mainFrame.add(buildRegisterTopline(positionIntconRegisterTopline, "INTCON-Register"));
+        int[] positionOptionRegisterTopline = {10, 715, 400, 20};
+        mainFrame.add(buildRegisterTopline(positionOptionRegisterTopline, "OPTION-Register"));
+        int[] positionFrequency = {575, 140, 100, 50};
+        mainFrame.add(buildFrquencyDropDown(positionFrequency));
+
 
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -107,7 +117,7 @@ public class MainFrame {
         panel.setBounds(position[0], position[1], position[2], position[3]);
         panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         for (int row = 0; row < rowsMemory; row++) {
-            labelsMemory[row][0] = new JLabel(Integer.toHexString((int) Math.floor((float)row/2)).toUpperCase(), SwingConstants.CENTER);
+            labelsMemory[row][0] = new JLabel(Integer.toHexString((int) Math.floor((float) row / 2)).toUpperCase(), SwingConstants.CENTER);
             if (row % 2 == 1) {
                 labelsMemory[row][0].setOpaque(true);
                 labelsMemory[row][0].setBackground(Color.lightGray);
@@ -124,12 +134,10 @@ public class MainFrame {
                 if (row % 2 == 0 && (column - 1) % 2 == 1) {
                     labelsMemory[row][column].setOpaque(true);
                     labelsMemory[row][column].setBackground(Color.lightGray);
-                }
-                else if (row % 2 == 1 && (column - 1) % 2 == 0) {
+                } else if (row % 2 == 1 && (column - 1) % 2 == 0) {
                     labelsMemory[row][column].setOpaque(true);
                     labelsMemory[row][column].setBackground(Color.lightGray);
-                }
-                else if (row % 2 == 1 && (column - 1) % 2 == 1) {
+                } else if (row % 2 == 1 && (column - 1) % 2 == 1) {
                     labelsMemory[row][column].setOpaque(true);
                     labelsMemory[row][column].setBackground(Color.gray);
                 }
@@ -562,7 +570,7 @@ public class MainFrame {
      *
      * @return JPanel
      */
-    private JPanel buildButtonControls(int[]position) {
+    private JPanel buildButtonControls(int[] position) {
         JPanel panel = new JPanel();
         panel.setBounds(position[0], position[1], position[2], position[3]);
         panel.setBackground(Color.cyan);
@@ -592,6 +600,7 @@ public class MainFrame {
      */
     private void clickedGoButton() {
         System.out.println("Clicked: Go");
+        this.controller.setFrequency(this.jComboBox.getItemAt(this.jComboBox.getSelectedIndex()));
         this.controller.setGo(true);
     }
 
@@ -672,14 +681,16 @@ public class MainFrame {
 
     /**
      * method to build the INTCON register
+     *
      * @return JPanel
      */
-    private JPanel buildIntconRegister (int[] position) {
+    private JPanel buildIntconRegister(int[] position) {
         return this.buildRegister(this.intconStrings, 0x0B, position, this.intconLabels);
     }
 
     /**
      * method to build the OPTION register
+     *
      * @return JPanel
      */
     private JPanel buildOptionRegister(int[] position) {
@@ -688,12 +699,13 @@ public class MainFrame {
 
     /**
      * method to create registers
-     * @param registerName names of the different Bits
+     *
+     * @param registerName     names of the different Bits
      * @param mainMemoryAdress adress in MainMemory
-     * @param position position in the gui
+     * @param position         position in the gui
      * @return JPanel
      */
-    private JPanel buildRegister (String[] registerName, int mainMemoryAdress, int[] position, JLabel[] register) {
+    private JPanel buildRegister(String[] registerName, int mainMemoryAdress, int[] position, JLabel[] register) {
         JPanel panel = new JPanel();
         panel.setBounds(position[0], position[1], position[2], position[3]);
         GridLayout layout = new GridLayout(2, 8);
@@ -714,6 +726,37 @@ public class MainFrame {
                 }
             }
         }
+        return panel;
+    }
+
+    /**
+     * method to add a topline text for the Satus, INTCON and OPTION register
+     *
+     * @param position position
+     * @param text     text
+     * @return JPanel
+     */
+    private JPanel buildRegisterTopline(int[] position, String text) {
+        JPanel panel = new JPanel();
+        panel.setBounds(position[0], position[1], position[2], position[3]);
+        panel.add(new JLabel(text, SwingConstants.CENTER));
+        return panel;
+    }
+
+    /**
+     * method to select the frequency of the simulator
+     * @param position position
+     * @return JPanel
+     */
+    private JPanel buildFrquencyDropDown(int[] position) {
+        JPanel panel = new JPanel();
+        panel.setBounds(position[0], position[1], position[2], position[3]);
+        GridLayout layout = new GridLayout(2, 1);
+        panel.setLayout(layout);
+        panel.add(new JLabel("Frequenz"));
+        this.jComboBox = new JComboBox<>(this.frequencies);
+        panel.add(jComboBox);
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         return panel;
     }
 }
