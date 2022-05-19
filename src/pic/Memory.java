@@ -36,7 +36,7 @@ public class Memory {
         if (index == 1) {
             inhibitTimer += 2;
             prescaler = getMainMemory()[129] & 7;
-            prescalerCounter = prescaler;
+            prescalerCounter = (int) Math.pow(2, prescaler + 1);
         }
 
         if (getMainMemoryBit(3, 5) == 1 && !switched) {
@@ -91,7 +91,7 @@ public class Memory {
 
         if (index == 1) {
             inhibitTimer += 2;
-            int prescaler = getMainMemory()[129] & 7;
+            prescaler = getMainMemory()[129] & 7;
             prescalerCounter = (int) Math.pow(2, prescaler + 1);
         }
 
@@ -194,6 +194,15 @@ public class Memory {
 
     public void increaseTimer(int cycle) {
         this.timer += cycle;
+
+
+
+        inhibitTimer = inhibitTimer > 0 ? inhibitTimer - cycle : 0;
+
+        prescaler = getMainMemory()[129] & 7;
+
+        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) Math.pow(2, prescaler + 1)-1;
+
         if (getMainMemoryBit(131, 5) == 0 && inhibitTimer == 0 && prescalerCounter == 0) {
             int value = getMainMemoryByIndex(1) + cycle;
             if (value > 255) {
@@ -204,15 +213,6 @@ public class Memory {
             }
             this.mainMemory[1] = value;
         }
-
-
-        inhibitTimer = inhibitTimer > 0 ? inhibitTimer - cycle : 0;
-
-        prescaler = getMainMemory()[129] & 7;
-
-        prescalerCounter = prescalerCounter > 0 ? --prescalerCounter : (int) Math.pow(2, prescaler + 1);
-
-
     }
 
 

@@ -17,7 +17,6 @@ public class Commands {
      */
     public void addwf(int opcode) /*00 0111 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called addwf with " + opcode);
-        memory.increaseTimer(1);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
         int value = memory.getW() + memory.getMainMemoryByIndex(f);
@@ -30,6 +29,8 @@ public class Commands {
         }
         value = checkCarry(value);
         checkZeroSave(d, f, value);
+        memory.increaseTimer(1);
+
     }
 
     /**
@@ -39,13 +40,13 @@ public class Commands {
      */
     public void andwf(int opcode) /*00 0101 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called andwf with " + opcode);
-        memory.increaseTimer(1);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
 
         int value = memory.getW() & memory.getMainMemoryByIndex(f);
 
         checkZeroSave(d, f, value);
+        memory.increaseTimer(1);
 
     }
 
@@ -56,7 +57,6 @@ public class Commands {
      */
     public void clrf(int opcode) /*00 0001 1 -000 0000 -|-111 1111-*/ {
         System.out.println("called clrf with " + opcode);
-        memory.increaseTimer(1);
         int f = opcode & 0x7f;
         memory.setMainMemoryByIndex(f, 0);
         memory.setStatus(2, 1);
@@ -208,11 +208,12 @@ public class Commands {
      */
     public void movf(int opcode) /*00 1000 -0000 0000 -|-1111 1111-*/ {
         System.out.println("called movf with " + opcode);
-        memory.increaseTimer(1);
         int f = opcode & 0x7f;
         int d = opcode & 0x80;
         int value = memory.getMainMemoryByIndex(f);
         checkZeroSave(d, f, value);
+        memory.increaseTimer(1);
+
     }
 
     /**
@@ -222,9 +223,10 @@ public class Commands {
      */
     public void movwf(int opcode) /*00 0000 1 -000 0000 -|-111 1111-*/ {
         System.out.println("called movwf with " + opcode);
-        memory.increaseTimer(1);
         int f = opcode & 0x7f;
         memory.setMainMemoryByIndex(f, memory.getW());
+        memory.increaseTimer(1);
+
     }
 
     /**
