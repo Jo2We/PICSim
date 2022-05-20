@@ -383,7 +383,7 @@ public class MainFrame {
             label.setText("0");
             if (row == 2) { // RA
                 this.controller.setBitInMemory(5, 0, column);
-                if (column == 4 && controller.getMainMemoryBit(129, 5) == 1 && controller.getMainMemoryBit(131, 4) == 1) {
+                if (column == 4 && controller.getMainMemoryBit(129, 5) == 1 && controller.getMainMemoryBit(129, 4) == 1) {
                     controller.increaseTimer();
                 }
             }
@@ -395,7 +395,7 @@ public class MainFrame {
             label.setText("1");
             if (row == 2) { // RA
                 controller.setBitInMemory(5, 1, column);
-                if (column == 4 && controller.getMainMemoryBit(129, 5) == 1 && controller.getMainMemoryBit(131, 4) == 0) {
+                if (column == 4 && controller.getMainMemoryBit(129, 5) == 1 && controller.getMainMemoryBit(129, 4) == 0) {
                     controller.increaseTimer();
                 }
             }

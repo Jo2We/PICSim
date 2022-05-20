@@ -206,7 +206,11 @@ public class Memory {
             inhibitTimer = inhibitTimer > 0 ? inhibitTimer - 1 : 0;
 
             prescaler = getMainMemory()[129] & 7;
-            prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
+            if (getMainMemoryBit(129, 3) == 0) {
+                prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
+            } else {
+                prescalerCounter = 0;
+            }
 
 
             if (inhibitTimer == 0 && prescalerCounter == 0) {
@@ -225,8 +229,12 @@ public class Memory {
 
     public void increaseTimer() {
         prescaler = getMainMemory()[129] & 7;
-        prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
 
+        if (getMainMemoryBit(129, 3) == 0) {
+            prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
+        } else {
+            prescalerCounter = 0;
+        }
 
         if (prescalerCounter == 0) {
             int value = getMainMemoryByIndex(1) + 1;
