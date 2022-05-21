@@ -7,8 +7,7 @@ import java.util.Arrays;
 public class Memory {
     private Controller controller;
     int w;
-    String[] trisa = {"i", "i", "i", "i", "i", "i", "i", "i"};
-    String[] trisb = {"i", "i", "i", "i", "i", "i", "i", "i"};
+
     private final int rowsMemory = 32;
     private final int columnsMemory = 8;
     private final int[] mainMemory = new int[rowsMemory * columnsMemory];
@@ -131,48 +130,6 @@ public class Memory {
             return stack[stackpointer];
         }
         return 0;
-    }
-
-    /**
-     * set method to set TrisA to input ("i") or output ("o"),
-     * TrisA is stored as array, the column stands for the index in the array
-     *
-     * @param value  contains a string with o or i
-     * @param column index to set in the array
-     */
-    public void setRATris(String value, int column) {
-        this.trisa[7 - column] = value;
-        if (value.equals("o")) {
-            this.setMainMemoryBit(0x85, 0, column);
-        } else {
-            this.setMainMemoryBit(0x85, 1, column);
-        }
-        System.out.print("TRISA: ");
-        for (String key : this.trisa) {
-            System.out.print(key + " ");
-        }
-        System.out.println();
-    }
-
-    /**
-     * set method to set TrisB to input ("i") or output ("o"),
-     * TrisA is stored as array, the column stands for the index in the array
-     *
-     * @param value  contains a string with o or i
-     * @param column index to set in the array
-     */
-    public void setRBTris(String value, int column) {
-        this.trisb[7 - column] = value;
-        if (value.equals("o")) {
-            this.setMainMemoryBit(0x86, 0, column);
-        } else {
-            this.setMainMemoryBit(0x86, 1, column);
-        }
-        System.out.print("TRISB: ");
-        for (String key : this.trisb) {
-            System.out.print(key + " ");
-        }
-        System.out.println();
     }
 
     /**

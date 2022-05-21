@@ -347,22 +347,18 @@ public class MainFrame {
             if (this.trisaLabels[column].getText().equals("o")) {
                 this.trisaLabels[column].setText("i");
                 this.controller.setBitInMemory(0x85, 1, column);
-                this.controller.setRATrisMemory("i", column);
             } else {
                 this.trisaLabels[column].setText("o");
                 this.controller.setBitInMemory(0x85, 0, column);
-                this.controller.setRATrisMemory("o", column);
             }
         }
         if (row == 4) {
             if (this.trisbLabels[column].getText().equals("o")) {
                 this.trisbLabels[column].setText("i");
                 this.controller.setBitInMemory(0x86, 1, column);
-                this.controller.setRBTrisMemory("i", column);
             } else {
                 this.trisbLabels[column].setText("o");
                 this.controller.setBitInMemory(0x86, 0, column);
-                this.controller.setRBTrisMemory("o", column);
             }
         }
     }

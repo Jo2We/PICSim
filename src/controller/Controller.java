@@ -400,14 +400,6 @@ public class Controller {
         memory.setMainMemoryBit(index, value, position);
     }
 
-    public void setRATrisMemory(String value, int column) {
-        memory.setRATris(value, column);
-    }
-
-    public void setRBTrisMemory(String value, int column) {
-        memory.setRBTris(value, column);
-    }
-
     public void increaseTimer() {
         memory.increaseTimer();
     }
