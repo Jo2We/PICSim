@@ -201,51 +201,40 @@ public class Memory {
     public void operationTimer() {
         this.timer += (16 / this.controller.getFrequency());
 
+        inhibitTimer = inhibitTimer > 0 ? inhibitTimer - 1 : 0;
 
         if (getMainMemoryBit(129, 5) == 0) {
-            inhibitTimer = inhibitTimer > 0 ? inhibitTimer - 1 : 0;
 
-            prescaler = getMainMemory()[129] & 7;
-            if (getMainMemoryBit(129, 3) == 0) {
-                prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
-            } else {
-                prescalerCounter = 0;
-            }
-
-
-            if (inhibitTimer == 0 && prescalerCounter == 0) {
-                int value = getMainMemoryByIndex(1) + 1;
-                if (value > 255) {
-                    value %= 256;
-                    if (getMainMemoryBit(11, 5) == 1) {
-                        setMainMemoryBit(11, 1, 2);
-                        // Interrupt für Timer 0
-                    }
-                }
-                this.mainMemory[1] = value;
-            }
+            increaseTimer();
         }
     }
 
     public void increaseTimer() {
-        prescaler = getMainMemory()[129] & 7;
 
+        prescaler = getMainMemory()[129] & 7;
         if (getMainMemoryBit(129, 3) == 0) {
             prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
         } else {
             prescalerCounter = 0;
         }
 
-        if (prescalerCounter == 0) {
+        if (prescalerCounter == 0 && inhibitTimer == 0) {
             int value = getMainMemoryByIndex(1) + 1;
             if (value > 255) {
                 value %= 256;
-                if (getMainMemoryBit(11, 5) == 1) {
-                    setMainMemoryBit(11, 1, 2);
-                    // Interrupt für Timer 0
-                }
+                interrupt(2);
+
             }
             this.mainMemory[1] = value;
+        }
+    }
+
+    public void interrupt(int source) {
+        if (getMainMemoryBit(11, source + 3) == 1 && getMainMemoryBit(11, 7) == 1) {
+            setMainMemoryBit(11, 1, source);
+            setMainMemoryBit(11, 0, 7);
+            pushStack(getPcl());
+            setPcl(3);
         }
     }
 

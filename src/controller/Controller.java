@@ -408,7 +408,7 @@ public class Controller {
         memory.setRBTris(value, column);
     }
 
-    public void increaseTimer(){
+    public void increaseTimer() {
         memory.increaseTimer();
     }
 
@@ -440,7 +440,7 @@ public class Controller {
         this.memory.setTimer(timer);
     }
 
-    public void setFrequency (String strFrequency) {
+    public void setFrequency(String strFrequency) {
         switch (strFrequency) {
             case "1 MHz" -> this.frequency = 1;
             case "2 MHz" -> this.frequency = 2;
@@ -454,7 +454,11 @@ public class Controller {
         System.out.println("Frequency: " + this.frequency + " MHz");
     }
 
-    public int getFrequency () {
+    public int getFrequency() {
         return this.frequency;
+    }
+
+    public void interrupt(int source) {
+        memory.interrupt(source);
     }
 }

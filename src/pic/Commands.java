@@ -553,6 +553,10 @@ public class Commands {
      */
     public void retfie() /*00 0000 0000 1001*/ {
         System.out.println("called retfie");
+
+        memory.setPcl(memory.popStack());
+        memory.setMainMemoryBit(11,1,7);
+
         memory.operationTimer();
         memory.operationTimer();
 

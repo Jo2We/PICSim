@@ -389,7 +389,12 @@ public class MainFrame {
             }
             if (row == 5) { // RB
                 this.controller.setBitInMemory(6, 0, column);
-
+                if (controller.getMainMemoryBit(129, 6) == 0 && column == 0) {
+                    controller.interrupt(1);
+                }
+                if (controller.getMainMemoryBit(134, column) == 1 && column >=4 && column <= 7) {
+                    controller.interrupt(0);
+                }
             }
         } else {
             label.setText("1");
@@ -401,6 +406,12 @@ public class MainFrame {
             }
             if (row == 5) { // RB
                 controller.setBitInMemory(6, 1, column);
+                if (controller.getMainMemoryBit(129, 6) == 1 && column == 0) {
+                    controller.interrupt(1);
+                }
+                if (controller.getMainMemoryBit(134, column) == 1 && column >=4 && column <= 7) {
+                    controller.interrupt(0);
+                }
             }
         }
     }
