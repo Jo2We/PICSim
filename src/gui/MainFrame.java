@@ -528,7 +528,7 @@ public class MainFrame {
         panel.add(labelFsr);
         panel.add(new JLabel("PCL"));
         JLabel labelPcl = new JLabel("", SwingConstants.CENTER);
-        labelPcl.setText(this.controller.getText(this.controller.getPcl()));
+        labelPcl.setText(this.controller.getText(this.controller.getPc()));
         labelsSpecialFunctionsRegisterVisible[2] = labelPcl;
         panel.add(labelPcl);
         panel.add(new JLabel("PCLATH"));

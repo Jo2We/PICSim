@@ -132,7 +132,7 @@ public class Commands {
 
         if (value == 0) {
             memory.operationTimer();
-            memory.setPcl(memory.getPcl() + 1);
+            memory.increasePc();
         }
 
         if (d == 0) {
@@ -175,8 +175,7 @@ public class Commands {
         value %= 256;
         if (value == 0) {
             memory.operationTimer();
-            memory.setPcl(memory.getPcl() + 1);
-
+            memory.increasePc();
         }
         if (d == 0) {
             memory.setW(value);
@@ -419,7 +418,7 @@ public class Commands {
 
         if (memory.getMainMemoryBit(f, b) == 0) {
             nop();
-            memory.setPcl(memory.getPcl() + 1);
+            memory.increasePc();
         }
         memory.operationTimer();
 
@@ -439,7 +438,7 @@ public class Commands {
 
         if (memory.getMainMemoryBit(f, b) == 1) {
             nop();
-            memory.setPcl(memory.getPcl() + 1);
+            memory.increasePc();
         }
         memory.operationTimer();
 
@@ -491,8 +490,8 @@ public class Commands {
     public void call(int opcode) /*10 0*/ {
         System.out.println("called call with " + opcode);
         int k = opcode & 0x7ff;
-        memory.pushStack(memory.getPcl());
-        memory.setPcl(k - 1);
+        memory.pushStack();
+        memory.loadPc(k - 1);
         memory.operationTimer();
         memory.operationTimer();
 
@@ -515,7 +514,7 @@ public class Commands {
     public void _goto(int opcode) /*10 0*/ {
         System.out.println("called _goto with " + opcode);
         int k = opcode & 0x7ff;
-        memory.setPcl(k - 1);
+        memory.loadPc(k - 1);
         memory.operationTimer();
         memory.operationTimer();
 
@@ -553,9 +552,8 @@ public class Commands {
      */
     public void retfie() /*00 0000 0000 1001*/ {
         System.out.println("called retfie");
-
-        memory.setPcl(memory.popStack());
-        memory.setMainMemoryBit(11,1,7);
+        memory.popStack();
+        memory.setMainMemoryBit(11, 1, 7);
 
         memory.operationTimer();
         memory.operationTimer();
@@ -572,7 +570,7 @@ public class Commands {
         int k = opcode & 0xff;
 
         memory.setW(k);
-        memory.setPcl(memory.popStack());
+        memory.popStack();
         memory.operationTimer();
         memory.operationTimer();
 
@@ -585,7 +583,7 @@ public class Commands {
     public void _return() /*00 0000 0000 1000*/ {
         System.out.println("called _return");
 
-        memory.setPcl(memory.popStack());
+        memory.popStack();
         memory.operationTimer();
         memory.operationTimer();
 

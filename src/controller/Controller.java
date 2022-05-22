@@ -42,28 +42,28 @@ public class Controller {
         I.read(this.lines, this.fullLines, this.crossList);
         this.reloadingMethods = new ReloadingMethods(this);
 
-        int tempPcl;
+        int tempPc;
         do {
             while (!this.go) {
                 reloadingMethods.reloadAll(false, memory.getTimer(), -1);
             }
             do {
-                if (this.memory.getPcl() > 0 && !this.reset) {
-                    tempPcl = this.memory.getPcl();
+                if (this.memory.getPc() > 0 && !this.reset) {
+                    tempPc = this.memory.getPc();
                 } else {
-                    tempPcl = 0;
+                    tempPc = 0;
                 }
-                for (this.memory.setPcl(tempPcl); this.memory.getPcl() < this.lines.size(); this.memory.setPcl(this.memory.getPcl() + 1)) {
+                for (this.memory.setPc(tempPc); this.memory.getPc() < this.lines.size(); memory.increasePc()) {
                     if (!this.go) {
                         break;
                     }
-                    if (this.validBreakpoint(this.memory.getPcl()) && !this.continueAfterBreakpoint) {
+                    if (this.validBreakpoint(this.memory.getPc()) && !this.continueAfterBreakpoint) {
                         break;
                     }
                     this.setContinueAfterBreakpoint(false);
-                    int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
+                    int index = Integer.parseInt(this.crossList.get(this.memory.getPc()));
                     reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
-                    callCommands(lines.get(memory.getPcl()));
+                    callCommands(lines.get(memory.getPc()));
                     System.out.println(this.pc);
                     this.pc++;
                     try {
@@ -314,7 +314,7 @@ public class Controller {
         this.setBreakpoint(-1);
         this.setGo(false);
         this.setTimer(timer);
-        int index = Integer.parseInt(this.crossList.get(this.memory.getPcl()));
+        int index = Integer.parseInt(this.crossList.get(this.memory.getPc()));
         reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
         this.pc = 0;
     }
@@ -408,8 +408,8 @@ public class Controller {
         return this.memory.getW();
     }
 
-    public int getPcl() {
-        return this.memory.getPcl();
+    public int getPc() {
+        return this.memory.getPc();
     }
 
     public int getStackPointer() {

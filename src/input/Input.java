@@ -23,7 +23,7 @@ public class Input {
     public void read(ArrayList<Integer> lines, ArrayList<String> fullLines, ArrayList<String> crossList) {
         String encoding = "windows-1252";
         try {
-            File source = new File("res/TPicSim8.LST");
+            File source = new File("res/TPicSim10.LST");
             // System.out.println(source.isFile());
             Scanner myReader = new Scanner(source, Charset.forName(encoding));
             while (myReader.hasNextLine()) {

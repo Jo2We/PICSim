@@ -8,6 +8,8 @@ public class Memory {
     private Controller controller;
     int w;
 
+    int pc = 0;
+
     private final int rowsMemory = 32;
     private final int columnsMemory = 8;
     private final int[] mainMemory = new int[rowsMemory * columnsMemory];
@@ -41,6 +43,11 @@ public class Memory {
             inhibitTimer += 2;
             prescaler = getMainMemory()[129] & 7;
             prescalerCounter = (int) Math.pow(2, prescaler + 1);
+        }
+
+        if (index == 2) {
+            int pclath = mainMemory[10] << 7;
+            pc = value + pclath;
         }
 
         if (getMainMemoryBit(3, 5) == 1 && !switched) {
@@ -85,18 +92,24 @@ public class Memory {
     }
 
     public void setMainMemoryByIndex(int index, int value) {
+
         if (index == 0) {
             index = getMainMemory()[4];
-        }
-
-        if (getMainMemoryBit(3, 5) == 1 && !switched) {
-            index += 128;
         }
 
         if (index == 1) {
             inhibitTimer += 2;
             prescaler = getMainMemory()[129] & 7;
             prescalerCounter = (int) Math.pow(2, prescaler + 1);
+        }
+
+        if (index == 2) {
+            int pclath = mainMemory[10] << 8;
+            pc = value + pclath;
+        }
+
+        if (getMainMemoryBit(3, 5) == 1 && !switched) {
+            index += 128;
         }
 
         if (!(index == 1 || index == 5 || index == 6 || index == 8 || index == 9 || index == 129 || index == 133 || index == 134 || index == 136 || index == 137) && !switched) {
@@ -111,12 +124,10 @@ public class Memory {
 
     /**
      * pushes the value to the stack and increases sp by 1 with mod8
-     *
-     * @param value return adress to be saved on stack
-     */
-    public void pushStack(int value) {
-        stack[stackpointer % 8] = value;
-        stackpointer++;
+     **/
+    public void pushStack() {
+        stack[stackpointer] = pc;
+        stackpointer = (stackpointer + 1) % 8;
     }
 
     /**
@@ -124,12 +135,12 @@ public class Memory {
      *
      * @return return adress from stack
      */
-    public int popStack() {
+    public void popStack() {
         if (stackpointer > 0) {
             stackpointer--;
-            return stack[stackpointer];
+            mainMemory[2]= stack[stackpointer]&0xFF;
+            pc=stack[stackpointer];
         }
-        return 0;
     }
 
     /**
@@ -190,8 +201,8 @@ public class Memory {
         if (getMainMemoryBit(11, source + 3) == 1 && getMainMemoryBit(11, 7) == 1) {
             setMainMemoryBit(11, 1, source);
             setMainMemoryBit(11, 0, 7);
-            pushStack(getPcl());
-            setPcl(3);
+            pushStack();
+            setMainMemoryByIndex(2, 3);
         }
     }
 
@@ -209,7 +220,6 @@ public class Memory {
         return getMainMemory()[index];
     }
 
-
     public void setStatus(int position, int value) {
         setMainMemoryBit(3, value, position);
     }
@@ -222,12 +232,32 @@ public class Memory {
         this.w = w;
     }
 
-    public int getPcl() {
-        return mainMemory[2];
+    public int getPc() {
+        return pc;
     }
 
-    public void setPcl(int pcl) {
-        mainMemory[2] = pcl;
+    public void setPc(int pc) {
+        this.pc = pc;
+        mainMemory[2] = pc & 0xFF;
+    }
+
+    public void loadPc(int value) {
+
+        mainMemory[2] = value & 0xFF;
+        //mainMemory[10] = mainMemory[10] & 0xF8;
+        //mainMemory[10] += (value & 0x700) >> 8;
+
+        int pclath = (mainMemory[10] & 0x18) << 8;
+        pc = value + pclath;
+    }
+
+    public void increasePc() {
+        mainMemory[2]++;
+        pc++;
+    }
+
+    public int getPcl() {
+        return mainMemory[2];
     }
 
     public int getStack() {
