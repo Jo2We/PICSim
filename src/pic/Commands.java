@@ -595,6 +595,11 @@ public class Commands {
      */
     public void sleep() /*00 0000 0110 0011*/ {
         System.out.println("called sleep");
+
+        memory.setWatchdog(0);
+        memory.setMainMemoryBit(3, 0, 3);
+        memory.setMainMemoryBit(3, 1, 4);
+
         memory.operationTimer();
     }
 

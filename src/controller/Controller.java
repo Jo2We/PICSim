@@ -39,45 +39,39 @@ public class Controller {
      */
     public void runPICSimulator() {
         Input I = new Input();
-        I.read(this.lines, this.fullLines, this.crossList);
-        this.reloadingMethods = new ReloadingMethods(this);
+        I.read(lines, fullLines, crossList);
+        reloadingMethods = new ReloadingMethods(this);
 
         int tempPc;
         do {
-            while (!this.go) {
+            while (!go) {
                 reloadingMethods.reloadAll(false, memory.getTimer(), -1);
             }
             do {
-                if (this.memory.getPc() > 0 && !this.reset) {
-                    tempPc = this.memory.getPc();
-                } else {
-                    tempPc = 0;
-                }
-                for (this.memory.setPc(tempPc); this.memory.getPc() < this.lines.size(); memory.increasePc()) {
-                    if (!this.go) {
+                tempPc = !reset ? memory.getPc() : 0;
+                for (memory.setPc(tempPc); memory.getPc() < lines.size(); memory.increasePc()) {
+                    if (!go) {
                         break;
                     }
-                    if (this.validBreakpoint(this.memory.getPc()) && !this.continueAfterBreakpoint) {
+                    if (validBreakpoint(memory.getPc()) && !continueAfterBreakpoint) {
                         break;
                     }
-                    this.setContinueAfterBreakpoint(false);
-                    int index = Integer.parseInt(this.crossList.get(this.memory.getPc()));
+                    setContinueAfterBreakpoint(false);
+                    int index = Integer.parseInt(crossList.get(memory.getPc()));
                     reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPc()));
-                    System.out.println(this.pc);
-                    this.pc++;
                     try {
-                        Thread.sleep((90 - (10 * this.frequency)));
+                        Thread.sleep((90 - (10 * frequency)));
                         //Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                while (this.checkContinueOrReset()) {
+                while (checkContinueOrReset()) {
                     reloadingMethods.reloadAll(false, memory.getTimer(), -1);
                 }
-            } while (this.go);
-        } while (!this.go);
+            } while (go);
+        } while (!go);
     }
 
     /**
@@ -309,14 +303,14 @@ public class Controller {
      * @param timer value to set
      */
     public void reset(int timer) {
-        this.memory.reset();
-        this.setContinueAfterBreakpoint(true);
-        this.setBreakpoint(-1);
-        this.setGo(false);
-        this.setTimer(timer);
-        int index = Integer.parseInt(this.crossList.get(this.memory.getPc()));
+        memory.reset();
+        setContinueAfterBreakpoint(true);
+        setBreakpoint(-1);
+        setGo(false);
+        setTimer(timer);
+        int index = Integer.parseInt(crossList.get(memory.getPc()));
         reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
-        this.pc = 0;
+        pc = 0;
     }
 
     /**
@@ -329,8 +323,8 @@ public class Controller {
      * @return bool if breakpoint is valid
      */
     private boolean validBreakpoint(int line) {
-        for (int index = 0; index < this.crossList.size(); index++) {
-            if (this.breakpoint == Integer.parseInt(this.crossList.get(index)) && index == line) {
+        for (int index = 0; index < crossList.size(); index++) {
+            if (breakpoint == Integer.parseInt(crossList.get(index)) && index == line) {
                 return true;
             }
         }
@@ -344,7 +338,7 @@ public class Controller {
      */
 
     private boolean checkContinueOrReset() {
-        return !this.reset && !this.continueAfterBreakpoint;
+        return !reset && !continueAfterBreakpoint;
     }
 
 
@@ -357,7 +351,7 @@ public class Controller {
      * @param value value to set
      */
     public void setContinueAfterBreakpoint(boolean value) {
-        this.continueAfterBreakpoint = value;
+        continueAfterBreakpoint = value;
     }
 
     /**
@@ -366,8 +360,8 @@ public class Controller {
      * @param value value to set
      */
     public void setGo(boolean value) {
-        this.go = value;
-        this.setContinueAfterBreakpoint(false);
+        go = value;
+        setContinueAfterBreakpoint(false);
     }
 
     /**
@@ -376,24 +370,24 @@ public class Controller {
      * @param line line of the click for the breakpoint
      */
     public void setBreakpoint(int line) {
-        this.breakpoint = line;
-        this.setContinueAfterBreakpoint(false);
+        breakpoint = line;
+        setContinueAfterBreakpoint(false);
     }
 
     public ArrayList<String> getFullLines() {
-        return this.fullLines;
+        return fullLines;
     }
 
     public void setReset(boolean value) {
-        this.reset = value;
+        reset = value;
     }
 
     public int[] getMainMemory() {
-        return this.memory.getMainMemory();
+        return memory.getMainMemory();
     }
 
     public void setMainMemoryByIndex(int index, int value) {
-        this.memory.setMainMemoryByIndex(index, value);
+        memory.setMainMemoryByIndex(index, value);
     }
 
     public void setBitInMemory(int index, int value, int position) {
@@ -405,49 +399,49 @@ public class Controller {
     }
 
     public int getW() {
-        return this.memory.getW();
+        return memory.getW();
     }
 
     public int getPc() {
-        return this.memory.getPc();
+        return memory.getPc();
     }
 
     public int getStackPointer() {
-        return this.memory.getStackPointer();
+        return memory.getStackPointer();
     }
 
     public int[] getFullStack() {
-        return this.memory.getFullStack();
+        return memory.getFullStack();
     }
 
     public int getStack() {
-        return this.memory.getStack();
+        return memory.getStack();
     }
 
     public int getMainMemoryBit(int index, int position) {
-        return this.memory.getMainMemoryBit(index, position);
+        return memory.getMainMemoryBit(index, position);
     }
 
     private void setTimer(int timer) {
-        this.memory.setTimer(timer);
+        memory.setTimer(timer);
     }
 
     public void setFrequency(String strFrequency) {
         switch (strFrequency) {
-            case "1 MHz" -> this.frequency = 1;
-            case "2 MHz" -> this.frequency = 2;
-            case "3 MHz" -> this.frequency = 3;
-            case "4 MHz" -> this.frequency = 4;
-            case "5 MHz" -> this.frequency = 5;
-            case "6 MHz" -> this.frequency = 6;
-            case "7 MHz" -> this.frequency = 7;
-            case "8 MHz" -> this.frequency = 8;
+            case "1 MHz" -> frequency = 1;
+            case "2 MHz" -> frequency = 2;
+            case "3 MHz" -> frequency = 3;
+            case "4 MHz" -> frequency = 4;
+            case "5 MHz" -> frequency = 5;
+            case "6 MHz" -> frequency = 6;
+            case "7 MHz" -> frequency = 7;
+            case "8 MHz" -> frequency = 8;
         }
-        System.out.println("Frequency: " + this.frequency + " MHz");
+        System.out.println("Frequency: " + frequency + " MHz");
     }
 
     public int getFrequency() {
-        return this.frequency;
+        return frequency;
     }
 
     public void interrupt(int source) {

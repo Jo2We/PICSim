@@ -5,7 +5,7 @@ import controller.Controller;
 import java.util.Arrays;
 
 public class Memory {
-    private Controller controller;
+    private final Controller controller;
     int w;
 
     int pc = 0;
@@ -19,6 +19,8 @@ public class Memory {
     private int inhibitTimer = 0;
     int prescaler;
     private int prescalerCounter = 0;
+
+    private int watchdog = 0;
     private boolean switched = false;
 
     public Memory(Controller controller) {
@@ -36,12 +38,12 @@ public class Memory {
     public void setMainMemoryBit(int index, int value, int position) {
 
         if (index == 0) {
-            index = getMainMemory()[4];
+            index = mainMemory[4];
         }
 
         if (index == 1) {
             inhibitTimer += 2;
-            prescaler = getMainMemory()[129] & 7;
+            prescaler = mainMemory[129] & 7;
             prescalerCounter = (int) Math.pow(2, prescaler + 1);
         }
 
@@ -61,7 +63,7 @@ public class Memory {
 
         switched = false;
 
-        int currValue = this.getMainMemoryBit(index, position);
+        int currValue = getMainMemoryBit(index, position);
         if (currValue == 0 && value == 1) {
             switch (position) {
                 case 0 -> mainMemory[index] += 1;
@@ -94,12 +96,12 @@ public class Memory {
     public void setMainMemoryByIndex(int index, int value) {
 
         if (index == 0) {
-            index = getMainMemory()[4];
+            index = mainMemory[4];
         }
 
         if (index == 1) {
             inhibitTimer += 2;
-            prescaler = getMainMemory()[129] & 7;
+            prescaler = mainMemory[129] & 7;
             prescalerCounter = (int) Math.pow(2, prescaler + 1);
         }
 
@@ -119,7 +121,7 @@ public class Memory {
 
         switched = false;
 
-        this.mainMemory[index] = value % 256;
+        mainMemory[index] = value % 256;
     }
 
     /**
@@ -132,8 +134,6 @@ public class Memory {
 
     /**
      * return top of stack and ecrease sp, if not 0
-     *
-     * @return return adress from stack
      */
     public void popStack() {
         if (stackpointer > 0) {
@@ -151,7 +151,7 @@ public class Memory {
      * @return 0 or 1, value of bit
      */
     public int getMainMemoryBit(int index, int position) {
-        String str = String.format("%8s", Integer.toBinaryString(this.mainMemory[index] & 0xFF)).replace(' ', '0');
+        String str = String.format("%8s", Integer.toBinaryString(mainMemory[index] & 0xFF)).replace(' ', '0');
         return Character.getNumericValue(str.charAt(7 - position));
     }
 
@@ -159,15 +159,15 @@ public class Memory {
      * sets w and main memory = 0
      */
     public void reset() {
-        this.setW(0);
-        Arrays.fill(this.mainMemory, 0);
-        this.mainMemory[0x85] = 0xFF;
-        this.mainMemory[0x86] = 0xFF;
+        setW(0);
+        Arrays.fill(mainMemory, 0);
+        mainMemory[0x85] = 0xFF;
+        mainMemory[0x86] = 0xFF;
     }
 
 
     public void operationTimer() {
-        this.timer += (16 / this.controller.getFrequency());
+        timer += (16 / controller.getFrequency());
 
         inhibitTimer = inhibitTimer > 0 ? inhibitTimer - 1 : 0;
 
@@ -179,7 +179,7 @@ public class Memory {
 
     public void increaseTimer() {
 
-        prescaler = getMainMemory()[129] & 7;
+        prescaler = mainMemory[129] & 7;
         if (getMainMemoryBit(129, 3) == 0) {
             prescalerCounter = prescalerCounter > 0 ? prescalerCounter - 1 : (int) (Math.pow(2, prescaler + 1) - 1);
         } else {
@@ -193,7 +193,7 @@ public class Memory {
                 interrupt(2);
 
             }
-            this.mainMemory[1] = value;
+            mainMemory[1] = value;
         }
     }
 
@@ -210,14 +210,14 @@ public class Memory {
     // getter and setter
 
     public int[] getMainMemory() {
-        return this.mainMemory;
+        return mainMemory;
     }
 
     public int getMainMemoryByIndex(int index) {
         if (index == 0) {
-            index = getMainMemory()[4];
+            index = mainMemory[4];
         }
-        return getMainMemory()[index];
+        return mainMemory[index];
     }
 
     public void setStatus(int position, int value) {
@@ -256,27 +256,31 @@ public class Memory {
         pc++;
     }
 
-    public int getPcl() {
-        return mainMemory[2];
-    }
-
     public int getStack() {
-        return this.stack[stackpointer];
+        return stack[stackpointer];
     }
 
     public int[] getFullStack() {
-        return this.stack;
+        return stack;
     }
 
     public int getStackPointer() {
-        return this.stackpointer;
+        return stackpointer;
     }
 
     public int getTimer() {
-        return this.timer;
+        return timer;
     }
 
     public void setTimer(int timer) {
         this.timer = timer;
+    }
+
+    public int getWatchdog(){
+        return watchdog;
+    }
+
+    public void setWatchdog(int watchdog){
+        this.watchdog = watchdog;
     }
 }
