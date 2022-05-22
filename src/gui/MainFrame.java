@@ -618,6 +618,7 @@ public class MainFrame {
     private void clickedGoButton() {
         System.out.println("Clicked: Go");
         this.controller.setFrequency(this.jComboBox.getItemAt(this.jComboBox.getSelectedIndex()));
+        this.controller.setReset(false);
         this.controller.setGo(true);
     }
 

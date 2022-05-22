@@ -160,6 +160,7 @@ public class Memory {
      */
     public void reset() {
         setW(0);
+        setPc(0);
         Arrays.fill(mainMemory, 0);
         mainMemory[0x85] = 0xFF;
         mainMemory[0x86] = 0xFF;
