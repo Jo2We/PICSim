@@ -87,7 +87,7 @@ public class MainFrame {
         int[] positionOptionRegisterTopline = {10, 735, 400, 30};
         mainFrame.add(buildRegisterTopline(positionOptionRegisterTopline, "OPTION-Register"));
         int[] positionFrequency = {575, 140, 100, 50};
-        mainFrame.add(buildFrquencyDropDown(positionFrequency));
+        mainFrame.add(buildFrequencyDropDown(positionFrequency));
 
 
         mainFrame.setLayout(null);
@@ -414,7 +414,7 @@ public class MainFrame {
 
     /**
      * method to build the scrollable Code view,
-     * using two JLists, one for the line of the code and the other for the acual code
+     * using two JLists, one for the line of the code and the other for the actual code
      *
      * @return JScrollPane
      */
@@ -618,6 +618,7 @@ public class MainFrame {
     private void clickedGoButton() {
         System.out.println("Clicked: Go");
         this.controller.setFrequency(this.jComboBox.getItemAt(this.jComboBox.getSelectedIndex()));
+        this.controller.setReset(false);
         this.controller.setGo(true);
     }
 
@@ -718,11 +719,11 @@ public class MainFrame {
      * method to create registers
      *
      * @param registerName     names of the different Bits
-     * @param mainMemoryAdress adress in MainMemory
+     * @param mainMemoryAddress address in MainMemory
      * @param position         position in the gui
      * @return JPanel
      */
-    private JPanel buildRegister(String[] registerName, int mainMemoryAdress, int[] position, JLabel[] register) {
+    private JPanel buildRegister(String[] registerName, int mainMemoryAddress, int[] position, JLabel[] register) {
         JPanel panel = new JPanel();
         panel.setBounds(position[0], position[1], position[2], position[3]);
         GridLayout layout = new GridLayout(2, 8);
@@ -736,14 +737,14 @@ public class MainFrame {
                     panel.add(label);
                 }
                 if (row == 1) {
-                    this.controller.setBitInMemory(mainMemoryAdress, 0, column);
-                    label.setText("" + this.controller.getMainMemoryBit(mainMemoryAdress, column));
+                    this.controller.setBitInMemory(mainMemoryAddress, 0, column);
+                    label.setText("" + this.controller.getMainMemoryBit(mainMemoryAddress, column));
                     register[column] = label;
                     int col = column;
                     register[column].addMouseListener(new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            clickedRegister(mainMemoryAdress, register[col], col);
+                            clickedRegister(mainMemoryAddress, register[col], col);
                         }
 
                         @Override
@@ -774,7 +775,7 @@ public class MainFrame {
     }
 
     /**
-     * method to add a topline text for the Satus, INTCON and OPTION register
+     * method to add a topline text for the Status, INTCON and OPTION register
      *
      * @param position position
      * @param text     text
@@ -793,7 +794,7 @@ public class MainFrame {
      * @param position position
      * @return JPanel
      */
-    private JPanel buildFrquencyDropDown(int[] position) {
+    private JPanel buildFrequencyDropDown(int[] position) {
         JPanel panel = new JPanel();
         panel.setBounds(position[0], position[1], position[2], position[3]);
         GridLayout layout = new GridLayout(2, 1);
@@ -808,17 +809,17 @@ public class MainFrame {
     /**
      * method to toggle the values of the status, intcon and option register
      *
-     * @param mainMemoryAdress adress of the register
+     * @param mainMemoryAddress address of the register
      * @param label            label to show the value
      * @param column           position to set bit
      */
-    private void clickedRegister(int mainMemoryAdress, JLabel label, int column) {
+    private void clickedRegister(int mainMemoryAddress, JLabel label, int column) {
         if (label.getText().equals("0")) {
             label.setText("1");
-            this.controller.setBitInMemory(mainMemoryAdress, 1, column);
+            this.controller.setBitInMemory(mainMemoryAddress, 1, column);
         } else {
             label.setText("0");
-            this.controller.setBitInMemory(mainMemoryAdress, 0, column);
+            this.controller.setBitInMemory(mainMemoryAddress, 0, column);
         }
     }
 }

@@ -304,13 +304,13 @@ public class Controller {
      */
     public void reset(int timer) {
         memory.reset();
+        pc = 0;
         setContinueAfterBreakpoint(true);
         setBreakpoint(-1);
         setGo(false);
         setTimer(timer);
         int index = Integer.parseInt(crossList.get(memory.getPc()));
         reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
-        pc = 0;
     }
 
     /**
@@ -351,7 +351,8 @@ public class Controller {
      * @param value value to set
      */
     public void setContinueAfterBreakpoint(boolean value) {
-        continueAfterBreakpoint = value;
+        this.continueAfterBreakpoint = value;
+        this.reset = false;
     }
 
     /**
