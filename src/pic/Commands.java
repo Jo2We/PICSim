@@ -1,13 +1,16 @@
 package pic;
 
 
+import controller.Controller;
+
 public class Commands {
 
     private final Memory memory;
+    private final Controller controller;
 
-
-    public Commands(Memory m) {
+    public Commands(Memory m, Controller c) {
         this.memory = m;
+        this.controller = c;
     }
 
     /**
@@ -599,7 +602,7 @@ public class Commands {
         memory.setWatchdog(0);
         memory.setMainMemoryBit(3, 0, 3);
         memory.setMainMemoryBit(3, 1, 4);
-
+        controller.setSleepBreak();
         memory.operationTimer();
     }
 

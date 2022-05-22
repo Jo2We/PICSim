@@ -27,11 +27,12 @@ public class Controller {
 
     private int frequency = 8;
     private int pc;
+    private int sleepBreak = -1;
 
 
     public Controller() {
         memory = new Memory(this);
-        command = new Commands(memory);
+        command = new Commands(memory, this);
     }
 
     /**
@@ -60,6 +61,9 @@ public class Controller {
                     int index = Integer.parseInt(crossList.get(memory.getPc()));
                     reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPc()));
+                    if (this.sleepBreak == this.memory.getPc()) {
+                        break;
+                    }
                     try {
                         Thread.sleep((90 - (10 * frequency)));
                         //Thread.sleep(1);
@@ -324,7 +328,7 @@ public class Controller {
      */
     private boolean validBreakpoint(int line) {
         for (int index = 0; index < crossList.size(); index++) {
-            if (breakpoint == Integer.parseInt(crossList.get(index)) && index == line) {
+            if (this.breakpoint == Integer.parseInt(crossList.get(index)) && index == line) {
                 return true;
             }
         }
@@ -449,5 +453,9 @@ public class Controller {
 
     public void interrupt(int source) {
         memory.interrupt(source);
+    }
+
+    public void setSleepBreak () {
+        this.sleepBreak = this.memory.getPc();
     }
 }
