@@ -386,9 +386,10 @@ public class MainFrame {
             if (row == 5) { // RB
                 this.controller.setBitInMemory(6, 0, column);
                 if (controller.getMainMemoryBit(129, 6) == 0 && column == 0) {
+                    controller.setContinueAfterBreakpoint(true);
                     controller.interrupt(1);
                 }
-                if (controller.getMainMemoryBit(134, column) == 1 && column >=4 && column <= 7) {
+                if (controller.getMainMemoryBit(134, column) == 1 && column >= 4 && column <= 7) {
                     controller.interrupt(0);
                 }
             }
@@ -403,9 +404,10 @@ public class MainFrame {
             if (row == 5) { // RB
                 controller.setBitInMemory(6, 1, column);
                 if (controller.getMainMemoryBit(129, 6) == 1 && column == 0) {
+                    controller.setContinueAfterBreakpoint(true);
                     controller.interrupt(1);
                 }
-                if (controller.getMainMemoryBit(134, column) == 1 && column >=4 && column <= 7) {
+                if (controller.getMainMemoryBit(134, column) == 1 && column >= 4 && column <= 7) {
                     controller.interrupt(0);
                 }
             }
@@ -719,9 +721,9 @@ public class MainFrame {
     /**
      * method to create registers
      *
-     * @param registerName     names of the different Bits
+     * @param registerName      names of the different Bits
      * @param mainMemoryAddress address in MainMemory
-     * @param position         position in the gui
+     * @param position          position in the gui
      * @return JPanel
      */
     private JPanel buildRegister(String[] registerName, int mainMemoryAddress, int[] position, JLabel[] register) {
@@ -811,8 +813,8 @@ public class MainFrame {
      * method to toggle the values of the status, intcon and option register
      *
      * @param mainMemoryAddress address of the register
-     * @param label            label to show the value
-     * @param column           position to set bit
+     * @param label             label to show the value
+     * @param column            position to set bit
      */
     private void clickedRegister(int mainMemoryAddress, JLabel label, int column) {
         if (label.getText().equals("0")) {

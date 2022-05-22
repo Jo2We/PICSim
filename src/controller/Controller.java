@@ -57,13 +57,14 @@ public class Controller {
                     if (validBreakpoint(memory.getPc()) && !continueAfterBreakpoint) {
                         break;
                     }
-                    setContinueAfterBreakpoint(false);
                     int index = Integer.parseInt(crossList.get(memory.getPc()));
                     reloadingMethods.reloadAll(true, memory.getTimer(), (index - 1));
                     callCommands(lines.get(memory.getPc()));
-                    if (this.sleepBreak == this.memory.getPc()) {
+                    if (this.sleepBreak == this.memory.getPc() && !continueAfterBreakpoint) {
                         break;
                     }
+                    setContinueAfterBreakpoint(false);
+
                     try {
                         Thread.sleep((90 - (10 * frequency)));
                         //Thread.sleep(1);
