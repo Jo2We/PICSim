@@ -39,9 +39,9 @@ public class ReloadingMethods extends MainFrame {
     private void reloadSpecialFunctionsRegisterVisible() {
         labelsSpecialFunctionsRegisterVisible[0].setText(this.controller.getText(this.controller.getW()));
         labelsSpecialFunctionsRegisterVisible[1].setText(this.controller.getText(this.mainMemory[4]));
-        labelsSpecialFunctionsRegisterVisible[2].setText(this.controller.getText(this.controller.getPc()));
-        labelsSpecialFunctionsRegisterVisible[3].setText("insert here");
-        labelsSpecialFunctionsRegisterVisible[4].setText(this.controller.getText(this.controller.getMainMemory()[3]));
+        labelsSpecialFunctionsRegisterVisible[2].setText(this.controller.getText(this.mainMemory[2]));
+        labelsSpecialFunctionsRegisterVisible[3].setText(this.controller.getText(this.mainMemory[10]));
+        labelsSpecialFunctionsRegisterVisible[4].setText(this.controller.getText(this.mainMemory[3]));
     }
 
     /**
@@ -49,7 +49,7 @@ public class ReloadingMethods extends MainFrame {
      * reloads PC and Stackpointer
      */
     private void reloadLabelsSpecialFunctionsRegisterHidden() {
-        labelsSpecialFunctionsRegisterHidden[0].setText("insert here");
+        labelsSpecialFunctionsRegisterHidden[0].setText(this.controller.getText(this.controller.getPc()));
         labelsSpecialFunctionsRegisterHidden[1].setText(this.controller.getText(this.controller.getStackPointer()));
     }
 

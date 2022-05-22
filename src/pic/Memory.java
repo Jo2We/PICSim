@@ -138,8 +138,8 @@ public class Memory {
     public void popStack() {
         if (stackpointer > 0) {
             stackpointer--;
-            mainMemory[2]= stack[stackpointer]&0xFF;
-            pc=stack[stackpointer];
+            mainMemory[2] = stack[stackpointer] & 0xFF;
+            pc = stack[stackpointer];
         }
     }
 
@@ -159,8 +159,10 @@ public class Memory {
      * sets w and main memory = 0
      */
     public void reset() {
-        setW(0);
+        w = 0;
         Arrays.fill(mainMemory, 0);
+        Arrays.fill(stack, 0);
+        stackpointer = 0;
         mainMemory[0x85] = 0xFF;
         mainMemory[0x86] = 0xFF;
     }
@@ -276,11 +278,11 @@ public class Memory {
         this.timer = timer;
     }
 
-    public int getWatchdog(){
+    public int getWatchdog() {
         return watchdog;
     }
 
-    public void setWatchdog(int watchdog){
+    public void setWatchdog(int watchdog) {
         this.watchdog = watchdog;
     }
 }

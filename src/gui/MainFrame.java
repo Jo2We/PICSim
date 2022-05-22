@@ -523,12 +523,12 @@ public class MainFrame {
         panel.add(labelWRegister);
         panel.add(new JLabel("FSR"));
         JLabel labelFsr = new JLabel("", SwingConstants.CENTER);
-        labelFsr.setText("insert here");
+        labelFsr.setText(this.controller.getText(this.mainMemory[4]));
         labelsSpecialFunctionsRegisterVisible[1] = labelFsr;
         panel.add(labelFsr);
         panel.add(new JLabel("PCL"));
         JLabel labelPcl = new JLabel("", SwingConstants.CENTER);
-        labelPcl.setText(this.controller.getText(this.controller.getPc()));
+        labelPcl.setText(this.controller.getText(this.mainMemory[2]));
         labelsSpecialFunctionsRegisterVisible[2] = labelPcl;
         panel.add(labelPcl);
         panel.add(new JLabel("PCLATH"));
@@ -538,7 +538,7 @@ public class MainFrame {
         panel.add(labelPclath);
         panel.add(new JLabel("Status"));
         JLabel labelStatus = new JLabel("", SwingConstants.CENTER);
-        labelStatus.setText(this.controller.getText(this.controller.getMainMemory()[3]));
+        labelStatus.setText(this.controller.getText(this.mainMemory[3]));
         labelsSpecialFunctionsRegisterVisible[4] = labelStatus;
         panel.add(labelStatus);
         return panel;
@@ -560,12 +560,12 @@ public class MainFrame {
         panel.add(new JLabel(""));
         panel.add(new JLabel("PC"));
         JLabel labelPc = new JLabel("", SwingConstants.CENTER);
-        labelPc.setText("insert here");
+        labelPc.setText(controller.getText(controller.getPc()));
         labelsSpecialFunctionsRegisterHidden[0] = labelPc;
         panel.add(labelPc);
         panel.add(new JLabel("Stackpointer"));
         JLabel labelStackpointer = new JLabel("", SwingConstants.CENTER);
-        labelStackpointer.setText(this.controller.getText(this.controller.getStack()));
+        labelStackpointer.setText(this.controller.getText(this.controller.getStackPointer()));
         labelsSpecialFunctionsRegisterHidden[1] = labelStackpointer;
         panel.add(labelStackpointer);
         return panel;

@@ -418,6 +418,8 @@ public class Controller {
         return memory.getStack();
     }
 
+
+
     public int getMainMemoryBit(int index, int position) {
         return memory.getMainMemoryBit(index, position);
     }
