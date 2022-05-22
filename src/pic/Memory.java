@@ -144,7 +144,7 @@ public class Memory {
     }
 
     /**
-     * returns the value(0 or 1) of the selcted bit of the selected main memory byte
+     * returns the value(0 or 1) of the selected bit of the selected main memory byte
      *
      * @param index    main memory byte
      * @param position bit in byte
