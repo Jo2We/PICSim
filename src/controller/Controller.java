@@ -51,6 +51,15 @@ public class Controller {
             do {
                 tempPc = !reset ? memory.getPc() : 0;
                 for (memory.setPc(tempPc); memory.getPc() < lines.size(); memory.increasePc()) {
+                    this.memory.setWatchdog(this.memory.getWatchdog() + 1);
+                    //System.out.println("Watchdog: " + this.memory.getWatchdog());
+                    //System.out.println("in for");
+                    if (this.memory.getWatchdog() >= 256) {
+                        this.memory.setWatchdog(0);
+                        this.reset(0);
+                        this.setReset(false);
+                        this.setContinueAfterBreakpoint(false);
+                    }
                     if (!go) {
                         break;
                     }
@@ -67,12 +76,30 @@ public class Controller {
                     sleepBreak = -1;
                     try {
                         Thread.sleep((90 - (10 * frequency)));
-                        //Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
                 while (checkContinueOrReset()) {
+                    try {
+                        Thread.sleep((90 - (10 * frequency)));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    this.memory.setWatchdog(this.memory.getWatchdog() + 1);
+                    //System.out.println("Watchdog: " + this.memory.getWatchdog());
+                    //System.out.println("in while");
+                    if (this.memory.getWatchdog() >= 256) {
+                        this.memory.setWatchdog(0);
+                        if (this.sleepBreak == -1) {
+                            this.reset(0);
+                            this.setGo(true);
+                            this.setReset(false);
+                            this.setContinueAfterBreakpoint(false);
+                        }
+                        this.memory.increasePc();
+                        break;
+                    }
                     reloadingMethods.reloadAll(false, memory.getTimer(), -1);
                 }
             } while (go);
@@ -308,8 +335,9 @@ public class Controller {
      * @param timer value to set
      */
     public void reset(int timer) {
-        memory.reset();
-        pc = 0;
+        System.out.println("reset");
+        this.memory.reset();
+        this.memory.setWatchdog(0);
         setContinueAfterBreakpoint(true);
         setBreakpoint(-1);
         setGo(false);
