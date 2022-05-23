@@ -290,5 +290,11 @@ public class Memory {
         this.watchdog = watchdog;
     }
 
+    public int getPrescaler () {
+        return this.prescaler;
+    }
 
+    public void setPrescaler (int prescaler) {
+        this.prescaler = prescaler;
+    }
 }

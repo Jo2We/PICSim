@@ -29,6 +29,9 @@ public class Controller {
     private int pc;
     private int sleepBreak = -1;
 
+    private  int prescalerCounter = 0;
+    private boolean wdte = false;
+
 
     public Controller() {
         memory = new Memory(this);
@@ -51,14 +54,14 @@ public class Controller {
             do {
                 tempPc = !reset ? memory.getPc() : 0;
                 for (memory.setPc(tempPc); memory.getPc() < lines.size(); memory.increasePc()) {
-                    this.memory.setWatchdog(this.memory.getWatchdog() + 1);
+                    this.increaseWatchdog();
                     //System.out.println("Watchdog: " + this.memory.getWatchdog());
                     //System.out.println("in for");
                     if (this.memory.getWatchdog() >= 256) {
                         this.memory.setWatchdog(0);
                         this.reset(0);
-                        this.setReset(false);
-                        this.setContinueAfterBreakpoint(false);
+                        this.setReset(true);
+                        this.setContinueAfterBreakpoint(true);
                     }
                     if (!go) {
                         break;
@@ -86,7 +89,7 @@ public class Controller {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    this.memory.setWatchdog(this.memory.getWatchdog() + 1);
+                    this.increaseWatchdog();
                     //System.out.println("Watchdog: " + this.memory.getWatchdog());
                     //System.out.println("in while");
                     if (this.memory.getWatchdog() >= 256) {
@@ -95,7 +98,7 @@ public class Controller {
                             this.reset(0);
                             this.setGo(true);
                             this.setReset(false);
-                            this.setContinueAfterBreakpoint(false);
+                            this.setContinueAfterBreakpoint(true);
                         }
                         this.memory.increasePc();
                         break;
@@ -490,5 +493,17 @@ public class Controller {
 
     public int getSleepBreak(){
         return sleepBreak;
+    }
+
+    private void increaseWatchdog () {
+        if (this.memory.getMainMemoryBit(129, 3) == 1 && this.wdte) {
+            this.memory.setPrescaler(this.memory.getMainMemoryByIndex(129) & 7);
+            this.prescalerCounter =  this.prescalerCounter > 0 ? this.prescalerCounter - 1 : (int) (Math.pow(2, this.memory.getPrescaler()) - 1);
+        } else {
+            this.prescalerCounter = 0;
+        }
+        if (this.prescalerCounter == 0) {
+            this.memory.setWatchdog(this.memory.getWatchdog() + 1);
+        }
     }
 }
