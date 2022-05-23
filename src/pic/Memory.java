@@ -206,6 +206,9 @@ public class Memory {
             setMainMemoryBit(11, 0, 7);
             pushStack();
             setMainMemoryByIndex(2, 3);
+            if(controller.getSleepBreak() != -1){
+                pc = 0;
+            }
         }
     }
 

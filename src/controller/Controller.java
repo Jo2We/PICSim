@@ -64,7 +64,7 @@ public class Controller {
                         break;
                     }
                     setContinueAfterBreakpoint(false);
-
+                    sleepBreak = -1;
                     try {
                         Thread.sleep((90 - (10 * frequency)));
                         //Thread.sleep(1);
@@ -458,5 +458,9 @@ public class Controller {
 
     public void setSleepBreak () {
         this.sleepBreak = this.memory.getPc();
+    }
+
+    public int getSleepBreak(){
+        return sleepBreak;
     }
 }
