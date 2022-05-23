@@ -151,6 +151,9 @@ public class Memory {
      * @return 0 or 1, value of bit
      */
     public int getMainMemoryBit(int index, int position) {
+        if (index == 0) {
+            index = mainMemory[4];
+        }
         String str = String.format("%8s", Integer.toBinaryString(mainMemory[index] & 0xFF)).replace(' ', '0');
         return Character.getNumericValue(str.charAt(7 - position));
     }
@@ -166,6 +169,7 @@ public class Memory {
         stackpointer = 0;
         mainMemory[0x85] = 0xFF;
         mainMemory[0x86] = 0xFF;
+        mainMemory[0x3] = 0b00011000;
     }
 
 

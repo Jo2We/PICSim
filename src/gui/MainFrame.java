@@ -580,7 +580,10 @@ public class MainFrame {
      * @return JPanel
      */
     private JPanel buildStatusRegister(int[] position) {
-        return this.buildRegister(this.statusStrings, 3, position, this.statusLabels);
+        JPanel panel = this.buildRegister(this.statusStrings, 3, position, this.statusLabels);
+        this.controller.setBitInMemory(3, 1, 3);
+        this.controller.setBitInMemory(3, 1, 4);
+        return panel;
     }
 
     /**

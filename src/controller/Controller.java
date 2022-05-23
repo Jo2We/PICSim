@@ -26,8 +26,7 @@ public class Controller {
 
 
     private int frequency = 8;
-    private int pc;
-    private int sleepBreak = -1;
+    private int sleepBreak = -2;
 
     private  int prescalerCounter = 0;
     private boolean wdte = false;
@@ -76,19 +75,20 @@ public class Controller {
                         break;
                     }
                     setContinueAfterBreakpoint(false);
-                    sleepBreak = -1;
+                    sleepBreak = -2;
                     try {
                         Thread.sleep((90 - (10 * frequency)));
+                        //Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
                 while (checkContinueOrReset()) {
-                    try {
+                    /*try {
                         Thread.sleep((90 - (10 * frequency)));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                     this.increaseWatchdog();
                     //System.out.println("Watchdog: " + this.memory.getWatchdog());
                     //System.out.println("in while");
@@ -496,13 +496,13 @@ public class Controller {
     }
 
     private void increaseWatchdog () {
-        if (this.memory.getMainMemoryBit(129, 3) == 1 && this.wdte) {
+        if (this.memory.getMainMemoryBit(129, 3) == 1) {
             this.memory.setPrescaler(this.memory.getMainMemoryByIndex(129) & 7);
             this.prescalerCounter =  this.prescalerCounter > 0 ? this.prescalerCounter - 1 : (int) (Math.pow(2, this.memory.getPrescaler()) - 1);
         } else {
             this.prescalerCounter = 0;
         }
-        if (this.prescalerCounter == 0) {
+        if (this.prescalerCounter == 0 && wdte) {
             this.memory.setWatchdog(this.memory.getWatchdog() + 1);
         }
     }
