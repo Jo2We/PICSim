@@ -386,7 +386,6 @@ public class MainFrame {
             if (row == 5) { // RB
                 this.controller.setBitInMemory(6, 0, column);
                 if (controller.getMainMemoryBit(129, 6) == 0 && column == 0) {
-                    controller.setContinueAfterBreakpoint(true);
                     controller.interrupt(1);
                 }
                 if (controller.getMainMemoryBit(134, column) == 1 && column >= 4 && column <= 7) {

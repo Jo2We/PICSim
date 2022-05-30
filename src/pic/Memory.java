@@ -205,13 +205,16 @@ public class Memory {
     }
 
     public void interrupt(int source) {
-        if (getMainMemoryBit(11, source + 3) == 1 && getMainMemoryBit(11, 7) == 1) {
-            setMainMemoryBit(11, 1, source);
-            setMainMemoryBit(11, 0, 7);
-            pushStack();
-            setMainMemoryByIndex(2, 3);
-            if(controller.getSleepBreak() != -1){
-                pc = 0;
+        if (getMainMemoryBit(11, source + 3) == 1) {
+            controller.setContinueAfterBreakpoint(true);
+            if (getMainMemoryBit(11, 7) == 1) {
+                setMainMemoryBit(11, 1, source);
+                setMainMemoryBit(11, 0, 7);
+                pushStack();
+                setMainMemoryByIndex(2, 3);
+                if (controller.getSleepBreak() != -1) {
+                    pc = 3;
+                }
             }
         }
     }
@@ -254,8 +257,6 @@ public class Memory {
     public void loadPc(int value) {
 
         mainMemory[2] = value & 0xFF;
-        //mainMemory[10] = mainMemory[10] & 0xF8;
-        //mainMemory[10] += (value & 0x700) >> 8;
 
         int pclath = (mainMemory[10] & 0x18) << 8;
         pc = value + pclath;
@@ -294,11 +295,11 @@ public class Memory {
         this.watchdog = watchdog;
     }
 
-    public int getPrescaler () {
+    public int getPrescaler() {
         return this.prescaler;
     }
 
-    public void setPrescaler (int prescaler) {
+    public void setPrescaler(int prescaler) {
         this.prescaler = prescaler;
     }
 }
